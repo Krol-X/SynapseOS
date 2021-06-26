@@ -1,0 +1,78 @@
+version: 2.1
+
+orbs:
+  github-release: SynapseOS/release
+
+parameters:
+  src-repo-url:
+    type: string
+    default: https://github.com/esnet/iperf.git
+  branch-name:
+    type: string
+    default: "3.8.1"
+  common-build-params:
+    type: string
+    default: "--disable-shared --disable-static"
+
+jobs:
+  build-linux:
+    docker:
+      - image: archlinux/base
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    parameters:
+      label:
+        type: string
+        default: iperf3-linux
+    steps:
+      - run:
+          name: Install dependencies
+          command: pacman -Syu --noconfirm openssl git gcc make awk tar
+      - run:
+          name: Clone iperf3
+          command: git clone << pipeline.parameters.src-repo-url >> -b << pipeline.parameters.branch-name >>
+      - run:
+          name: Build iperf3
+          working_directory: iperf
+          command: |
+            CIRCLE_WORKING_DIRECTORY=$(eval "echo $CIRCLE_WORKING_DIRECTORY")
+            IPERF3_MAKE_PREFIX=$CIRCLE_WORKING_DIRECTORY/<< parameters.label >>
+            ./configure --prefix=$IPERF3_MAKE_PREFIX << pipeline.parameters.common-build-params >>
+            make
+            mkdir -p $IPERF3_MAKE_PREFIX
+            make install
+      - run:
+          name: Create a tarball
+          command: tar -cJf << parameters.label >>.tar.xz << parameters.label >>
+      - persist_to_workspace:
+          root: .
+          paths:
+            - << parameters.label >>.tar.xz
+      - store_artifacts:
+          path: << parameters.label >>.tar.xz
+    executor: github-release/default
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Compute version number
+          command: |
+            echo "export IPERF3_BUILD_VERSION=\"<< pipeline.parameters.branch-name>>-${CIRCLE_BUILD_NUM}-${CIRCLE_SHA1:0:7}\"" | tee -a $BASH_ENV
+      - github-release/release:
+          tag: v$IPERF3_BUILD_VERSION
+          title: $IPERF3_BUILD_VERSION
+          artefacts-folder: .
+
+workflows:
+  version: 2
+  build-test-release:
+    jobs:
+      - build-linux
+      - release:
+          requires:
+            - test-linux
+          context: github
+          filters:
+            branches:
+              only: main
