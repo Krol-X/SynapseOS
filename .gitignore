@@ -1,3 +1,5 @@
 # Just ignore bin folder
 bin/*
 disk/*
+!.gitignore
+!bin/readme.md
