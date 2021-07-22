@@ -1,7 +1,4 @@
 @Echo off
-::set make_listfs = "utils/make_listfs.exe"
-::set dd = "utils/dd.exe"
-::set fasm = "utils/FASM.EXE"
 
 echo Fasm utils/FASM.EXE
 start utils/FASM.EXE src/boot.asm bin/boot.bin
