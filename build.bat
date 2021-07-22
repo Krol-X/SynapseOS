@@ -19,7 +19,7 @@ echo main.o
 gcc -c -m32 -ffreestanding -o bin/main.o src/main.c
 
 echo link 
-ld --oformat=binary -melf_i386 -T src/script.ld -o kernel.bin bin/startup.o bin/main.o
+ld -T src/script.ld -o bin/kernel.exe bin/startup.o bin/main.o
 
 echo Make disk.img
 start utils/dd.exe if=bin/boot.bin of=bin/boot_sector.bin bs=512 count=1
