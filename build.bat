@@ -1,5 +1,13 @@
 @Echo off
 
+echo Setup output
+mkdir bin
+mkdir disk
+(echo Lkernel.bin
+echo S32) > disk/boot.cfg
+
+
+
 echo boot.bin
 start utils/FASM.EXE src/boot.asm bin/boot.bin
 
@@ -11,7 +19,7 @@ echo main.o
 gcc -c -m32 -ffreestanding -o bin/main.o src/main.c
 
 echo link 
-ld --oformat=binary -melf_i386 -T script.ld -o kernel.bin startup.o main.o
+ld --oformat=binary -melf_i386 -T src/script.ld -o kernel.bin bin/startup.o bin/main.o
 
 echo Make disk.img
 start utils/dd.exe if=bin/boot.bin of=bin/boot_sector.bin bs=512 count=1
