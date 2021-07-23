@@ -10,5 +10,11 @@ void kernel_main(uint8 boot_disk_id, void *memory_map, BootModuleInfo *boot_modu
     init_tty();
     set_text_attr(0x1F);
     clear_screen();
-    out_string("***SynapseOS 0001***\n\nEnter help to get information about commands\n");
+    out_string("***SynapseOS 0001***\n\n");
+    printf("Boot disk id is %d\n", boot_disk_id);
+    printf("Memory map at 0x%x\n", memory_map);
+    printf("Boot module list at 0x%x\n", boot_module_list);
+    printf("String is %s, char is %c, number is %d, hex number is 0x%x\n\n",
+        __DATE__, 'A', 1234, 0x1234);
+    printf("Enter help to get information about commands\n");
 }
