@@ -15,6 +15,9 @@ echo *************************
 ::Build libs
 echo build libs
 
+::Build Interrupts
+echo interrupts.o
+i686-elf-gcc -c -m32 -ffreestanding -o bin/interrupts.o src/lib/interrupts.c
 
 ::Build Stdlib
 echo stdlib.o
@@ -40,7 +43,7 @@ i686-elf-gcc -c -m32 -ffreestanding -o bin/main.o src/kernel/main.c
 
 ::Link kernel with starter and libs
 echo link 
-i686-elf-ld -T src/script.ld -o bin/kernel.bin bin/startup.o bin/stdlib.o bin/tty.o bin/main.o --entry _start
+i686-elf-ld -T src/script.ld -o bin/kernel.bin bin/startup.o bin/stdlib.o bin/tty.o bin/interrupts.o bin/main.o --entry _start
 
 
 
