@@ -3,3 +3,4 @@ bin/*
 disk/*
 !.gitignore
 !bin/readme.md
+disk.img
