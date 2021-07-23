@@ -3,8 +3,10 @@
 echo Setup output
 mkdir bin
 mkdir disk
-(echo Lkernel.bin
-echo S32) > disk/boot.cfg
+(
+    echo Lkernel.bin
+    echo S32
+) > disk/boot.cfg
 
 
 
@@ -16,14 +18,16 @@ echo startup.o
 start utils/FASM.EXE src/startup.asm bin/startup.o
 
 echo main.o
-gcc -c -m32 -ffreestanding -o bin/main.o src/main.c
+i686-elf-gcc -c -m32 -ffreestanding -o bin/main.o src/main.c
 
 echo link 
-ld -T src/script.ld -o bin/kernel.exe bin/startup.o bin/main.o
+i686-elf-ld -T src/script.ld -o bin/kernel.bin bin/startup.o bin/main.o --entry _start
+objcopy bin/kernel.bin -O binary
 
 echo Make disk.img
 start utils/dd.exe if=bin/boot.bin of=bin/boot_sector.bin bs=512 count=1
 start utils/dd.exe if=bin/boot.bin of=disk/boot.bin bs=1 skip=512
-start utils/make_listfs.exe of=bin/disk.img bs=512 size=2880 boot=bin/boot_sector.bin src=./disk
+cp bin/kernel.bin disk/kernel.bin
+start utils/make_listfs.exe of=disk.img bs=512 size=2880 boot=bin/boot_sector.bin src=./disk 
 
 pause
