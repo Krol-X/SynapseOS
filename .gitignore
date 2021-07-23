@@ -5,3 +5,4 @@ disk/*
 !bin/readme.md
 !disk/boot.cfg
 disk.img
+.vscode/settings.json
