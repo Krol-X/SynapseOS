@@ -1,28 +1,17 @@
 @Echo off
 
-echo Setup output
-mkdir bin
-mkdir disk
-(
-    echo Lkernel.bin
-    echo S32
-) > disk/boot.cfg
-
-
-
 echo boot.bin
-start utils/FASM.EXE src/boot.asm bin/boot.bin
+start utils/FASM.EXE src/boot/boot.asm bin/boot.bin
 
 
 echo startup.o
-start utils/FASM.EXE src/startup.asm bin/startup.o
+start utils/FASM.EXE src/kernel/startup.asm bin/startup.o
 
 echo main.o
-i686-elf-gcc -c -m32 -ffreestanding -o bin/main.o src/main.c
+i686-elf-gcc -c -m32 -ffreestanding -o bin/main.o src/kernel/main.c
 
 echo link 
 i686-elf-ld -T src/script.ld -o bin/kernel.bin bin/startup.o bin/main.o --entry _start
-objcopy bin/kernel.bin -O binary
 
 echo Make disk.img
 start utils/dd.exe if=bin/boot.bin of=bin/boot_sector.bin bs=512 count=1
