@@ -6,3 +6,4 @@ disk/*
 !disk/boot.cfg
 disk.img
 .vscode/settings.json
+build.sh
