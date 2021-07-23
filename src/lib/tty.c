@@ -1,3 +1,4 @@
+#include <stdarg.h>
 #include "stdlib.h"
 #include "tty.h"
 
@@ -51,6 +52,7 @@ void clear_screen() {
     move_cursor(0);
 }
 
+
 void set_text_attr(char attr) {
     text_attr = attr;
 }
@@ -64,5 +66,60 @@ void move_cursor(unsigned int pos) {
             * sizeof(TtyChar));
         memset_word(tty_buffer + tty_width * (tty_height - 1), (text_attr << 8) + ' ', tty_width);
     }
-    asm("movw %w0, %%dx \n movl %1, %%ecx \n movb $0x0E, %%al \n movb %%ch, %%ah \n outw %%ax, %%dx \n incb %%al \n movb %%cl, %%ah \n outw %%ax, %%dx"::"d"(tty_io_port),"c"(cursor));
+    outportb(tty_io_port, 0x0E);
+    outportb(tty_io_port + 1, cursor >> 8);
+    outportb(tty_io_port, 0x0F);
+    outportb(tty_io_port + 1, cursor & 0xFF);
+}
+
+
+const char digits[] = "0123456789ABCDEF";
+char num_buffer[65];
+char *int_to_str(size_t value, unsigned char base) {
+    size_t i = sizeof(num_buffer) - 1;
+    num_buffer[i--] = '\0';
+    do {
+        num_buffer[i--] = digits[value % base];
+        value = value / base;
+    } while (value);
+    return &num_buffer[i + 1];
+}
+
+
+void printf(char *fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    while (*fmt) {
+        if (*fmt == '%') {
+            fmt++;
+            size_t arg = va_arg(args, size_t);
+            switch (*fmt) {
+                case '%':
+                    out_char('%');
+                    break;
+                case 'c':
+                    out_char(arg);
+                    break;
+                case 's':
+                    out_string((char*)arg);
+                    break;
+                case 'b':
+                    out_string(int_to_str(arg, 2));
+                    break;
+                case 'o':
+                    out_string(int_to_str(arg, 8));
+                    break;
+                case 'd':
+                    out_string(int_to_str(arg, 10));
+                    break;
+                case 'x':
+                    out_string(int_to_str(arg, 16));
+                    break;
+            }
+    } else {
+        out_char(*fmt);
+        }
+        fmt++;
+    }
+    va_end(args);
 }

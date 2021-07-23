@@ -7,5 +7,6 @@ void out_string(char *str);
 void clear_screen();
 void set_text_attr(char attr);
 void move_cursor(unsigned int pos);
+void printf(char *fmt, ...);
 
 #endif
