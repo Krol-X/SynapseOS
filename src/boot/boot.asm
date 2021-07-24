@@ -39,7 +39,7 @@ label sector_per_track word at $$
 label head_count byte at $$ + 2
 label disk_id byte at $$ + 3
 reboot_msg db "Press any key...",13,10,0
-boot_file_name db "boot.bin",0
+boot_file_name db "boot",0
 
 
 ; Вывод строки DS:SI на экран
