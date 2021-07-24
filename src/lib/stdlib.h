@@ -6,6 +6,9 @@ typedef enum {
     true = 1
 } bool;
 
+
+
+
 #define NULL ((void*)0)
 
 typedef unsigned char uint8;
