@@ -6,10 +6,10 @@ disk/*
 
 #Ignore files
 disk.img
-build.sh
 
 
 #No ignore files
 !.gitignore
 !bin/readme.md
 !disk/boot.cfg
+log.txt
