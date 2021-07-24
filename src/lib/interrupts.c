@@ -1,6 +1,6 @@
 #include "stdlib.h"
 #include "interrupts.h"
-
+#include "tty.h"
 
 typedef struct {
     uint16 address_0_15;
