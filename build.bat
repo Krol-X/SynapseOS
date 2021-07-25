@@ -1,6 +1,6 @@
 @Echo off
 
-echo build SynapseOS 0001
+echo build SynapseOS 0002
 echo *************************
 
 ::Build bootloader
