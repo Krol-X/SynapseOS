@@ -8,3 +8,5 @@ isodir/boot/kernel.elf
 bin/kernel.elf
 isodir/boot/grub/grub.cfg
 src/kernel/SynapseOS_log.txt
+log.txt
+disk.img
