@@ -1,3 +1,4 @@
 src/kernel/bin/*
 src/kernel/*.iso
 .vscode/settings.json
+*.o
