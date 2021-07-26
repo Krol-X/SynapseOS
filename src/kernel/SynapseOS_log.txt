@@ -1,0 +1,4 @@
+hello, qemu
+tty init...
+tty_buffer = 0xB8000
+tty inited

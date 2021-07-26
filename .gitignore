@@ -1,15 +1,3 @@
-# Ignore folders
-.vscode/*
-bin/*
-disk/*
-
-
-#Ignore files
-disk.img
-
-
-#No ignore files
-!.gitignore
-!bin/readme.md
-!disk/boot.cfg
-log.txt
+src/kernel/bin/*
+src/kernel/*.iso
+.vscode/settings.json
