@@ -34,6 +34,12 @@ echo %CC% %CCFLAGS% -c %SRC%/kernel.c -o ./bin/kc.o
 echo %CC% %CCFLAGS% -c %SRC%/Modules/gdt.c -o bin/gdt.o
 %CC% %CCFLAGS% -c %SRC%/Modules/gdt.c -o bin/gdt.o
 
+echo %CC% %CCFLAGS% -c %SRC%/Modules/string.c -o bin/string.o
+%CC% %CCFLAGS% -c %SRC%/Modules/string.c -o bin/string.o
+
+echo %CC% %CCFLAGS% -c %SRC%/Modules/shell.c -o bin/shell.o
+%CC% %CCFLAGS% -c %SRC%/Modules/shell.c -o bin/shell.o
+
 echo %CC% %CCFLAGS% -c %SRC%/Modules/interdesctbl.c -o bin/interdesctbl.o
 %CC% %CCFLAGS% -c %SRC%/Modules/interdesctbl.c -o bin/interdesctbl.o
 
@@ -52,8 +58,8 @@ echo %CC% %CCFLAGS% -c %SRC%/Modules/cpu_detect.c -o bin/cpu_detect.o
 echo %CC% %CCFLAGS% -c %SRC%/Modules/qemu_log.c -o bin/qemu_log.o
 %CC% %CCFLAGS% -c %SRC%/Modules/qemu_log.c -o bin/qemu_log.o
 
-echo %CC% %CCFLAGS% -c %SRC%/link.ld -o bin/kernel.elf bin/kasm.o bin/kc.o bin/gdt.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o
-%CC% %LDFLAGS% -T %SRC%/link.ld -o bin/kernel.elf bin/kasm.o bin/kc.o bin/gdt.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o
+echo %CC% %CCFLAGS% -c %SRC%/link.ld -o bin/kernel.elf bin/kasm.o bin/kc.o bin/gdt.o bin/string.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o
+%CC% %LDFLAGS% -T %SRC%/link.ld -o bin/kernel.elf bin/kasm.o bin/kc.o bin/gdt.o bin/string.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o
 
 
 
