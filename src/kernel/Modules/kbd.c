@@ -3,6 +3,7 @@
 #include "kbd.h"
 #include "ports.h"
 #include "tty.h"
+#include "shell.h"
 
 char string_mem[STRING_MEM_MAX];
 int string_mem_counter = 0;
@@ -71,6 +72,11 @@ void keyboard_handler_main(void)
 		if(keycode == ENTER_KEY_CODE) {
 			tty_putchar('\n');
       shell_exec(string_mem);
+      string_mem_counter = 0;
+      memset(string_mem, 0, STRING_MEM_MAX);
+      tty_setcolor(VGA_COLOR_LIGHT_GREEN);
+      tty_printf("    $");
+      tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 			return;
 		}
 
