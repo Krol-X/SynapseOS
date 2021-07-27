@@ -23,13 +23,25 @@ void kmain(void)
 	qemu_printf("tty inited\n");
 
 	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
-	tty_printf("SynapseOS v0003 build %s\n\n", __TIMESTAMP__);
+	tty_printf("SynapseOS v0004 build %s\n\n", __TIMESTAMP__);
 	tty_setcolor(VGA_COLOR_LIGHT_GREY);
 
+	
 	detect_cpu();
+	tty_setcolor(VGA_COLOR_LIGHT_BLUE);
+	
+	tty_printf("  #####                                              #######  #####  \n");
+	tty_printf(" #     # #   # #    #   ##   #####   ####  ######    #     # #     # \n");
+	tty_printf(" #        # #  ##   #  #  #  #    # #      #         #     # #       \n");
+	tty_printf("  #####    #   # #  # #    # #    #  ####  #####     #     #  #####  \n");
+	tty_printf("       #   #   #  # # ###### #####       # #         #     #       # \n");
+	tty_printf(" #     #   #   #   ## #    # #      #    # #         #     # #     # \n");
+	tty_printf("  #####    #   #    # #    # #       ####  ######    #######  #####  \n");
 
-	tty_putstring_color("\nType something on keyboard\n\n", VGA_COLOR_GREEN);
-	tty_setcolor(VGA_COLOR_LIGHT_MAGENTA);
-
+	tty_printf("\n\n\nEnter 'help' to get info about commands\n");
+	
+	tty_setcolor(VGA_COLOR_LIGHT_GREEN);
+	tty_printf("    $");
+	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 	while(1);
 }
