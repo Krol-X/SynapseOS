@@ -1,7 +1,11 @@
 /* PS/2 Keyboard driver */
+#include "string.h"
 #include "kbd.h"
 #include "ports.h"
 #include "tty.h"
+
+char string_mem[STRING_MEM_MAX];
+int string_mem_counter = 0;
 
 unsigned char keyboard_map[128] =
 {
@@ -66,11 +70,21 @@ void keyboard_handler_main(void)
 
 		if(keycode == ENTER_KEY_CODE) {
 			tty_putchar('\n');
+      shell_exec(string_mem);
 			return;
 		}
 
     tty_putchar(keyboard_map[(unsigned char) keycode]);
-		//vidptr[current_loc++] = keyboard_map[(unsigned char) keycode];
+    if (string_mem_counter!= STRING_MEM_MAX){
+      string_mem[string_mem_counter] = keyboard_map[(unsigned char) keycode];
+      string_mem_counter++;
+    } else{
+      tty_printf("\nError: Buffer is full. Buffer cleaned.\n");
+      string_mem_counter = 0;
+      memset(string_mem, 0, STRING_MEM_MAX);
+    }
+
+    //vidptr[current_loc++] = keyboard_map[(unsigned char) keycode];
 		//vidptr[current_loc++] = 0x07;
 	}
 }

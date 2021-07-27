@@ -6,6 +6,8 @@
 
 #define ENTER_KEY_CODE 0x1C
 
+#define STRING_MEM_MAX 128
+
 extern unsigned char keyboard_map[128];
 
 void kb_init(void);
