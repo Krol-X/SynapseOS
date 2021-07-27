@@ -1,7 +1,14 @@
-#include "idt.h"
+//Interrupt_Descriptor_Table
+
+#include "Interrupt_Descriptor_Table.h"
 #include "gdt.h"
 #include "kbd.h"
 #include "ports.h"
+
+//Interrupt Descriptor Table || Таблица векторов прерываний
+
+
+#define KEYBOARD_INTERRUPT 0x21
 
 struct IDT_entry IDT[IDT_SIZE]; // array of IDT entries
 
@@ -13,11 +20,11 @@ void idt_init(void) // initialize IDT
 
 	/* populate IDT entry of keyboard's interrupt */
 	keyboard_address = (unsigned long)keyboard_handler;
-	IDT[0x21].offset_lowerbits = keyboard_address & 0xffff;
-	IDT[0x21].selector = KERNEL_CODE_SEGMENT_OFFSET;
-	IDT[0x21].zero = 0;
-	IDT[0x21].type_attr = INTERRUPT_GATE;
-	IDT[0x21].offset_higherbits = (keyboard_address & 0xffff0000) >> 16;
+	IDT[KEYBOARD_INTERRUPT].offset_lowerbits = keyboard_address & 0xffff;
+	IDT[KEYBOARD_INTERRUPT].selector = KERNEL_CODE_SEGMENT_OFFSET;
+	IDT[KEYBOARD_INTERRUPT].zero = 0;
+	IDT[KEYBOARD_INTERRUPT].type_attr = INTERRUPT_GATE;
+	IDT[KEYBOARD_INTERRUPT].offset_higherbits = (keyboard_address & 0xffff0000) >> 16;
 
 	/*     Ports
 	*	 PIC1	PIC2
@@ -34,20 +41,20 @@ void idt_init(void) // initialize IDT
 	* In x86 protected mode, we have to remap the PICs beyond 0x20 because
 	* Intel have designated the first 32 interrupts as "reserved" for cpu exceptions
 	*/
-	outb(0x21 , 0x20);
+	outb(KEYBOARD_INTERRUPT , 0x20);
 	outb(0xA1 , 0x28);
 
 	/* ICW3 - setup cascading */
-	outb(0x21 , 0x00);
+	outb(KEYBOARD_INTERRUPT , 0x00);
 	outb(0xA1 , 0x00);
 
 	/* ICW4 - environment info */
-	outb(0x21 , 0x01);
+	outb(KEYBOARD_INTERRUPT , 0x01);
 	outb(0xA1 , 0x01);
 	/* Initialization finished */
 
 	/* mask interrupts */
-	outb(0x21 , 0xff);
+	outb(KEYBOARD_INTERRUPT , 0xff);
 	outb(0xA1 , 0xff);
 
 	/* fill the IDT descriptor */

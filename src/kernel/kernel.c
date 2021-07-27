@@ -1,5 +1,5 @@
 #include "Modules/gdt.h"
-#include "Modules/idt.h"
+#include "Modules/Interrupt_Descriptor_Table.h"
 #include "Modules/kbd.h"
 #include "Modules/tty.h"
 #include "Modules/qemu_log.h"
