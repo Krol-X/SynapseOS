@@ -1,6 +1,6 @@
 //Interrupt_Descriptor_Table
 
-#include "Interrupt_Descriptor_Table.h"
+#include "interdesctbl.h"
 #include "gdt.h"
 #include "kbd.h"
 #include "ports.h"

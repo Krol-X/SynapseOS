@@ -1,9 +1,9 @@
-#include "Modules/gdt.h"
-#include "Modules/Interrupt_Descriptor_Table.h"
-#include "Modules/kbd.h"
-#include "Modules/tty.h"
-#include "Modules/qemu_log.h"
-#include "Modules/cpu_detect.h"
+#include "modules/gdt.h"
+#include "modules/interdesctbl.h"
+#include "modules/kbd.h"
+#include "modules/tty.h"
+#include "modules/qemu_log.h"
+#include "modules/cpu_detect.h"
 
 /* ------------------------------------------- */
 void kmain(void)
