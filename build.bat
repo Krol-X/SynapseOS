@@ -16,6 +16,8 @@ set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/string.o bin/cmos.o bin/shell.o bi
 
 
 IF EXIST "./bin/" (
+    echo Cleaning bin folder
+    
 ) ELSE (
     mkdir bin & mkdir isodir & cd isodir & mkdir boot & cd boot & mkdir grub & cd ../../
 )
@@ -24,7 +26,6 @@ IF EXIST "./bin/" (
 
 echo Build asm kernel
 fasm %SRC%/kernel.asm bin/kasm.o
-echo .
 
 
 
