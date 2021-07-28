@@ -26,7 +26,7 @@ void kmain(void)
 	//tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 	//tty_printf("SynapseOS v0005 build %s\n\n", __TIMESTAMP__);
 	shell_exec("logo");
-
+	shell_exec("time");
 
 	tty_printf("\n\n\nEnter 'help' to get info about commands\n\n");
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);

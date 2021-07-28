@@ -14,10 +14,8 @@ void shell_exec(char input_command[]){
         //system info
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("\nSynapseOS v0005 build %s\n\n", __TIMESTAMP__);
-        read_rtc();
         tty_setcolor(VGA_COLOR_LIGHT_GREY);
         detect_cpu();
-        
 
     } else if(strcmp(input_command, "logo")==0){
         // SynapseOS logo
@@ -32,6 +30,10 @@ void shell_exec(char input_command[]){
         tty_printf("  #####    #   #    # #    # #       ####  ######    #######  #####  \n");
         tty_printf("                                                                   version: 0005");
         tty_printf("________________________________________________________________________________");
+
+    } else if(strcmp(input_command, "time")==0){
+        //Get current time
+        read_rtc();
 
     } else if(strcmp(input_command, "")==0){
         //No command
