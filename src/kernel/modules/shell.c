@@ -38,7 +38,7 @@ void shell_exec(char input_command[]){
         read_rtc();
         
 
-    } else if(strcmp(input_command, "hello")==0){s
+    } else if(strcmp(input_command, "hello")==0){
         tty_printf("Hello World!");
 
     } else if(strcmp(input_command, "")==0){
