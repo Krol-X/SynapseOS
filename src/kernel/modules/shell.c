@@ -34,11 +34,12 @@ void shell_exec(char input_command[]){
         tty_printf("________________________________________________________________________________");
 
     } else if(strcmp(input_command, "time")==0){
-        //Hello World
-        tty_printf("Hello World!");
+        //Time
+        read_rtc();
+        
 
-    } else if(strcmp(input_command, "hello")==0){
-        //No command
+    } else if(strcmp(input_command, "hello")==0){s
+        tty_printf("Hello World!");
 
     } else if(strcmp(input_command, "")==0){
         //No command
