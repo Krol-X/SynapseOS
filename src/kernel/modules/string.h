@@ -42,7 +42,7 @@ void *memchr(void *mem, char value, size_t count);
 size_t strlen(char *str);
 void strcpy(char *dest, char *src);
 void strncpy(char *dest, char*src, size_t max_count);
-int strcmp(char *str1, char *str2);
+int strcmp(const char *str1, const char *str2);
 char *strchr(char *str, char value);
 
 #endif
