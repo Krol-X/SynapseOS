@@ -32,5 +32,7 @@ void kmain(void)
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);
 	tty_printf("    $");
 	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
+
+
 	while(1);
 }

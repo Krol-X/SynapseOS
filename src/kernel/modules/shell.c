@@ -34,7 +34,7 @@ void shell_exec(char input_command[]){
         //No command
 
     } else {
-        // No command
+        // Unknown command
         tty_setcolor(VGA_COLOR_LIGHT_RED);
         tty_printf("\nUnknown command [");
         tty_printf(input_command);
