@@ -1,4 +1,4 @@
-#include "gdt.h"
+#include "../include/gdt.h"
  
 // Defines a GDT entry.
 struct gdt_entry

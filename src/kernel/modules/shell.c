@@ -1,14 +1,16 @@
-#include "shell.h"
-#include "tty.h"
-#include "string.h"
-#include "cpu_detect.h"
-#include "cmos.h"
+#include "../include/shell.h"
+#include "../include/tty.h"
+#include "../include/string.h"
+#include "../include/cpu_detect.h"
+#include "../include/cmos.h"
 
 void shell_exec(char input_command[]){
     //Help
     if(strcmp(input_command, "help")==0){
         tty_setcolor(VGA_COLOR_WHITE);
-        tty_printf("\nSynapseOS is a free and open source 64x operating system written in FASM and C.\nCommands:\n    help - info about commands\n    sysinfo - system information");
+        tty_printf("\nSynapseOS is a free and open source 64x operating system written in FASM and C.\nCommands:");
+        tty_printf("\n    help - info about commands\n    sysinfo - system information");
+        tty_printf("\n    time - info about current time\n hello - Hello World programm");
         
     } else if(strcmp(input_command, "sysinfo")==0){
         //system info
@@ -32,8 +34,11 @@ void shell_exec(char input_command[]){
         tty_printf("________________________________________________________________________________");
 
     } else if(strcmp(input_command, "time")==0){
-        //Get current time
-        read_rtc();
+        //Hello World
+        tty_printf("Hello World!");
+
+    } else if(strcmp(input_command, "hello")==0){
+        //No command
 
     } else if(strcmp(input_command, "")==0){
         //No command

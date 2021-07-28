@@ -1,4 +1,4 @@
-#include "qemu_log.h"
+#include "../include/qemu_log.h"
 
 //string.h part (for future)
 static size_t strlen(const char* str) {

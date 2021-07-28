@@ -1,5 +1,5 @@
 /* Kernel text terminal driver */
-#include "tty.h"
+#include "../include/tty.h"
 
 volatile uint8_t tty_feedback = 1;
 

@@ -1,9 +1,9 @@
 //Interrupt_Descriptor_Table
 
-#include "interdesctbl.h"
-#include "gdt.h"
-#include "kbd.h"
-#include "ports.h"
+#include "../include/interdesctbl.h"
+#include "../include/gdt.h"
+#include "../include/kbd.h"
+#include "../include/ports.h"
 
 //Interrupt Descriptor Table || Таблица векторов прерываний
 

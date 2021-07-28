@@ -1,5 +1,5 @@
-#include "cpu_detect.h"
-#include "tty.h"
+#include "../include/cpu_detect.h"
+#include "../include/tty.h"
 
 /* Simply call this function detect_cpu(); */
 int detect_cpu(void) { /* or main() if your trying to port this as an independant application */

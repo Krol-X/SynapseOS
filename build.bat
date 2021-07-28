@@ -15,14 +15,16 @@ SET LDFLAGS=-ffreestanding -nostdlib -lgcc
 set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/string.o bin/cmos.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o
 
 
-mkdir bin & mkdir isodir & cd isodir & mkdir boot & cd boot & mkdir grub & cd ../../
-
+IF EXIST "./bin/" (
+) ELSE (
+    mkdir bin & mkdir isodir & cd isodir & mkdir boot & cd boot & mkdir grub & cd ../../
+)
 
 
 
 echo Build asm kernel
 fasm %SRC%/kernel.asm bin/kasm.o
-
+echo .
 
 
 
@@ -30,6 +32,7 @@ echo Build kernel
 
 echo %CC% %CCFLAGS% -c %SRC%/kernel.c -o ./bin/kc.o
 %CC% %CCFLAGS% -c %SRC%/kernel.c -o ./bin/kc.o
+
 
 echo %CC% %CCFLAGS% -c %SRC%/modules/gdt.c -o bin/gdt.o
 %CC% %CCFLAGS% -c %SRC%/modules/gdt.c -o bin/gdt.o

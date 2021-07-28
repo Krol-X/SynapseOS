@@ -1,9 +1,9 @@
 /* PS/2 Keyboard driver */
-#include "string.h"
-#include "kbd.h"
-#include "ports.h"
-#include "tty.h"
-#include "shell.h"
+#include "../include/string.h"
+#include "../include/kbd.h"
+#include "../include/ports.h"
+#include "../include/tty.h"
+#include "../include/shell.h"
 
 char string_mem[STRING_MEM_MAX];
 int string_mem_counter = 0;

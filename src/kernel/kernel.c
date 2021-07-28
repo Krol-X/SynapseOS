@@ -1,10 +1,10 @@
-#include "modules/gdt.h"
-#include "modules/interdesctbl.h"
-#include "modules/kbd.h"
-#include "modules/tty.h"
-#include "modules/qemu_log.h"
-#include "modules/cpu_detect.h"
-#include "modules/shell.h"
+#include "include/gdt.h"
+#include "include/interdesctbl.h"
+#include "include/kbd.h"
+#include "include/tty.h"
+#include "include/qemu_log.h"
+#include "include/cpu_detect.h"
+#include "include/shell.h"
 
 /* ------------------------------------------- */
 void kmain(void)
