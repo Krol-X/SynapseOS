@@ -2,6 +2,7 @@
 #include "tty.h"
 #include "string.h"
 #include "cpu_detect.h"
+#include "cmos.h"
 
 void shell_exec(char input_command[]){
     //Help
@@ -13,8 +14,10 @@ void shell_exec(char input_command[]){
         //system info
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("\nSynapseOS v0005 build %s\n\n", __TIMESTAMP__);
+        read_rtc();
         tty_setcolor(VGA_COLOR_LIGHT_GREY);
         detect_cpu();
+        
 
     } else if(strcmp(input_command, "logo")==0){
         // SynapseOS logo
