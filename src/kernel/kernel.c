@@ -4,6 +4,7 @@
 #include "modules/tty.h"
 #include "modules/qemu_log.h"
 #include "modules/cpu_detect.h"
+#include "modules/shell.h"
 
 /* ------------------------------------------- */
 void kmain(void)
@@ -22,21 +23,10 @@ void kmain(void)
 	tty_init(); // initialize terminal
 	qemu_printf("tty inited\n");
 
-	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
-	tty_printf("SynapseOS v0004 build %s\n\n", __TIMESTAMP__);
-	tty_setcolor(VGA_COLOR_LIGHT_GREY);
+	//tty_setcolor(VGA_COLOR_LIGHT_CYAN);
+	//tty_printf("SynapseOS v0005 build %s\n\n", __TIMESTAMP__);
+	shell_exec("logo");
 
-	
-	detect_cpu();
-	tty_setcolor(VGA_COLOR_LIGHT_BLUE);
-	
-	tty_printf("  #####                                              #######  #####  \n");
-	tty_printf(" #     # #   # #    #   ##   #####   ####  ######    #     # #     # \n");
-	tty_printf(" #        # #  ##   #  #  #  #    # #      #         #     # #       \n");
-	tty_printf("  #####    #   # #  # #    # #    #  ####  #####     #     #  #####  \n");
-	tty_printf("       #   #   #  # # ###### #####       # #         #     #       # \n");
-	tty_printf(" #     #   #   #   ## #    # #      #    # #         #     # #     # \n");
-	tty_printf("  #####    #   #    # #    # #       ####  ######    #######  #####  \n");
 
 	tty_printf("\n\n\nEnter 'help' to get info about commands\n\n");
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);
