@@ -1,13 +1,13 @@
 @Echo off
-echo build SynapseOS 0003
+echo build SynapseOS 0006
 echo *************************
 
 
 
 
-SET AS=i686-elf-as
-SET CC=i686-elf-gcc
-SET LD=i686-elf-ld
+SET AS=x86_64-elf-as
+SET CC=x86_64-elf-gcc
+SET LD=x86_64-elf-ld
 SET SRC=./src/kernel
 SET CCFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra
 SET LDFLAGS=-ffreestanding -nostdlib -lgcc
