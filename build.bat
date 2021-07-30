@@ -12,7 +12,7 @@ SET SRC=./src/kernel
 SET CCFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra
 SET LDFLAGS=-ffreestanding -nostdlib -lgcc
 
-set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/string.o bin/cmos.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o
+set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/string.o bin/cmos.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o
 
 
 IF EXIST "./bin/" (
@@ -33,6 +33,9 @@ echo Build kernel
 
 echo %CC% %CCFLAGS% -c %SRC%/kernel.c -o ./bin/kc.o
 %CC% %CCFLAGS% -c %SRC%/kernel.c -o ./bin/kc.o
+
+echo %CC% %CCFLAGS% -c %SRC%/modules/stdlib.c -o ./bin/stdlib.o
+%CC% %CCFLAGS% -c %SRC%/modules/stdlib.c -o ./bin/stdlib.o
 
 echo %CC% %CCFLAGS% -c %SRC%/modules/memory_manager.c -o ./bin/memory_manager.o
 %CC% %CCFLAGS% -c %SRC%/modules/memory_manager.c -o ./bin/memory_manager.o
