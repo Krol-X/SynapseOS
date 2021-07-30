@@ -5,14 +5,14 @@ echo *************************
 
 
 
-SET AS=x86_64-elf-as
-SET CC=x86_64-elf-gcc
-SET LD=x86_64-elf-ld
+SET AS=i686-elf-as
+SET CC=i686-elf-gcc
+SET LD=i686-elf-ld
 SET SRC=./src/kernel
 SET CCFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra
 SET LDFLAGS=-ffreestanding -nostdlib -lgcc
 
-set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/string.o bin/cmos.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o
+set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/string.o bin/cmos.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o
 
 
 IF EXIST "./bin/" (
@@ -34,6 +34,8 @@ echo Build kernel
 echo %CC% %CCFLAGS% -c %SRC%/kernel.c -o ./bin/kc.o
 %CC% %CCFLAGS% -c %SRC%/kernel.c -o ./bin/kc.o
 
+echo %CC% %CCFLAGS% -c %SRC%/modules/memory_manager.c -o ./bin/memory_manager.o
+%CC% %CCFLAGS% -c %SRC%/modules/memory_manager.c -o ./bin/memory_manager.o
 
 echo %CC% %CCFLAGS% -c %SRC%/modules/gdt.c -o bin/gdt.o
 %CC% %CCFLAGS% -c %SRC%/modules/gdt.c -o bin/gdt.o

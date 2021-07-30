@@ -1,5 +1,5 @@
 //#include "stdlib.h"
-#include "memory_manager.h"
+#include "../include/memory_manager.h"
 
 typedef struct {
     uint64 base;
