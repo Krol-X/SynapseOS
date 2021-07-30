@@ -8,29 +8,28 @@ void shell_exec(char input_command[]){
     //Help
     if(strcmp(input_command, "help")==0){
         tty_setcolor(VGA_COLOR_WHITE);
-        tty_printf("\nSynapseOS is a free and open source 64x operating system written in FASM and C.\nCommands:");
+        tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C.\nCommands:");
         tty_printf("\n    help - info about commands\n    sysinfo - system information");
-        tty_printf("\n    time - info about current time\n hello - Hello World programm");
+        tty_printf("\n    time - info about current time\n    hello - Hello World programm");
         
     } else if(strcmp(input_command, "sysinfo")==0){
         //system info
         tty_setcolor(VGA_COLOR_WHITE);
-        tty_printf("\nSynapseOS v0005 build %s\n\n", __TIMESTAMP__);
-        tty_setcolor(VGA_COLOR_LIGHT_GREY);
+        tty_printf("SynapseOS v0006 build %s\n\n", __TIMESTAMP__);
         detect_cpu();
 
     } else if(strcmp(input_command, "logo")==0){
         // SynapseOS logo
         tty_setcolor(VGA_COLOR_LIGHT_CYAN);
-	    tty_printf("________________________________________________________________________________");
-        tty_printf("  #####                                              #######  #####  \n");
-        tty_printf(" #     # #   # #    #   ##   #####   ####  ######    #     # #     # \n");
-        tty_printf(" #        # #  ##   #  #  #  #    # #      #         #     # #       \n");
-        tty_printf("  #####    #   # #  # #    # #    #  ####  #####     #     #  #####  \n");
-        tty_printf("       #   #   #  # # ###### #####       # #         #     #       # \n");
-        tty_printf(" #     #   #   #   ## #    # #      #    # #         #     # #     # \n");
-        tty_printf("  #####    #   #    # #    # #       ####  ######    #######  #####  \n");
-        tty_printf("                                                                   version: 0005");
+	    tty_printf("________________________________________________________________________________\n");
+        tty_printf("  #####                                              #######  ##### \n");
+        tty_printf(" #     # #   # #    #   ##   #####   ####  ######    #     # #     #\n");
+        tty_printf(" #        # #  ##   #  #  #  #    # #      #         #     # #      \n");
+        tty_printf("  #####    #   # #  # #    # #    #  ####  #####     #     #  ##### \n");
+        tty_printf("       #   #   #  # # ###### #####       # #         #     #       #\n");
+        tty_printf(" #     #   #   #   ## #    # #      #    # #         #     # #     #\n");
+        tty_printf("  #####    #   #    # #    # #       ####  ######    #######  ##### \n");
+        tty_printf("                                                                   version: 0006");
         tty_printf("________________________________________________________________________________");
 
     } else if(strcmp(input_command, "time")==0){
@@ -41,13 +40,25 @@ void shell_exec(char input_command[]){
     } else if(strcmp(input_command, "hello")==0){
         tty_printf("Hello World!");
 
+    } else if(strcmp(input_command, "logo-doom")==0){
+        //Logo with doom style
+        tty_printf("________________________________________________________________________________\n");
+        tty_printf("/  ___|                                 |  _  /  ___|\n");
+        tty_printf("\ `--. _   _ _ __   __ _ _ __  ___  ___ | | | \ `--. \n");
+        tty_printf("`--. \ | | | '_ \ / _` | '_ \/ __|/ _ \| | | |`--. \\n");
+        tty_printf("\____/ \__, |_| |_|\__,_| .__/|___/\___| \___/\____/ \n");
+        tty_printf("        __/ |           | |                          \n");
+        tty_printf("       |___/            |_|                          \n");
+        tty_printf("                                                                   version: 0006");
+        tty_printf("________________________________________________________________________________");
+
     } else if(strcmp(input_command, "")==0){
         //No command
 
     } else {
         // Unknown command
         tty_setcolor(VGA_COLOR_LIGHT_RED);
-        tty_printf("\nUnknown command [");
+        tty_printf("Unknown command [");
         tty_printf(input_command);
         tty_printf("]");
 
