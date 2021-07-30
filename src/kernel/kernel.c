@@ -30,7 +30,7 @@ void kmain(void)
 
 	tty_printf("\n\n\nEnter 'help' to get info about commands\n\n");
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);
-	tty_printf("    $");
+	tty_printf(">");
 	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 
 

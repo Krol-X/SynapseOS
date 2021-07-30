@@ -77,7 +77,7 @@ void keyboard_handler_main(void)
       memset(string_mem, 0, STRING_MEM_MAX);
 
       tty_setcolor(VGA_COLOR_LIGHT_GREEN);
-      tty_printf("\n    $");
+      tty_printf("\n>");
       tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 			return;
 		}
@@ -87,6 +87,7 @@ void keyboard_handler_main(void)
       string_mem[string_mem_counter] = keyboard_map[(unsigned char) keycode];
       string_mem_counter++;
     } else{
+      tty_setcolor(VGA_COLOR_RED);
       tty_printf("\nError: Buffer is full. Buffer cleaned.\n");
       string_mem_counter = 0;
       memset(string_mem, 0, STRING_MEM_MAX);
