@@ -40,15 +40,10 @@ void shell_exec(char input_command[]){
     } else if(strcmp(input_command, "hello")==0){
         tty_printf("Hello World!");
 
-    } else if(strcmp(input_command, "logo-doom")==0){
-        //Logo with doom style
+    } else if(strcmp(input_command, "no-logo")==0){
+        //No logo
         tty_printf("________________________________________________________________________________\n");
-        tty_printf("/  ___|                                 |  _  /  ___|\n");
-        tty_printf("\ `--. _   _ _ __   __ _ _ __  ___  ___ | | | \ `--. \n");
-        tty_printf("`--. \ | | | '_ \ / _` | '_ \/ __|/ _ \| | | |`--. \\n");
-        tty_printf("\____/ \__, |_| |_|\__,_| .__/|___/\___| \___/\____/ \n");
-        tty_printf("        __/ |           | |                          \n");
-        tty_printf("       |___/            |_|                          \n");
+        tty_printf("SynapseOS");
         tty_printf("                                                                   version: 0006");
         tty_printf("________________________________________________________________________________");
 
