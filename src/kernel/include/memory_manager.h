@@ -1,7 +1,7 @@
 #ifndef MEMORY_MANAGER_H
 #define MEMORY_MANAGER_H
 
-#include "stdlib.h"
+#include "string.h"
 
 
 #define PAGE_SIZE 0x1000
@@ -30,7 +30,7 @@ size_t memory_size;
 
 void init_memory_manager(void *memory_map);
 void temp_map_page(phyaddr addr);
-bool map_pages(phyaddr page_dir, void *vaddr, phyaddr paddr, size_t count, unsigned int flags);
+int map_pages(phyaddr page_dir, void *vaddr, phyaddr paddr, size_t count, unsigned int flags);
 
 
 phyaddr get_page_info(phyaddr page_dir, void *vaddr);

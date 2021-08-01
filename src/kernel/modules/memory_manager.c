@@ -1,4 +1,5 @@
 //#include "stdlib.h"
+#include "../include/string.h"
 #include "../include/memory_manager.h"
 
 typedef struct {
@@ -34,7 +35,7 @@ void temp_map_page(phyaddr addr) {
 }
 
 
-bool map_pages(phyaddr page_dir, void *vaddr, phyaddr paddr, size_t count, unsigned int flags) {
+int map_pages(phyaddr page_dir, void *vaddr, phyaddr paddr, size_t count, unsigned int flags) {
     for (; count; count--) {
         phyaddr page_table = page_dir;
         char shift;
@@ -55,7 +56,7 @@ bool map_pages(phyaddr page_dir, void *vaddr, phyaddr paddr, size_t count, unsig
                         ((phyaddr*)TEMP_PAGE)[index] = addr | PAGE_VALID | PAGE_WRITABLE | PAGE_USER;
                         page_table = addr;
                     } else {
-                        return false;
+                        return 0;
                     }
                 }
             } else {
@@ -66,7 +67,7 @@ bool map_pages(phyaddr page_dir, void *vaddr, phyaddr paddr, size_t count, unsig
         vaddr += PAGE_SIZE;
         paddr += PAGE_SIZE;
     }
-    return true;
+    return 1;
 }
 
 

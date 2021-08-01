@@ -3,6 +3,7 @@
 
 #define S_NULL ((void*)0)
 
+
 typedef unsigned char uint8;
 typedef signed char int8;
 
