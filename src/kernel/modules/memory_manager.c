@@ -1,5 +1,6 @@
 //#include "stdlib.h"
 #include "../include/string.h"
+#include "../include/tty.h"
 #include "../include/memory_manager.h"
 
 typedef struct {
@@ -20,11 +21,11 @@ void init_memory_manager(void *memory_map) {
     MemoryMapEntry *entry;
     for (entry = memory_map; entry->type; entry++) {
         if ((entry->type == 1) && (entry->base >= 0x100000)) {
-            free_phys_pages(entry->base, entry->length >>
-            PAGE_OFFSET_BITS);
+            free_phys_pages(entry->base, entry->length >> PAGE_OFFSET_BITS);
             memory_size += entry->length;
         }
     }
+    tty_printf("\nMemory size = %d\n", memory_size);
 }
 
 

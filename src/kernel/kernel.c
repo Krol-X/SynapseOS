@@ -5,10 +5,11 @@
 #include "include/qemu_log.h"
 #include "include/cpu_detect.h"
 #include "include/memory_manager.h"
+#include "include/shell.h"
+
 
 /* ------------------------------------------- */
-void kmain(void)
-{
+void kmain(void *memory_map){
 
     gdt_init(); // intialize Global Descriptor Table
 	qemu_printf("Global Descriptor Table inited\n");
@@ -24,11 +25,13 @@ void kmain(void)
 	tty_init(); // initialize terminal
 	qemu_printf("tty inited\n");
 
-	init_memory_manager();
+	
 	//tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 	//tty_printf("SynapseOS v0005 build %s\n\n", __TIMESTAMP__);
 	shell_exec("logo");
 	shell_exec("time");
+	
+	init_memory_manager(memory_map);
 
 	tty_printf("\n\n\nEnter 'help' to get info about commands\n\n");
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);
