@@ -89,7 +89,7 @@ int do_intel(void) {
 	stepping = eax & 0xf;
 	reserved = eax >> 14;
 	signature = eax;
-	tty_printf("Type %d - ", type);
+	tty_printf("    Type %d - ", type);
 	switch(type) {
 		case 0:
 		tty_printf("Original OEM");
@@ -105,7 +105,7 @@ int do_intel(void) {
 		break;
 	}
 	tty_printf("\n");
-	tty_printf("Family %d - ", family);
+	tty_printf("    Family %d - ", family);
 	switch(family) {
 		case 3:
 		tty_printf("i386");
@@ -127,7 +127,7 @@ int do_intel(void) {
 		extended_family = (eax >> 20) & 0xff;
 		tty_printf("Extended family %d\n", extended_family);
 	}
-	tty_printf("Model %d - ", model);
+	tty_printf("    Model %d - ", model);
 	switch(family) {
 		case 3:
 		break;
@@ -206,7 +206,7 @@ int do_intel(void) {
 	According to the Sept. 2006 Intel Arch Software Developer's Guide, if extended eax values are supported, 
 	then all 3 values for the processor brand string are supported, but we'll test just to make sure and be safe. */
 	if(max_eax >= 0x80000004) {
-		tty_printf("Brand: ");
+		tty_printf("     Brand: ");
 		if(max_eax >= 0x80000002) {
 			cpuid(0x80000002, eax, ebx, ecx, edx);
 			printregs(eax, ebx, ecx, edx);
@@ -221,7 +221,7 @@ int do_intel(void) {
 		}
 		tty_printf("\n");
 	} else if(brand > 0) {
-		tty_printf("Brand %d - ", brand);
+		tty_printf("    Brand %d - ", brand);
 		if(brand < 0x18) {
 			if(signature == 0x000006B1 || signature == 0x00000F13) {
 				tty_printf("%s\n", Intel_Other[brand]);
@@ -232,7 +232,7 @@ int do_intel(void) {
 			tty_printf("Reserved\n");
 		}
 	}
-	tty_printf("Stepping: %d Reserved: %d\n", stepping, reserved);
+	tty_printf("    Stepping: %d Reserved: %d\n", stepping, reserved);
 	return 0;
 }
 
@@ -260,7 +260,7 @@ int do_amd(void) {
 	family = (eax >> 8) & 0xf;
 	stepping = eax & 0xf;
 	reserved = eax >> 12;
-	tty_printf("Family: %d Model: %d [", family, model);
+	tty_printf("	Family: %d Model: %d [", family, model);
 	switch(family) {
 		case 4:
 		tty_printf("486 Model %d", model);
@@ -328,6 +328,6 @@ int do_amd(void) {
 			tty_printf("Temperature Sensing Diode Detected!\n");
 		}
 	}
-	tty_printf("Stepping: %d Reserved: %d\n", stepping, reserved);
+	tty_printf("	Stepping: %d Reserved: %d\n", stepping, reserved);
 	return 0;
 }
