@@ -7,6 +7,7 @@
 #include "include/memory_manager.h"
 #include "include/shell.h"
 
+EXIT = 0;
 
 /* ------------------------------------------- */
 void kmain(void *memory_map){
@@ -39,5 +40,5 @@ void kmain(void *memory_map){
 	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 
 
-	while(1);
+	while(EXIT!=1);
 }

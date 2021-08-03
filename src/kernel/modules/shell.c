@@ -40,12 +40,9 @@ void shell_exec(char input_command[]){
     } else if(strcmp(input_command, "hello")==0){
         tty_printf("Hello World!");
 
-    } else if(strcmp(input_command, "no-logo")==0){
-        //No logo
-        tty_printf("________________________________________________________________________________\n");
-        tty_printf("SynapseOS");
-        tty_printf("                                                                   version: 0006");
-        tty_printf("________________________________________________________________________________");
+    } else if(strcmp(input_command, "exit")==0){
+        //Exit
+        EXIT = 1;
 
     } else if(strcmp(input_command, "")==0){
         //No command
