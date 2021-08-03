@@ -8,6 +8,7 @@
 #include "include/shell.h"
 
 EXIT = 0;
+DEBUG = 0;
 
 /* ------------------------------------------- */
 void kmain(void *memory_map){
