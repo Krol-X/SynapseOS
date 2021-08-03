@@ -10,3 +10,4 @@ isodir/boot/grub/grub.cfg
 src/kernel/SynapseOS_log.txt
 log.txt
 disk.img
+.vscode/c_cpp_properties.json
