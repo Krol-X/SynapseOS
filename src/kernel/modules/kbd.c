@@ -23,10 +23,10 @@ unsigned  char keyboard_map[] = {
     0,			/*  29 - Control */
     'a', 's',  'd', 'f',  'g', 'h',  'j', 'k',  'l', ';',	/*  39 */
     '\'',  '`', 
-    1,		/*  Left shift */
+    -2,		/*  Left shift 42 */
     '\\',  'z', 'x',  'c', 'v',  'b', 'n',			/*  49 */
     'm', ',',  '.', '/',  
-    1,				/*  Right  shift  */
+    -2,				/*  Right  shift  */
     '*',
     0,	/*  Alt  */
     ' ',	/*  Space  bar  */
@@ -107,7 +107,7 @@ void  kb_init(void){
 
 void  keyboard_handler_main(void)
 {
-    unsigned  char status;
+    unsigned  char  status;
     char  keycode;
 
     /*  write  EOI  */
@@ -117,21 +117,29 @@ void  keyboard_handler_main(void)
     /*  Lowest bit of  status will  be set if  buffer is  not  empty  */
     if  (status  &  0x01)  {
       keycode = inb(KEYBOARD_DATA_PORT);
-      qemu_printf(inb(KEYBOARD_DATA_PORT));
-      if ( keycode  == 1 ) {
-        qemu_printf("\nSHIFT = 1\n");
-        SHIFT = 1;
+      qemu_printf("%d\n", (int)keycode);
+
+      if ( keycode   == 42 ) {
+        if (SHIFT == 0){
+          SHIFT = 1;
+        } else {
+          SHIFT = 0;
+        }
+        qemu_printf("\nSHIFT = %d\n", SHIFT);
         return;
       }
       
-      if ( keycode  ==  -1 ) {
+
+      if ( keycode  ==  -70 ) {
         if ( CAPS == 0 ){
           CAPS = 1;
         } else {
           CAPS = 0;
         }
+        qemu_printf("CAPS = %d", CAPS);
       }
-      if(keycode  <  0){
+      //tty_printf("\n%d \n", keycode);
+      if( keycode  <  0){
         return;
       }
 
@@ -141,7 +149,7 @@ void  keyboard_handler_main(void)
         } else {
           SHIFT = 0;
         }
-        
+        qemu_printf("SHIFT = %d", SHIFT);
       }
 
       if(keycode  == ENTER_KEY_CODE) {
@@ -151,31 +159,51 @@ void  keyboard_handler_main(void)
         string_mem_counter  =  0;
         memset(string_mem,  0, STRING_MEM_MAX);
 
-        tty_setcolor(VGA_COLOR_LIGHT_GREEN);
+        if (color_theme == 0){
+            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
+        } else if ( color_theme == 1 ){
+            tty_setcolor(VGA_COLOR_LIGHT_MAGENTA);
+        } else{
+            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
+        }
         tty_printf("\n>");
-        tty_setcolor(VGA_COLOR_LIGHT_CYAN);
         return;
       }
-      
+      qemu_printf("SHIFT = %d, CAPS = %d\n", SHIFT, CAPS);
       if ( SHIFT == 0 ){
         tty_putchar(keyboard_map[(unsigned char) keycode]);
       } else {
+        qemu_printf("SHIFTED\n");
         tty_putchar(keyboard_map_shifted[(unsigned char) keycode]);
       }
 
       if (string_mem_counter!= STRING_MEM_MAX){
         if (DEBUG==1){
-          qemu_printf("%c",(unsigned char) keycode);
+          qemu_printf("\n%d \n", keycode);;
         }
         
-        string_mem[string_mem_counter]  =  keyboard_map[(unsigned char) keycode];
+        if (SHIFT == 0){
+            string_mem[string_mem_counter]  =  keyboard_map[(unsigned char) keycode];
+        } else {
+            string_mem[string_mem_counter]  =  keyboard_map_shifted[(unsigned char) keycode];
+        }
+        
         string_mem_counter++;
 
+        SHIFT = 0;
       }  else{
         tty_setcolor(VGA_COLOR_RED);
         tty_printf("\nError:  Buffer is  full.  Buffer cleaned.\n");
+        if (color_theme == 0){
+            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
+        } else if ( color_theme == 1 ){
+            tty_setcolor(VGA_COLOR_LIGHT_MAGENTA);
+        } else{
+            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
+        }
         string_mem_counter  =  0;
         memset( string_mem,  0, STRING_MEM_MAX );
+        SHIFT = 0;
       }
     }
 }
