@@ -10,7 +10,7 @@ void shell_exec(char input_command[]){
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C.\nCommands:");
         tty_printf("\n    help - info about commands\n    sysinfo - system information");
-        tty_printf("\n    time - info about current time\n    hello - Hello World programm");
+        tty_printf("\n    time - info about current time\n    hello - Hello World programm\n    exit - ");
         
     } else if( strcmp(input_command, "sysinfo") == 0 ){
         //system info
@@ -56,8 +56,12 @@ void shell_exec(char input_command[]){
         EXIT = 1;
 
     } else if( strcmp(input_command, "debug") == 0 ){
-        //Exit
-        DEBUG = 1;
+        //Debug mode
+        if ( DEBUG == 0 ){
+            DEBUG = 1;
+        } else {
+            DEBUG = 0;
+        }
 
     } else if( strcmp(input_command, "cls") == 0 || strcmp(input_command, "clear") == 0 ){
         //Cleaning screen
