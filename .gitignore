@@ -11,3 +11,5 @@ src/kernel/SynapseOS_log.txt
 log.txt
 disk.img
 .vscode/c_cpp_properties.json
+Bochs_log.txt
+Qemu_log.txt

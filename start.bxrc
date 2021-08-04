@@ -3,4 +3,4 @@
 
 ata0-master: type=cdrom, path=SynapseOS.iso, status=inserted
 boot: cdrom
-log: log.txt
+log: Bochs_log.txt
