@@ -21,13 +21,13 @@ unsigned  char keyboard_map[] =
   0,			/*  29 - Control */
   'a', 's',  'd', 'f',  'g', 'h',  'j', 'k',  'l', ';',	/*  39 */
   '\'',  '`', 
-  '',		/*  Left shift */
+  ' ',		/*  Left shift */
   '\\',  'z', 'x',  'c', 'v',  'b', 'n',			/*  49 */
   'm', ',',  '.', '/',  
   0,				/*  Right  shift  */
   '*',
   0,	/*  Alt  */
-  '  ',	/*  Space  bar  */
+  ' ',	/*  Space  bar  */
   0,	/*  Caps lock  */
   0,	/*  59 - F1  key  ...  >  */
   0, 0,  0, 0,  0, 0,  0, 0,
