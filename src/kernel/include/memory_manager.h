@@ -28,14 +28,4 @@ phyaddr kernel_page_dir;
 size_t memory_size;
 
 
-void init_memory_manager(void *memory_map);
-void temp_map_page(phyaddr addr);
-int map_pages(phyaddr page_dir, void *vaddr, phyaddr paddr, size_t count, unsigned int flags);
-
-
-phyaddr get_page_info(phyaddr page_dir, void *vaddr);
-size_t get_free_memory_size();
-phyaddr alloc_phys_pages(size_t count);
-void free_phys_pages(phyaddr base, size_t count);
-
 #endif
