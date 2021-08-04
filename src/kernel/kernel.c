@@ -44,7 +44,7 @@ void kmain(void *memory_map){
 	
 	//init_memory_manager(memory_map);
 
-	tty_printf("\n\n\nEnter 'help' to get info about commands\n\n");
+	tty_printf("\n\n\n\n\n\n\n\n\nEnter 'help' to get info about commands\n\n");
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);
 	tty_printf(">");
 	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
