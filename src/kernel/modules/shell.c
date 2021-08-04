@@ -4,13 +4,18 @@
 #include "../include/cpu_detect.h"
 #include "../include/cmos.h"
 
+int color_theme = 0;
+int DEBUG = 0;
+
 void shell_exec(char input_command[]){
     //Help
     if( strcmp(input_command, "help") == 0 ){
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C.\nCommands:");
         tty_printf("\n    help - info about commands\n    sysinfo - system information");
-        tty_printf("\n    time - info about current time\n    hello - Hello World programm\n    exit - ");
+        tty_printf("\n    time - info about current time\n    hello - Hello World programm\n    exit - Shutdown SynapseOS");
+        tty_printf("\n    cls or clear - cleaning screen\n    ascii - show all ASCII symbols\n    debug - enable debug mode");
+        tty_printf("\n    colors - Show all color themes");
         
     } else if( strcmp(input_command, "sysinfo") == 0 ){
         //system info
@@ -20,7 +25,13 @@ void shell_exec(char input_command[]){
 
     } else if( strcmp(input_command, "logo") == 0 ){
         // SynapseOS logo
-        tty_setcolor(VGA_COLOR_LIGHT_CYAN);
+        if (color_theme == 0){
+            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
+        } else if ( color_theme == 1 ){
+            tty_setcolor(VGA_COLOR_LIGHT_MAGENTA);
+        } else{
+            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
+        }
 	    tty_printf("________________________________________________________________________________\n");
         tty_printf("  #####                                              #######  ##### \n");
         tty_printf(" #     # #   # #    #   ##   #####   ####  ######    #     # #     #\n");
@@ -37,6 +48,22 @@ void shell_exec(char input_command[]){
         read_rtc();
         
 
+    } else if( strcmp(input_command, "colors") == 0 ){
+        //Colors
+        tty_printf("All color themes:\n");
+        tty_printf("    theme_0 - default color theme\n    theme_1 - MAGENTA color theme\n");
+        //tty_printf("    theme_2 - blue color theme\n    theme_3 - green color theme\n");
+
+    } else if( strcmp(input_command, "theme_0") == 0 ){
+        //Colors
+        tty_printf("Color theme: default\n");
+        color_theme = 0;
+
+    } else if( strcmp(input_command, "theme_1") == 0 ){
+        //Colors
+        tty_printf("Color theme: MAGENTA\n");
+        color_theme = 1;
+
     } else if( strcmp(input_command, "hello") == 0 ){
         tty_printf("Hello World!");
 
@@ -49,7 +76,6 @@ void shell_exec(char input_command[]){
             tty_printf("%c", (unsigned char)i);
             i++;
         }
-        tty_printf("☻");
 
     } else if( strcmp(input_command, "exit") == 0 ){
         //Exit
@@ -75,7 +101,7 @@ void shell_exec(char input_command[]){
 
     } else {
         // Unknown command
-        tty_setcolor(VGA_COLOR_LIGHT_RED);
+        tty_setcolor(VGA_COLOR_RED);
         tty_printf("Unknown command [");
         tty_printf(input_command);
         tty_printf("]");
