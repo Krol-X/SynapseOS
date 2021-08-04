@@ -41,7 +41,7 @@ void shell_exec(char input_command[]){
         tty_printf("Hello World!");
 
     } else if( strcmp(input_command, "ignat") == 0 ){
-        tty_printf("☻");
+        tty_printf("%c", (unsigned char)1);
 
     } else if( strcmp(input_command, "ascii") == 0 ){
         int i = 0;
