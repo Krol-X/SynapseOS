@@ -9,6 +9,8 @@
 
 int EXIT = 0;
 int DEBUG = 0;
+char TEMP_MEMORY[1024];
+
 
 /* ------------------------------------------- */
 void kmain(void *memory_map){
@@ -30,11 +32,15 @@ void kmain(void *memory_map){
 	qemu_printf("tty inited\n");
 
 	int j = 0;
-	while (j != 1000){
-		tty_printf("Loading...   %d/1000\n", j);
+	tty_printf("Loading...");
+	while (j != 1024){
+		TEMP_MEMORY[j] = 0x1;
 		j++;
 	}
-	qemu_printf("memory_map %d\n", memory_map);
+	qemu_printf("TEMP_MEMORY[1024] = ");
+	qemu_printf(TEMP_MEMORY);
+
+	qemu_printf("\nmemory_map %d\n", memory_map);
 	shell_exec("cls");
 	//tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 	//tty_printf("SynapseOS v0005 build %s\n\n", __TIMESTAMP__);

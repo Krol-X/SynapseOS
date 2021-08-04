@@ -117,11 +117,13 @@ void  keyboard_handler_main(void)
     /*  Lowest bit of  status will  be set if  buffer is  not  empty  */
     if  (status  &  0x01)  {
       keycode = inb(KEYBOARD_DATA_PORT);
-      qemu
+      qemu_printf(inb(KEYBOARD_DATA_PORT));
       if ( keycode  == 1 ) {
+        qemu_printf("\nSHIFT = 1\n");
         SHIFT = 1;
         return;
       }
+      
       if ( keycode  ==  -1 ) {
         if ( CAPS == 0 ){
           CAPS = 1;
@@ -161,11 +163,9 @@ void  keyboard_handler_main(void)
         tty_putchar(keyboard_map_shifted[(unsigned char) keycode]);
       }
 
-
-      tty_putchar(keyboard_map[(unsigned char) keycode]);
       if (string_mem_counter!= STRING_MEM_MAX){
         if (DEBUG==1){
-          tty_printf("\n%c\n",(unsigned char) keycode);
+          qemu_printf("%c",(unsigned char) keycode);
         }
         
         string_mem[string_mem_counter]  =  keyboard_map[(unsigned char) keycode];
