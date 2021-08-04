@@ -30,9 +30,8 @@ void kmain(void *memory_map){
 	qemu_printf("tty inited\n");
 
 	int j = 0;
-	while (j != 100){
-		shell_exec("cls");
-		tty_printf("Loading...   %d/100", j);
+	while (j != 1000){
+		tty_printf("Loading...   %d/1000\n", j);
 		j++;
 	}
 	qemu_printf("memory_map %d\n", memory_map);
