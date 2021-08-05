@@ -13,10 +13,11 @@ int EXIT = 0;
 //void *memory_map
 
 /* ------------------------------------------- */
-void kmain(){
+void kmain(void *memory_map){
 
-
-	qemu_printf("%c\n", (unsigned char)1);
+	init_memory_manager(memory_map);
+	qemu_printf("Memory  Manager inited\n");
+	
 
     gdt_init(); // intialize Global Descriptor Table
 	qemu_printf("Global Descriptor Table inited\n");
@@ -27,17 +28,12 @@ void kmain(){
 	kb_init(); // initialize the PS/2 keyboard
 	qemu_printf("keyboard inited\n");
 
-	qemu_printf("hello, qemu\n");
-
 	tty_init(); // initialize terminal
 	qemu_printf("tty inited\n");
 
-	init_memory_manager();
-	qemu_printf("memory_manage inited\n");
 
-	tty_printf("Loading...");
-	shell_exec("cls");
 	shell_exec("logo");
+	
 	shell_exec("time");
 	
 	//init_memory_manager(memory_map);

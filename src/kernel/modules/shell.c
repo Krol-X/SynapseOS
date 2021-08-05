@@ -3,6 +3,7 @@
 #include "../include/string.h"
 #include "../include/cpu_detect.h"
 #include "../include/cmos.h"
+#include "../include/memory_manager.h"
 
 int color_theme = 0;
 int DEBUG = 0;
@@ -46,6 +47,9 @@ void shell_exec(char input_command[]){
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("SynapseOS v0006 build %s\n\n", __TIMESTAMP__);
         detect_cpu();
+        tty_printf("    kernel_page_dir = 0x%x\n", kernel_page_dir);
+	    tty_printf("    memory_size = %d MB\n", memory_size / 1024 / 1024);
+	    tty_printf("    get_page_info(kernel_page_dir, 0xB8000) = 0x%x\n",get_page_info(kernel_page_dir, (void*)0xB8000));
 
     } else if( strcmp(input_command, "logo") == 0 ){
         // SynapseOS logo
