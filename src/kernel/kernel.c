@@ -8,14 +8,16 @@
 #include "include/shell.h"
 
 int EXIT = 0;
-int DEBUG = 0;
-char TEMP_MEMORY[1024];
 
+//char TEMP_MEMORY[1024];
+//void *memory_map
 
 /* ------------------------------------------- */
 void kmain(void *memory_map){
 
-	qemu_printf("%c\n", (unsigned char)1);
+	init_memory_manager(memory_map);
+	qemu_printf("Memory  Manager inited\n");
+	qemu_printf("RESULT: %d\n",alloc_phys_pages(5));
 
     gdt_init(); // intialize Global Descriptor Table
 	qemu_printf("Global Descriptor Table inited\n");
@@ -26,25 +28,12 @@ void kmain(void *memory_map){
 	kb_init(); // initialize the PS/2 keyboard
 	qemu_printf("keyboard inited\n");
 
-	qemu_printf("hello, qemu\n");
-
 	tty_init(); // initialize terminal
 	qemu_printf("tty inited\n");
 
-	int j = 0;
-	tty_printf("Loading...");
-	while (j != 1024){
-		TEMP_MEMORY[j] = 0x1;
-		j++;
-	}
-	qemu_printf("TEMP_MEMORY[1024] = ");
-	qemu_printf(TEMP_MEMORY);
 
-	qemu_printf("\nmemory_map %d\n", memory_map);
-	shell_exec("cls");
-	//tty_setcolor(VGA_COLOR_LIGHT_CYAN);
-	//tty_printf("SynapseOS v0005 build %s\n\n", __TIMESTAMP__);
 	shell_exec("logo");
+	
 	shell_exec("time");
 	
 	//init_memory_manager(memory_map);

@@ -9,6 +9,7 @@
 #define STRING_MEM_MAX 64
 
 extern unsigned char keyboard_map[128];
+extern unsigned char keyboard_map_shifted[128];
 
 void kb_init(void);
 void keyboard_handler(void);

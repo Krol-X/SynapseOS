@@ -3,6 +3,7 @@
 
 #define S_NULL ((void*)0)
 
+#include <stdint-gcc.h>
 
 typedef unsigned char uint8;
 typedef signed char int8;
@@ -15,6 +16,12 @@ typedef signed long int32;
 
 typedef unsigned long long uint64;
 typedef signed long long int64;
+
+
+
+/*typedef unsigned long int __uint64_t;
+typedef __uint64_t uint64_t;*/
+
 
 #ifdef __x86_64__
     typedef uint64 size_t;

@@ -2,7 +2,7 @@
 #define MEMORY_MANAGER_H
 
 #include "string.h"
-
+#include <stdint-gcc.h>
 
 #define PAGE_SIZE 0x1000
 #define PAGE_OFFSET_BITS 12
@@ -24,8 +24,20 @@ typedef size_t phyaddr;
 #define TEMP_PAGE_INFO (KERNEL_PAGE_TABLE + ((TEMP_PAGE >> PAGE_OFFSET_BITS) & PAGE_TABLE_INDEX_MASK) * sizeof(phyaddr))
 
 
-phyaddr kernel_page_dir;
+phyaddr kernel_page_dir; 
 size_t memory_size;
 
 
+extern size_t free_page_count;
+phyaddr free_phys_memory_pointer;
+
+void init_memory_manager(void *memory_map);
+void temp_map_page(phyaddr addr);
+int map_pages(phyaddr page_dir, void *vaddr, phyaddr paddr, size_t count, unsigned int flags);
+phyaddr get_page_info(phyaddr page_dir, void *vaddr);
+size_t get_free_memory_size();
+phyaddr alloc_phys_pages(size_t count);
+void free_phys_pages(phyaddr base, size_t count);
+
 #endif
+
