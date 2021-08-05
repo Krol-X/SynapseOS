@@ -159,14 +159,9 @@ void  keyboard_handler_main(void)
         string_mem_counter  =  0;
         memset(string_mem,  0, STRING_MEM_MAX);
 
-        if (color_theme == 0){
-            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
-        } else if ( color_theme == 1 ){
-            tty_setcolor(VGA_COLOR_LIGHT_MAGENTA);
-        } else{
-            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
-        }
+        colors(1);
         tty_printf("\n>");
+        colors(0);
         return;
       }
       qemu_printf("SHIFT = %d, CAPS = %d\n", SHIFT, CAPS);
@@ -194,13 +189,7 @@ void  keyboard_handler_main(void)
       }  else{
         tty_setcolor(VGA_COLOR_RED);
         tty_printf("\nError:  Buffer is  full.  Buffer cleaned.\n");
-        if (color_theme == 0){
-            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
-        } else if ( color_theme == 1 ){
-            tty_setcolor(VGA_COLOR_LIGHT_MAGENTA);
-        } else{
-            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
-        }
+        colors(0);
         string_mem_counter  =  0;
         memset( string_mem,  0, STRING_MEM_MAX );
         SHIFT = 0;

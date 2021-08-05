@@ -10,10 +10,10 @@
 int EXIT = 0;
 
 //char TEMP_MEMORY[1024];
-
+//void *memory_map
 
 /* ------------------------------------------- */
-void kmain(void *memory_map){
+void kmain(){
 
 
 	qemu_printf("%c\n", (unsigned char)1);

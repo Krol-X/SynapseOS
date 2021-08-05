@@ -7,6 +7,29 @@
 int color_theme = 0;
 int DEBUG = 0;
 
+
+void colors(int element){
+    if (color_theme == 0){
+        if (element == 0){
+            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
+        } else{
+            tty_setcolor(VGA_COLOR_LIGHT_GREEN);
+        }   
+    } else if ( color_theme == 1 ){
+        if (element == 0){
+            tty_setcolor(VGA_COLOR_LIGHT_YELLOW);
+        } else{
+            tty_setcolor(VGA_COLOR_LIGHT_MAGENTA);
+        }   
+    } else{
+        if (element == 0){
+            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
+        } else{
+            tty_setcolor(VGA_COLOR_LIGHT_GREEN);
+        }
+    }
+}
+
 void shell_exec(char input_command[]){
     //Help
     if( strcmp(input_command, "help") == 0 ){
@@ -25,13 +48,7 @@ void shell_exec(char input_command[]){
 
     } else if( strcmp(input_command, "logo") == 0 ){
         // SynapseOS logo
-        if (color_theme == 0){
-            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
-        } else if ( color_theme == 1 ){
-            tty_setcolor(VGA_COLOR_LIGHT_MAGENTA);
-        } else{
-            tty_setcolor(VGA_COLOR_LIGHT_CYAN);
-        }
+        colors(0);
 	    tty_printf("________________________________________________________________________________\n");
         tty_printf("  #####                                              #######  ##### \n");
         tty_printf(" #     # #   # #    #   ##   #####   ####  ######    #     # #     #\n");
