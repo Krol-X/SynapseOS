@@ -35,9 +35,9 @@ void shell_exec(char input_command[]){
     if( strcmp(input_command, "help") == 0 ){
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C.\nCommands:");
-        tty_printf("\n    help - info about commands    sysinfo - system information");
+        tty_printf("\n    help - info about commands        sysinfo - system information");
         tty_printf("\n    time - info about current time    hello - Hello World programm");
-        tty_printf("\n    exit - Shutdown SynapseOS    cls or clear - cleaning screen");
+        tty_printf("\n    exit - Shutdown SynapseOS         scls or clear - cleaning screen");
         tty_printf("\n    ascii - show all ASCII symbols    debug - enable debug mode");
         tty_printf("\n    colors - Show all color themes    vga test - show all 256 vga colors");
         
