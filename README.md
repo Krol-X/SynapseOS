@@ -1,6 +1,3 @@
-### EN
-------------
-
 # SynapseOS
 SynapseOS is a free and open source 64x operating system written in FASM and C
 
@@ -22,15 +19,13 @@ Next, unpack the downloaded archive into a separate folder and run one of the fi
 
 ---------------
 
-### RU
-
 # SynapseOS
 SynapseOS это бесплатная open source 64x операционная система написанная на FASM и СИ
 
-## Documentation
+## Документация
 [Документация](https://synapse-os.github.io/doc)
 
-## Build
+## Сборка и запуск
 Чтобы собрать систему вам понадобится скачать инструметы для сборки [здесь](https://drive.google.com/file/d/1E90V9DXx6-8ZoloeMgTTjUs0XCnLa2Bf/view?usp=sharing)
 
 После ттого как вы скачали инструменты для сборки вам нужно будет установить WSL с официального сайта и установить на него образ ubuntu. Затем вам потребуется запустить WSL и выполнить следующие команды:
