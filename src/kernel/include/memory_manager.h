@@ -24,10 +24,12 @@ typedef size_t phyaddr;
 #define TEMP_PAGE_INFO (KERNEL_PAGE_TABLE + ((TEMP_PAGE >> PAGE_OFFSET_BITS) & PAGE_TABLE_INDEX_MASK) * sizeof(phyaddr))
 
 
-phyaddr kernel_page_dir;
+phyaddr kernel_page_dir; 
 size_t memory_size;
 
 
+extern size_t free_page_count;
+phyaddr free_phys_memory_pointer;
 
 void init_memory_manager(void *memory_map);
 void temp_map_page(phyaddr addr);

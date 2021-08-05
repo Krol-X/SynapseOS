@@ -50,6 +50,7 @@ void shell_exec(char input_command[]){
         tty_printf("    kernel_page_dir = 0x%x\n", kernel_page_dir);
 	    tty_printf("    memory_size = %d MB\n", memory_size / 1024 / 1024);
 	    tty_printf("    get_page_info(kernel_page_dir, 0xB8000) = 0x%x\n",get_page_info(kernel_page_dir, (void*)0xB8000));
+        tty_printf("    free page count = %d", free_page_count);
 
     } else if( strcmp(input_command, "logo") == 0 ){
         // SynapseOS logo

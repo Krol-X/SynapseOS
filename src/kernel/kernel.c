@@ -17,7 +17,7 @@ void kmain(void *memory_map){
 
 	init_memory_manager(memory_map);
 	qemu_printf("Memory  Manager inited\n");
-	
+	qemu_printf("RESULT: %d\n",alloc_phys_pages(5));
 
     gdt_init(); // intialize Global Descriptor Table
 	qemu_printf("Global Descriptor Table inited\n");
