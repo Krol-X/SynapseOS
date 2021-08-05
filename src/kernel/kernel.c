@@ -32,6 +32,9 @@ void kmain(){
 	tty_init(); // initialize terminal
 	qemu_printf("tty inited\n");
 
+	init_memory_manager();
+	qemu_printf("memory_manage inited\n");
+
 	tty_printf("Loading...");
 	shell_exec("cls");
 	shell_exec("logo");
