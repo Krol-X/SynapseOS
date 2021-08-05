@@ -16,3 +16,5 @@ sudo apt update
 sudo apt-get install grub-common
 sudo apt-get install xorriso
 ```
+
+Next, unpack the downloaded archive into a separate folder and run one of the files, after starting they will ask you to provide the path to the project, you will just need to transfer the required folder to the console and press enter
