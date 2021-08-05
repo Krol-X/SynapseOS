@@ -3,8 +3,6 @@ SynapseOS is a free and open source 64x operating system written in FASM and C
 
 ## Documentation
 [Documentation](https://synapse-os.github.io/doc)
-## Run
-
 
 ## Build
 To build SinopseOS you need to download the build tools [here](https://drive.google.com/file/d/1E90V9DXx6-8ZoloeMgTTjUs0XCnLa2Bf/view?usp=sharing)
