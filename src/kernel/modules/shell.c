@@ -60,8 +60,18 @@ void shell_exec(char input_command[]){
         tty_printf("                                                                   version: 0006");
         tty_printf("________________________________________________________________________________");
 
+    } else if( strcmp(input_command, "vga test") == 0 ){
+        //est all VGA colors
+        int i = 0;
+        while (i != 256){
+            tty_setcolor(i);
+            tty_printf("%d ", i);
+            i++;
+        }
+        colors(0);
+        
     } else if( strcmp(input_command, "time") == 0 ){
-        //Time
+        //Time from CMOS
         read_rtc();
         
 
