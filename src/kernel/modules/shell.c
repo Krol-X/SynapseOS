@@ -125,14 +125,21 @@ void shell_exec(char input_command[]){
     } else if( strcmp(input_command, "cls") == 0 || strcmp(input_command, "clear") == 0 ){
         //Cleaning screen
         
-        /*int i = 0;
+        int i = 0;
+        /*
         while( i != 25 ){
             tty_printf("\n");
             i++;
         }*/
         //tty_printf("\033[2J\n");
         //tty_printf("\33c\e[3J");
-        memset ( tty_buffer, 0, 80*25*2 );
+        //memset ( tty_buffer, 0, 80*25*2 );
+
+        while ( i != 25 * 80 ){
+            tty_backspace();
+            i++;
+        }
+        
         
     } else if(strcmp(input_command, "")==0){
         //No command
