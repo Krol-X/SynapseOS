@@ -5,7 +5,7 @@ SynapseOS is a free and open source 64x operating system written in FASM and C
 [Documentation](https://synapse-os.github.io/doc)
 
 ## Build
-To build SinopseOS you need to download the build tools [here](https://drive.google.com/file/d/1E90V9DXx6-8ZoloeMgTTjUs0XCnLa2Bf/view?usp=sharing)
+To build SynapseOS you need to download the build tools [here](https://drive.google.com/file/d/1E90V9DXx6-8ZoloeMgTTjUs0XCnLa2Bf/view?usp=sharing)
 
 After you have downloaded the build tools, you need to install the WSL with the ubuntu image, after installing it, you need to write the following command in the ubuntu terminal and wait for the process to complete:
 
