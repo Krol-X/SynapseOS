@@ -122,6 +122,10 @@ void  keyboard_handler_main(void)
 
       if(keycode == 14){
         qemu_printf("Backspase!\n");
+        string_mem[ string_mem_counter ] = 0;
+        string_mem_counter--;
+        qemu_printf("string_mem = %s    ",string_mem);
+        qemu_printf("string_mem_counter = %d    \n",string_mem_counter);
         return;
       }
       if ( keycode   == 42 ) {
