@@ -122,10 +122,16 @@ void  keyboard_handler_main(void)
 
       if(keycode == 14){
         qemu_printf("Backspase!\n");
-        string_mem[ string_mem_counter ] = 0;
-        string_mem_counter--;
-        qemu_printf("string_mem = %s    ",string_mem);
-        qemu_printf("string_mem_counter = %d    \n",string_mem_counter);
+        if (string_mem_counter != 0){
+          string_mem_counter--;
+          string_mem[ string_mem_counter ] = 0;
+          qemu_printf("string_mem = %s    ",string_mem);
+          qemu_printf("string_mem_counter = %d    \n",string_mem_counter);
+          tty_backspace();
+        }
+        return;
+      }
+      if (keycode == -114){
         return;
       }
       if ( keycode   == 42 ) {
