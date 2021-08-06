@@ -1,6 +1,7 @@
 #ifndef STDLIB_H
 #define STDLIB_H
 
+#define VERSION "0007"
 #define S_NULL ((void*)0)
 
 #include <stdint-gcc.h>

@@ -45,7 +45,7 @@ void shell_exec(char input_command[]){
     } else if( strcmp(input_command, "sysinfo") == 0 ){
         //system info
         tty_setcolor(VGA_COLOR_WHITE);
-        tty_printf("SynapseOS v0006 build %s\n\n", __TIMESTAMP__);
+        tty_printf("SynapseOS v%s build %s\n\n", VERSION, __TIMESTAMP__);
         detect_cpu();
         tty_printf("    kernel_page_dir = 0x%x\n", kernel_page_dir);
 	    tty_printf("    memory_size = %d MB\n", memory_size / 1024 / 1024);
@@ -63,7 +63,7 @@ void shell_exec(char input_command[]){
         tty_printf("       #   #   #  # # ###### #####       # #         #     #       #\n");
         tty_printf(" #     #   #   #   ## #    # #      #    # #         #     # #     #\n");
         tty_printf("  #####    #   #    # #    # #       ####  ######    #######  ##### \n");
-        tty_printf("                                                                   version: 0006");
+        tty_printf("                                                                   version: %s", VERSION);
         tty_printf("________________________________________________________________________________");
 
     } else if( strcmp(input_command, "vga test") == 0 ){
