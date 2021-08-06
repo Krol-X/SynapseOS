@@ -119,6 +119,11 @@ void  keyboard_handler_main(void)
       keycode = inb(KEYBOARD_DATA_PORT);
       qemu_printf("%d\n", (int)keycode);
 
+
+      if(keycode == 14){
+        qemu_printf("Backspase!\n");
+        return;
+      }
       if ( keycode   == 42 ) {
         if (SHIFT == 0){
           SHIFT = 1;
