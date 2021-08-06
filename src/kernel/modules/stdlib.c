@@ -1,6 +1,6 @@
 #include "../include/stdlib.h"
 
-/*
+
 void memset(void *mem, char value, size_t count) {
     asm("movl %0, %%eax \n movl %1, %%edi \n movl %2, %%ecx \n rep stosl"
         ::"a"((uint32)value | ((uint32)value << 8) | ((uint32)value << 16) | ((uint32)value << 24)),"b"(mem),"c"(count >> 2));
@@ -19,10 +19,10 @@ void memcpy(void *dest, void *src, size_t count) {
 }
 
 
-int memcmp(void *mem1, void *mem2, size_t count) {
-    char above, below;
-    asm("movl %0, %%esi \n movl %1, %%edi \n movl %2, %%ecx \n repe cmpsb"::"a"(mem1),"b"(mem2),"c"(count));
-    asm("seta %0 \n setb %1":"=a"(above),"=b"(below));
+int memcmp(void *mem1, void *mem2, size_t count) { 
+    char above, below; 
+    asm("movl %0, %%esi \n movl %1, %%edi \n movl %2, %%ecx \n repe cmpsb"::"a"(mem1),"b"(mem2),"c"(count)); 
+    asm("seta %0 \n setb %1":"=a"(above),"=b"(below)); 
     return above - below;
 }
 
@@ -34,7 +34,7 @@ void *memchr(void *mem, char value, size_t count) {
     if (result < mem + count) {
         return result;
     } else {
-        return NULL;
+        return S_NULL;
     }
 }
 
@@ -56,11 +56,20 @@ void strncpy(char *dest, char *src, size_t max_count) {
 }
 
 
-int strcmp(char *str1, char *str2) {
-    return memcmp(str1, str2, strlen(str1) + 1);
+int strcmp(const char *str1, const char *str2)
+{
+    int s1;
+    int s2;
+    do {
+        s1 = *str1++;
+        s2 = *str2++;
+        if (s1 == 0)
+            break;
+    } while (s1 == s2);
+    return (s1 < s2) ? -1 : (s1 > s2);
 }
 
 
 char *strchr(char *str, char value) {
     return memchr(str, value, strlen(str));
-}*/
+}

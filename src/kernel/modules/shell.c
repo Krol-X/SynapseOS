@@ -1,6 +1,6 @@
 #include "../include/shell.h"
 #include "../include/tty.h"
-#include "../include/string.h"
+#include "../include/stdlib.h"
 #include "../include/cpu_detect.h"
 #include "../include/cmos.h"
 #include "../include/memory_manager.h"

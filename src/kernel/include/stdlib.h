@@ -1,15 +1,9 @@
 #ifndef STDLIB_H
 #define STDLIB_H
 
-typedef enum {
-    false = 0,
-    true = 1
-} bool;
+#define S_NULL ((void*)0)
 
-
-
-
-#define NULL ((void*)0)
+#include <stdint-gcc.h>
 
 typedef unsigned char uint8;
 typedef signed char int8;
@@ -22,6 +16,12 @@ typedef signed long int32;
 
 typedef unsigned long long uint64;
 typedef signed long long int64;
+
+
+
+/*typedef unsigned long int __uint64_t;
+typedef __uint64_t uint64_t;*/
+
 
 #ifdef __x86_64__
     typedef uint64 size_t;
@@ -50,7 +50,7 @@ void *memchr(void *mem, char value, size_t count);
 size_t strlen(char *str);
 void strcpy(char *dest, char *src);
 void strncpy(char *dest, char*src, size_t max_count);
-int strcmp(char *str1, char *str2);
+int strcmp(const char *str1, const char *str2);
 char *strchr(char *str, char value);
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef MEMORY_MANAGER_H
 #define MEMORY_MANAGER_H
 
-#include "string.h"
+#include "stdlib.h"
 #include <stdint-gcc.h>
 
 #define PAGE_SIZE 0x1000

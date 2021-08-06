@@ -1,5 +1,5 @@
 #include <stdint-gcc.h>
-#include "../include/string.h"
+#include "../include/stdlib.h"
 #include "../include/memory_manager.h"
 
 
