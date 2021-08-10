@@ -41,6 +41,9 @@ void shell_exec(char input_command[]){
         tty_printf("\n    exit - Shutdown SynapseOS         scls or clear - cleaning screen");
         tty_printf("\n    ascii - show all ASCII symbols    debug - enable debug mode");
         tty_printf("\n    colors - Show all color themes    vga test - show all 256 vga colors");
+        if(DEBUG == 1){
+            tty_printf("\n    free_memory - Show free memory    free_pages - show free pages count");
+        }
         
     } else if( strcmp(input_command, "sysinfo") == 0 ){
         //system info
@@ -141,6 +144,24 @@ void shell_exec(char input_command[]){
         }
         
         
+    }else if(strcmp(input_command, "get_memory")==0){
+        phyaddr arg = alloc_phys_pages(10);
+        if (arg != -1)
+        {
+            tty_printf("memory gived");
+        } else {
+            tty_setcolor(VGA_COLOR_RED);
+            tty_printf("failed to give memory\n");
+            tty_printf("error code: %d", arg);
+        }
+        
+        
+    } else if(strcmp(input_command, "memory_check")==0){
+        tty_setcolor(VGA_COLOR_GREEN);
+        tty_printf("Memory info: \n");
+        tty_setcolor(VGA_COLOR_WHITE);
+        tty_printf("\tfree memory: %d", get_free_memory_size());
+        tty_printf("\n\tfree page count: %d", free_page_count);    
     } else if(strcmp(input_command, "")==0){
         //No command
 

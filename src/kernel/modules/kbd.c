@@ -135,11 +135,12 @@ void  keyboard_handler_main(void)
         return;
       }
       if ( keycode   == 42 ) {
-        if (SHIFT == 0){
-          SHIFT = 1;
-        } else {
-          SHIFT = 0;
-        }
+        SHIFT = 1;
+        qemu_printf("\nSHIFT = %d\n", SHIFT);
+        return;
+      }
+      if ( keycode   == -86 ) {
+        SHIFT = 0;
         qemu_printf("\nSHIFT = %d\n", SHIFT);
         return;
       }
@@ -199,8 +200,6 @@ void  keyboard_handler_main(void)
         }
         
         string_mem_counter++;
-
-        SHIFT = 0;
       }  else{
         tty_setcolor(VGA_COLOR_RED);
         tty_printf("\nError:  Buffer is  full.  Buffer cleaned.\n");
