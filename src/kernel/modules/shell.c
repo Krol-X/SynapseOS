@@ -129,8 +129,6 @@ void shell_exec(char input_command[]){
             tty_printf("\n");
             i++;
         }
-<<<<<<< Updated upstream
-=======
         
         
     }else if(strcmp(input_command, "get_memory")==0){
@@ -151,7 +149,6 @@ void shell_exec(char input_command[]){
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("\tfree memory: %d", get_free_memory_size());
         tty_printf("\n\tfree page count: %d", free_page_count);    
->>>>>>> Stashed changes
     } else if(strcmp(input_command, "")==0){
         //No command
 

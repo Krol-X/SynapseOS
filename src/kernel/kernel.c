@@ -11,9 +11,10 @@ int EXIT = 0;
 
 //char TEMP_MEMORY[1024];
 //void *memory_map
+int *memory_map = (int *)0x68000;
 
 /* ------------------------------------------- */
-void kmain(void *memory_map){
+void kmain(){
 
 	init_memory_manager(memory_map);
 	qemu_printf("Memory  Manager inited\n");
