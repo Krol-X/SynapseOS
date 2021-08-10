@@ -33,7 +33,7 @@ void colors(int element){
 
 void shell_exec(char input_command[]){
     //Help
-    if( strcmp(input_command, "help")){
+    if( strcmp(input_command, "help") == 0 ){
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C.\nCommands:");
         tty_printf("\n    help - info about commands        sysinfo - system information");
@@ -45,7 +45,7 @@ void shell_exec(char input_command[]){
             tty_printf("\n    free_memory - Show free memory    free_pages - show free pages count");
         }
         
-    } else if( strcmp(input_command, "sysinfo")){
+    } else if( strcmp(input_command, "sysinfo") == 0 ){
         //system info
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("SynapseOS v%s build %s\n\n", VERSION, __TIMESTAMP__);
@@ -55,7 +55,7 @@ void shell_exec(char input_command[]){
 	    tty_printf("    get_page_info(kernel_page_dir, 0xB8000) = 0x%x\n",get_page_info(kernel_page_dir, (void*)0xB8000));
         tty_printf("    free page count = %d", free_page_count);
 
-    } else if( strcmp(input_command, "logo")){
+    } else if( strcmp(input_command, "logo") == 0 ){
         // SynapseOS logo
         colors(0);
 	    tty_printf("________________________________________________________________________________\n");
@@ -69,7 +69,7 @@ void shell_exec(char input_command[]){
         tty_printf("                                                                   version: %s", VERSION);
         tty_printf("________________________________________________________________________________");
 
-    } else if( strcmp(input_command, "vga test")){
+    } else if( strcmp(input_command, "vga test") == 0 ){
         //est all VGA colors
         int i = 0;
         while (i != 256){
@@ -79,45 +79,45 @@ void shell_exec(char input_command[]){
         }
         colors(0);
         
-    } else if( strcmp(input_command, "time")){
+    } else if( strcmp(input_command, "time") == 0 ){
         //Time from CMOS
         read_rtc();
         
 
-    } else if( strcmp(input_command, "colors")){
+    } else if( strcmp(input_command, "colors") == 0 ){
         //Colors
         tty_printf("All color themes:\n");
         tty_printf("    theme_0 - default color theme\n    theme_1 - MAGENTA color theme\n");
         //tty_printf("    theme_2 - blue color theme\n    theme_3 - green color theme\n");
 
-    } else if( strcmp(input_command, "theme_0")){
+    } else if( strcmp(input_command, "theme_0") == 0 ){
         //Colors
         tty_printf("Color theme: default\n");
         color_theme = 0;
 
-    } else if( strcmp(input_command, "theme_1")){
+    } else if( strcmp(input_command, "theme_1") == 0 ){
         //Colors
         tty_printf("Color theme: MAGENTA\n");
         color_theme = 1;
 
-    } else if( strcmp(input_command, "hello")){
+    } else if( strcmp(input_command, "hello") == 0 ){
         tty_printf("Hello World!");
 
-    } else if( strcmp(input_command, "ignat")){
+    } else if( strcmp(input_command, "ignat") == 0 ){
         tty_printf("%c", (unsigned char)1);
 
-    } else if( strcmp(input_command, "ascii")){
+    } else if( strcmp(input_command, "ascii") == 0 ){
         int i = 0;
         while( i != 256 ){
             tty_printf("%c", (unsigned char)i);
             i++;
         }
 
-    } else if( strcmp(input_command, "exit")){
+    } else if( strcmp(input_command, "exit") == 0 ){
         //Exit
         EXIT = 1;
 
-    } else if( strcmp(input_command, "debug")){
+    } else if( strcmp(input_command, "debug") == 0 ){
         //Debug mode
         if ( DEBUG == 0 ){
             DEBUG = 1;
@@ -125,7 +125,7 @@ void shell_exec(char input_command[]){
             DEBUG = 0;
         }
 
-    } else if( strcmp(input_command, "cls") || strcmp(input_command, "clear")){
+    } else if( strcmp(input_command, "cls") == 0 || strcmp(input_command, "clear") == 0 ){
         //Cleaning screen
         
         int i = 0;
@@ -144,7 +144,7 @@ void shell_exec(char input_command[]){
         }
         
         
-    }else if(strcmp(input_command, "get_memory")){
+    }else if(strcmp(input_command, "get_memory")==0){
         phyaddr arg = alloc_phys_pages(10);
         if (arg != -1)
         {
@@ -156,13 +156,13 @@ void shell_exec(char input_command[]){
         }
         
         
-    } else if(strcmp(input_command, "memory_check")){
+    } else if(strcmp(input_command, "memory_check")==0){
         tty_setcolor(VGA_COLOR_GREEN);
         tty_printf("Memory info: \n");
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("\tfree memory: %d", get_free_memory_size());
         tty_printf("\n\tfree page count: %d", free_page_count);    
-    } else if(strcmp(input_command, "")){
+    } else if(strcmp(input_command, "")==0){
         //No command
 
     } else {
