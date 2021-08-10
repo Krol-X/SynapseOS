@@ -2,7 +2,13 @@
 #define STDLIB_H
 
 #define VERSION "0007"
-#define S_NULL ((void*)0)
+
+typedef enum {
+	false = 0,
+	true = 1
+} bool;
+
+#define NULL ((void*)0)
 
 #include <stdint-gcc.h>
 
@@ -51,7 +57,7 @@ void *memchr(void *mem, char value, size_t count);
 size_t strlen(char *str);
 void strcpy(char *dest, char *src);
 void strncpy(char *dest, char*src, size_t max_count);
-int strcmp(const char *str1, const char *str2);
+bool strcmp(const char *str1, const char *str2);
 char *strchr(char *str, char value);
 
 #endif

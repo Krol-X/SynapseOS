@@ -34,7 +34,7 @@ void *memchr(void *mem, char value, size_t count) {
     if (result < mem + count) {
         return result;
     } else {
-        return S_NULL;
+        return NULL;
     }
 }
 
@@ -56,7 +56,7 @@ void strncpy(char *dest, char *src, size_t max_count) {
 }
 
 
-int strcmp(const char *str1, const char *str2)
+bool strcmp(const char *str1, const char *str2)
 {
     int s1;
     int s2;
