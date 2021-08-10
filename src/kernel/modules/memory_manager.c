@@ -50,7 +50,7 @@ size_t get_free_memory_size() {
 phyaddr alloc_phys_pages(size_t count) {
     if (free_page_count < count) return -1;
         phyaddr result = -1;
-    if (free_phys_memory_pointer != -1) {
+    if (free_phys_memory_pointer != (unsigned int)-1) {
         phyaddr cur_block = free_phys_memory_pointer;
         do {
             temp_map_page(cur_block);
@@ -80,7 +80,7 @@ phyaddr alloc_phys_pages(size_t count) {
         cur_block = ((PhysMemoryBlock*)TEMP_PAGE)->next;
         } while (cur_block != free_phys_memory_pointer);
 
-        if (result != -1) {
+        if (result != (unsigned int)-1) {
             free_page_count -= count;
         }
     }
@@ -89,7 +89,7 @@ phyaddr alloc_phys_pages(size_t count) {
 
 
 void free_phys_pages(phyaddr base, size_t count) {
-    if (free_phys_memory_pointer == -1) {
+    if (free_phys_memory_pointer == (unsigned int)-1) {
         temp_map_page(base);
         ((PhysMemoryBlock*)TEMP_PAGE)->next = base;
         ((PhysMemoryBlock*)TEMP_PAGE)->prev = base;
@@ -168,7 +168,7 @@ int map_pages(phyaddr page_dir, void *vaddr, phyaddr paddr, size_t count, unsign
                 page_table = ((phyaddr*)TEMP_PAGE)[index];
                 if (!(page_table & PAGE_VALID)) {
                     phyaddr addr = alloc_phys_pages(1);
-                    if (addr != -1) {
+                    if (addr != (unsigned int)-1) {
                         temp_map_page(paddr);
                         memset((void*)TEMP_PAGE, 0,
                         PAGE_SIZE);
@@ -207,6 +207,7 @@ phyaddr get_page_info(phyaddr page_dir, void *vaddr) {
             return ((phyaddr*)TEMP_PAGE)[index];
         }
     }
+    return 0;
 }
 
 
