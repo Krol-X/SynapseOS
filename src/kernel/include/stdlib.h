@@ -1,10 +1,6 @@
 #ifndef STDLIB_H
 #define STDLIB_H
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 #define S_NULL ((void*)0)
 
 #include <stdint-gcc.h>
