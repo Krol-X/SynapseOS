@@ -13,3 +13,4 @@ disk.img
 .vscode/*
 Bochs_log.txt
 Qemu_log.txt
+src/include/kernel.h
