@@ -129,6 +129,29 @@ void shell_exec(char input_command[]){
             tty_printf("\n");
             i++;
         }
+<<<<<<< Updated upstream
+=======
+        
+        
+    }else if(strcmp(input_command, "get_memory")==0){
+        phyaddr arg = alloc_phys_pages(10);
+        if (arg != -1)
+        {
+            tty_printf("memory gived");
+        } else {
+            tty_setcolor(VGA_COLOR_RED);
+            tty_printf("failed to give memory\n");
+            tty_printf("error code: %d", arg);
+        }
+        
+        
+    } else if(strcmp(input_command, "memory_check")==0){
+        tty_setcolor(VGA_COLOR_GREEN);
+        tty_printf("Memory info: \n");
+        tty_setcolor(VGA_COLOR_WHITE);
+        tty_printf("free memory: %d", get_free_memory_size());
+        tty_printf("\nmemory size: %d", memory_size);
+>>>>>>> Stashed changes
     } else if(strcmp(input_command, "")==0){
         //No command
 

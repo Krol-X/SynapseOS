@@ -15,6 +15,8 @@ int EXIT = 0;
 /* ------------------------------------------- */
 void kmain(void *memory_map){
 
+	enable_paging();
+	
 	init_memory_manager(memory_map);
 	qemu_printf("Memory  Manager inited\n");
 	qemu_printf("RESULT: %d\n",alloc_phys_pages(5));

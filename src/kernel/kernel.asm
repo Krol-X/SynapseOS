@@ -34,6 +34,14 @@ keyboard_handler:
 ; something special in order to set CS. We do what is called a
 ; far jump. A jump that includes a segment as well as an offset.
 ; This is declared in C as 'extern void gdt_flush(uint32_t gdt_ptr_addr);'
+
+enable_paging:
+        mov eax, cr0
+        or eax, 0x80000001
+        mov cr0, eax
+
+
+        
 gdt_flush:
     cli
     mov eax, [esp + 4]
