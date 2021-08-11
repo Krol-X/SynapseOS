@@ -17,6 +17,8 @@ int *memory_map = (int *)0x2C628;
 void kmain(){
 	
 	init_memory_manager(memory_map);
+	VGA_MEMORY = (uint16_t*)0xB8000;
+	qemu_printf(VGA_MEMORY);
 	qemu_printf("Memory  Manager inited\n");
 	qemu_printf("RESULT: %d\n",alloc_phys_pages(5));
 
