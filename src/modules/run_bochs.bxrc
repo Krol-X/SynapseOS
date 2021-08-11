@@ -4,5 +4,7 @@
 ata0-master: type=cdrom, path=../SynapseOS.iso, status=inserted
 clock: sync=both, time0=local, rtc_sync=0
 megs: 128
-boot: cdrom
+memory: guest=512, host=256
 log: bochsout.txt
+vgaromimage: file=$BXSHARE/VGABIOS-lgpl-latest
+boot: cdrom
