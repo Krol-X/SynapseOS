@@ -15,8 +15,6 @@ int *memory_map = (int *)0x2C628;
 
 /* ------------------------------------------- */
 void kmain(){
-
-	enable_paging();
 	
 	init_memory_manager(memory_map);
 	qemu_printf("Memory  Manager inited\n");
