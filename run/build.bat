@@ -14,7 +14,7 @@ set NL=^^^%NLM%%NLM%^%NLM%%NLM%
 call :GetUnixTime UNIX_TIME
 
 :vars
-echo #define VERSION %VERSION% %NL%#define BUILD_UID %UNIX_TIME%>src/include/kernel.h
+echo #define VERSION %VERSION% %NL%#define BUILD_UID "%UNIX_TIME%">src/include/kernel.h
 SET AS=i686-elf-as
 SET CC=i686-elf-gcc
 SET LD=i686-elf-ld
