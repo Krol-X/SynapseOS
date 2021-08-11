@@ -1,6 +1,7 @@
 src/kernel/bin/*
 .vscode/*
 *.o
+*.elf
 
 SynapseOS.iso
 isodir/boot/kernel.elf
