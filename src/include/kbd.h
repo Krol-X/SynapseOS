@@ -16,7 +16,7 @@ extern int SHIFT;
 extern int CAPS;
 extern unsigned char  status;
 extern char keycode;
-
+extern int keyboard_get_input;
 
 void kb_init(void);
 void keyboard_handler(void);

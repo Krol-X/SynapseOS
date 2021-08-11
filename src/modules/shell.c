@@ -165,6 +165,10 @@ void shell_exec(char input_command[]){
 }
 
 void check_keyboard(){
+    if ( keyboard_get_input == 0){
+        return;
+    }
+    keyboard_get_input = 0;
     if(keycode == 14){
         qemu_printf("Backspase!\n");
         if (string_mem_counter != 0){

@@ -10,6 +10,7 @@ char  string_mem[STRING_MEM_MAX];
 int string_mem_counter  =  0;
 int SHIFT = 0;
 int CAPS = 0;
+int keyboard_get_input = 0;
 unsigned  char  status;
 char  keycode;
 
@@ -115,6 +116,7 @@ char  keyboard_handler_main(void)
     status  =  inb(KEYBOARD_STATUS_PORT);
     /*  Lowest bit of  status will  be set if  buffer is  not  empty  */
     if  (status  &  0x01)  {
+      keyboard_get_input = 1;
       keycode = inb(KEYBOARD_DATA_PORT);
       qemu_printf("%d\n", (int)keycode);
       if (SHIFT == 0){
