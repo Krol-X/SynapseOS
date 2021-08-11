@@ -4,6 +4,7 @@
 #include "../include/cpu_detect.h"
 #include "../include/cmos.h"
 #include "../include/memory_manager.h"
+#include "../include/kernel.h"
 
 int color_theme = 0;
 int DEBUG = 0;
@@ -45,12 +46,13 @@ void shell_exec(char input_command[]){
     } else if( strcmp(input_command, "sysinfo") == 0 ){
         //system info
         tty_setcolor(VGA_COLOR_WHITE);
-        tty_printf("SynapseOS v0006 build %s\n\n", __TIMESTAMP__);
+        tty_printf("SynapseOS v%s build %s\n\n", VERSION, __TIMESTAMP__);
         detect_cpu();
         tty_printf("    kernel_page_dir = 0x%x\n", kernel_page_dir);
 	    tty_printf("    memory_size = %d MB\n", memory_size / 1024 / 1024);
 	    tty_printf("    get_page_info(kernel_page_dir, 0xB8000) = 0x%x\n",get_page_info(kernel_page_dir, (void*)0xB8000));
         tty_printf("    free page count = %d", free_page_count);
+        shell_exec("memory_check");
 
     } else if( strcmp(input_command, "logo") == 0 ){
         // SynapseOS logo
@@ -63,7 +65,7 @@ void shell_exec(char input_command[]){
         tty_printf("       #   #   #  # # ###### #####       # #         #     #       #\n");
         tty_printf(" #     #   #   #   ## #    # #      #    # #         #     # #     #\n");
         tty_printf("  #####    #   #    # #    # #       ####  ######    #######  ##### \n");
-        tty_printf("                                                                   version: 0006");
+        tty_printf("                                                                   version: %s", VERSION);
         tty_printf("________________________________________________________________________________");
 
     } else if( strcmp(input_command, "vga test") == 0 ){

@@ -21,6 +21,9 @@ typedef struct {
 size_t free_page_count = 0;
 phyaddr free_phys_memory_pointer = -1;
 
+void enable_paging(){
+    return;
+}
 
 void init_memory_manager(void *memory_map) {
     asm("movl %%cr3, %0":"=a"(kernel_page_dir));

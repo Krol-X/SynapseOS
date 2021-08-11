@@ -31,6 +31,7 @@ size_t memory_size;
 extern size_t free_page_count;
 phyaddr free_phys_memory_pointer;
 
+void enable_paging();
 void init_memory_manager(void *memory_map);
 void temp_map_page(phyaddr addr);
 int map_pages(phyaddr page_dir, void *vaddr, phyaddr paddr, size_t count, unsigned int flags);
