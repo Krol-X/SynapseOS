@@ -1,14 +1,21 @@
 @Echo off
-echo build SynapseOS 0007
+set VERSION="0008"
+
+echo build SynapseOS %VERSION%
 echo *************************
 
 
 cd ..
 
+call :GetUnixTime UNIX_TIME
+
+:vars
+echo #define VERSION %VERSION% #define BUILD_UID %UNIX_TIME%>src/include/kernel.h
+
 SET AS=i686-elf-as
 SET CC=i686-elf-gcc
 SET LD=i686-elf-ld
-SET SRC=./src/kernel
+SET SRC=./src
 SET CCFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra
 SET LDFLAGS=-ffreestanding -nostdlib -lgcc
 
@@ -71,6 +78,15 @@ cp %SRC%/grub.cfg isodir/boot/grub/grub.cfg
 ubuntu run grub-mkrescue -o SynapseOS.iso isodir/
 
 
+
+:GetUnixTime
+setlocal enableextensions
+for /f %%x in ('wmic path win32_utctime get /format:list ^| findstr "="') do (
+    set %%x)
+set /a z=(14-100%Month%%%100)/12, y=10000%Year%%%10000-z
+set /a ut=y*365+y/4-y/100+y/400+(153*(100%Month%%%100+12*z-3)+2)/5+Day-719469
+set /a ut=ut*86400+100%Hour%%%100*3600+100%Minute%%%100*60+100%Second%%%100
+endlocal & set "%1=%ut%" & goto :vars
 
 echo Done
 pause
