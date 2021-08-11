@@ -72,3 +72,4 @@ endlocal & set "%1=%ut%" & goto :vars
 :programm_done
 echo Done
 pause
+exit

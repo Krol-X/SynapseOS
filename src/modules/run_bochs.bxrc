@@ -1,7 +1,8 @@
-
 #floppya: 1_44="disk.img", status=inserted
 #boot: floppy
 
 ata0-master: type=cdrom, path=../SynapseOS.iso, status=inserted
+clock: sync=both, time0=local, rtc_sync=0
 megs: 128
 boot: cdrom
+log: bochsout.txt
