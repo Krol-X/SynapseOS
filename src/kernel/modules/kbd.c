@@ -119,12 +119,28 @@ void  keyboard_handler_main(void)
       keycode = inb(KEYBOARD_DATA_PORT);
       qemu_printf("%d\n", (int)keycode);
 
-      if ( keycode   == 42 ) {
-        if (SHIFT == 0){
-          SHIFT = 1;
-        } else {
-          SHIFT = 0;
+
+      if(keycode == 14){
+        qemu_printf("Backspase!\n");
+        if (string_mem_counter != 0){
+          string_mem_counter--;
+          string_mem[ string_mem_counter ] = 0;
+          qemu_printf("string_mem = %s    ",string_mem);
+          qemu_printf("string_mem_counter = %d    \n",string_mem_counter);
+          tty_backspace();
         }
+        return;
+      }
+      if (keycode == -114){
+        return;
+      }
+      if ( keycode   == 42 ) {
+        SHIFT = 1;
+        qemu_printf("\nSHIFT = %d\n", SHIFT);
+        return;
+      }
+      if ( keycode   == -86 ) {
+        SHIFT = 0;
         qemu_printf("\nSHIFT = %d\n", SHIFT);
         return;
       }
@@ -184,8 +200,6 @@ void  keyboard_handler_main(void)
         }
         
         string_mem_counter++;
-
-        SHIFT = 0;
       }  else{
         tty_setcolor(VGA_COLOR_RED);
         tty_printf("\nError:  Buffer is  full.  Buffer cleaned.\n");

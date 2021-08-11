@@ -11,9 +11,10 @@ int EXIT = 0;
 
 //char TEMP_MEMORY[1024];
 //void *memory_map
+int *memory_map = (int *)0x2C628;
 
 /* ------------------------------------------- */
-void kmain(void *memory_map){
+void kmain(){
 
 	enable_paging();
 	

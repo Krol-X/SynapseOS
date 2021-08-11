@@ -38,7 +38,7 @@ void shell_exec(char input_command[]){
         tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C.\nCommands:");
         tty_printf("\n    help - info about commands        sysinfo - system information");
         tty_printf("\n    time - info about current time    hello - Hello World programm");
-        tty_printf("\n    exit - Shutdown SynapseOS         scls or clear - cleaning screen");
+        tty_printf("\n    exit - Shutdown SynapseOS         cls or clear - cleaning screen");
         tty_printf("\n    ascii - show all ASCII symbols    debug - enable debug mode");
         tty_printf("\n    colors - Show all color themes    vga test - show all 256 vga colors");
         
@@ -129,6 +129,26 @@ void shell_exec(char input_command[]){
             tty_printf("\n");
             i++;
         }
+        
+        
+    }else if(strcmp(input_command, "get_memory")==0){
+        phyaddr arg = alloc_phys_pages(10);
+        if (arg != (unsigned int)-1)
+        {
+            tty_printf("memory gived");
+        } else {
+            tty_setcolor(VGA_COLOR_RED);
+            tty_printf("failed to give memory\n");
+            tty_printf("error code: %d", arg);
+        }
+        
+        
+    } else if(strcmp(input_command, "memory_check")==0){
+        tty_setcolor(VGA_COLOR_GREEN);
+        tty_printf("Memory info: \n");
+        tty_setcolor(VGA_COLOR_WHITE);
+        tty_printf("\tfree memory: %d", get_free_memory_size());
+        tty_printf("\n\tfree page count: %d", free_page_count);    
     } else if(strcmp(input_command, "")==0){
         //No command
 
