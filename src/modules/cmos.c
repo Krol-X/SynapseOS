@@ -109,5 +109,10 @@ void read_rtc() {
             year += (CURRENT_YEAR / 100) * 100;
             if(year < CURRENT_YEAR) year += 100;
       }
-      tty_printf("Time: %d.%d.%d  %d:%d\n", month, day, year, hour, minute);
+      
+}
+
+void getnowtime(){
+      read_rtc();
+      tty_printf("Time: %d.%d.%d  %d:%d", month, day, year, hour, minute);
 }

@@ -80,8 +80,7 @@ void shell_exec(char input_command[]){
         
     } else if( strcmp(input_command, "time") == 0 ){
         //Time from CMOS
-        read_rtc();
-        
+        getnowtime();
 
     } else if( strcmp(input_command, "colors") == 0 ){
         //Colors
