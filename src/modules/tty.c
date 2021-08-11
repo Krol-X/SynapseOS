@@ -17,13 +17,7 @@ static size_t strlen(const char* str) {
     }
     return len;
 }
-/*int strcmp(const char *s1, const char *s2)
-{
-    for ( ; *s1 == *s2; s1++, s2++)
-        if (*s1 == '\0')
-            return 0;
-    return ((*(unsigned char *)s1 < *(unsigned char *)s2) ? -1 : +1);
-}*/
+
 
 void update_cursor(size_t row, size_t col) {
   unsigned short position = (row * VGA_WIDTH) + col;

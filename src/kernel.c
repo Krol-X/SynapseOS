@@ -47,5 +47,7 @@ void kmain(){
 	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 
 
-	while(EXIT!=1);
+	while(EXIT!=1){
+		check_keyboard();
+	}
 }
