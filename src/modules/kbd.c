@@ -10,6 +10,8 @@ char  string_mem[STRING_MEM_MAX];
 int string_mem_counter  =  0;
 int SHIFT = 0;
 int CAPS = 0;
+unsigned  char  status;
+char  keycode;
 
 unsigned  char keyboard_map[] = {
     0, 
@@ -105,11 +107,8 @@ void  kb_init(void){
 }
 
 
-void  keyboard_handler_main(void)
+char  keyboard_handler_main(void)
 {
-    unsigned  char  status;
-    char  keycode;
-
     /*  write  EOI  */
     outb(0x20,  0x20);
 
@@ -118,96 +117,11 @@ void  keyboard_handler_main(void)
     if  (status  &  0x01)  {
       keycode = inb(KEYBOARD_DATA_PORT);
       qemu_printf("%d\n", (int)keycode);
-
-
-      if(keycode == 14){
-        qemu_printf("Backspase!\n");
-        if (string_mem_counter != 0){
-          string_mem_counter--;
-          string_mem[ string_mem_counter ] = 0;
-          qemu_printf("string_mem = %s    ",string_mem);
-          qemu_printf("string_mem_counter = %d    \n",string_mem_counter);
-          tty_backspace();
-        }
-        return;
-      }
-      if (keycode == -114){
-        return;
-      }
-      if ( keycode   == 42 ) {
-        SHIFT = 1;
-        qemu_printf("\nSHIFT = %d\n", SHIFT);
-        return;
-      }
-      if ( keycode   == -86 ) {
-        SHIFT = 0;
-        qemu_printf("\nSHIFT = %d\n", SHIFT);
-        return;
-      }
-      
-
-      if ( keycode  ==  -70 ) {
-        if ( CAPS == 0 ){
-          CAPS = 1;
-        } else {
-          CAPS = 0;
-        }
-        qemu_printf("CAPS = %d", CAPS);
-      }
-      //tty_printf("\n%d \n", keycode);
-      if( keycode  <  0){
-        return;
-      }
-
-      if (CAPS == 1)	{
-        if ( SHIFT == 0 ){
-          SHIFT = 1;
-        } else {
-          SHIFT = 0;
-        }
-        qemu_printf("SHIFT = %d", SHIFT);
-      }
-
-      if(keycode  == ENTER_KEY_CODE) {
-        tty_putchar('\n');
-        shell_exec(string_mem);
-
-        string_mem_counter  =  0;
-        memset(string_mem,  0, STRING_MEM_MAX);
-
-        colors(1);
-        tty_printf("\n>");
-        colors(0);
-        return;
-      }
-      qemu_printf("SHIFT = %d, CAPS = %d\n", SHIFT, CAPS);
-      if ( SHIFT == 0 ){
-        tty_putchar(keyboard_map[(unsigned char) keycode]);
+      if (SHIFT == 0){
+        return keyboard_map[(unsigned char) keycode];
       } else {
-        qemu_printf("SHIFTED\n");
-        tty_putchar(keyboard_map_shifted[(unsigned char) keycode]);
+          return keyboard_map_shifted[(unsigned char) keycode];
       }
-
-      if (string_mem_counter!= STRING_MEM_MAX){
-        if (DEBUG==1){
-          qemu_printf("\n%d \n", keycode);;
-        }
-        
-        if (SHIFT == 0){
-            string_mem[string_mem_counter]  =  keyboard_map[(unsigned char) keycode];
-        } else {
-            string_mem[string_mem_counter]  =  keyboard_map_shifted[(unsigned char) keycode];
-        }
-        
-        string_mem_counter++;
-      }  else{
-        tty_setcolor(VGA_COLOR_RED);
-        tty_printf("\nError:  Buffer is  full.  Buffer cleaned.\n");
-        colors(0);
-        string_mem_counter  =  0;
-        memset( string_mem,  0, STRING_MEM_MAX );
-        SHIFT = 0;
-      }
-    }
+  }
+  return (char)0;
 }
-

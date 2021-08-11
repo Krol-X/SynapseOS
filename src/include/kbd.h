@@ -10,9 +10,16 @@
 
 extern unsigned char keyboard_map[128];
 extern unsigned char keyboard_map_shifted[128];
+extern char  string_mem[STRING_MEM_MAX];
+extern int string_mem_counter;
+extern int SHIFT;
+extern int CAPS;
+extern unsigned char  status;
+extern char keycode;
+
 
 void kb_init(void);
 void keyboard_handler(void);
-void keyboard_handler_main(void);
+char keyboard_handler_main(void);
 
 #endif
