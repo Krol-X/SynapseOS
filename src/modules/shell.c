@@ -35,15 +35,35 @@ void colors(int element){
 
 void shell_exec(char input_command[]){
     //Help
-    if( strcmp(input_command, "help") == 0 ){
+    if( strcmp(input_command, "help") == 0 || strcmp(input_command, "help 1") == 0 ){
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C.\nCommands:");
-        tty_printf("\n    help - info about commands        sysinfo - system information");
-        tty_printf("\n    time - info about current time    hello - Hello World programm");
+        tty_printf("\n    help <1-3> - info about commands        sysinfo - system information");
+        tty_printf("\n    time - info about current time          syscheck - check system health");
+        tty_printf("\n    exit - Shutdown SynapseOS               cls or clear - cleaning screen");
+        tty_printf("\n    ascii - show all ASCII symbols          debug - enable debug mode");
+        tty_printf("\n    colors - Show all color themes          vga test - show all 256 vga colors");
+        
+    } else if( strcmp(input_command, "help 2") == 0 ){
+        //system info
+        tty_setcolor(VGA_COLOR_WHITE);
+        tty_printf("Help page 2/3.\nCommands:");
+        tty_printf("\n    hello - info about commands        sysinfo - system information");
+        tty_printf("\n    time - info about current time    tests - Show all system tests");
         tty_printf("\n    exit - Shutdown SynapseOS         cls or clear - cleaning screen");
         tty_printf("\n    ascii - show all ASCII symbols    debug - enable debug mode");
         tty_printf("\n    colors - Show all color themes    vga test - show all 256 vga colors");
-        
+
+    } else if( strcmp(input_command, "help 3") == 0 ){
+        //system info
+        tty_setcolor(VGA_COLOR_WHITE);
+        tty_printf("Help page 3/3.\nCommands:");
+        tty_printf("\n    hello - info about commands        sysinfo - system information");
+        tty_printf("\n    time - info about current time    tests - Show all system tests");
+        tty_printf("\n    exit - Shutdown SynapseOS         cls or clear - cleaning screen");
+        tty_printf("\n    ascii - show all ASCII symbols    debug - enable debug mode");
+        tty_printf("\n    colors - Show all color themes    vga test - show all 256 vga colors");
+
     } else if( strcmp(input_command, "sysinfo") == 0 ){
         //system info
         tty_setcolor(VGA_COLOR_WHITE);
@@ -86,15 +106,15 @@ void shell_exec(char input_command[]){
     } else if( strcmp(input_command, "colors") == 0 ){
         //Colors
         tty_printf("All color themes:\n");
-        tty_printf("    theme_0 - default color theme\n    theme_1 - MAGENTA color theme\n");
+        tty_printf("    theme 0 - default color theme\n    theme 1 - MAGENTA color theme\n");
         //tty_printf("    theme_2 - blue color theme\n    theme_3 - green color theme\n");
 
-    } else if( strcmp(input_command, "theme_0") == 0 ){
+    } else if( strcmp(input_command, "theme 0") == 0 ){
         //Colors
         tty_printf("Color theme: default\n");
         color_theme = 0;
 
-    } else if( strcmp(input_command, "theme_1") == 0 ){
+    } else if( strcmp(input_command, "theme 1") == 0 ){
         //Colors
         tty_printf("Color theme: MAGENTA\n");
         color_theme = 1;
