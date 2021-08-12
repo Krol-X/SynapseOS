@@ -16,6 +16,8 @@ public gdt_flush
 extrn kmain             ;this is defined in the c file
 extrn keyboard_handler_main
 
+
+
 load_idt:
         mov edx, [esp + 4]
         lidt [edx]
@@ -36,31 +38,7 @@ keyboard_handler:
 ; This is declared in C as 'extern void gdt_flush(uint32_t gdt_ptr_addr);'
 
 paging:
-        ;fill page directory
-        @@:
-        xor di, di
-        xor eax, eax
-        mov eax, 0x2000 + di ;addr without flags
-        mov dword[0x1000+di], eax
-        inc di
-        cmp di, 1023
-        jne @b  
-	; Загрузим значение в CR3
-	mov eax, 0x1000
-	mov cr3, eax
-        mov eax, cr0
-        or eax, 0x80000001
-        mov cr0, eax
-        mov eax, 0x1000
-        mov cr3, eax
-        mov eax, 16
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-	mov ss, ax
-	mov esp, 0xFFFFDFFC
-        ret
+       
         
 gdt_flush:
     cli
@@ -77,10 +55,10 @@ gdt_flush:
     ret               ; Returns back to the C code!
 
 start:
-        cli                             ;block interrupts
-        mov esp, stack_space
+	cli
         call kmain
-        hlt                             ;halt the CPU
+        mov esp, stack_space
+	hlt
 
 section '.bss' 
 rb 65535 ; 64 kib for stack
