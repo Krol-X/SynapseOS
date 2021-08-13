@@ -38,7 +38,7 @@ void shell_exec(char input_command[]){
     //Help
     if( strcmp(input_command, "help") == 0 || strcmp(input_command, "help 1") == 0 ){
         tty_setcolor(VGA_COLOR_WHITE);
-        tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C.\nCommands:");
+        tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C. Help page 1/3.\nCommands:");
         tty_printf("\n    help <1-3> - info about commands        sysinfo - system information");
         tty_printf("\n    time - info about current time          syscheck - check system health");
         tty_printf("\n    exit - Shutdown SynapseOS               cls or clear - cleaning screen");
@@ -50,13 +50,13 @@ void shell_exec(char input_command[]){
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("Help page 2/3.\nCommands:");
         tty_printf("\n    hello - info about commands              SID - get system ID");
-        tty_printf("\n    version - info about current version     tests - Show all system tests");
+        tty_printf("\n    version - info about current version     ! - enable safe mode");
 
     } else if( strcmp(input_command, "help 3") == 0 ){
         //system info
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("Help page 3/3.\nCommands:");
-        tty_printf("\n    ! - enable safe mode");
+        tty_printf("\n    ");
 
     } else if( strcmp(input_command, "sysinfo") == 0 ){
         //system info

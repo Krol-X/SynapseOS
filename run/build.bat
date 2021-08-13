@@ -18,8 +18,8 @@ SET AS=i686-elf-as
 SET CC=i686-elf-gcc
 SET LD=i686-elf-ld
 SET SRC=./src
-SET CCFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra
-SET LDFLAGS=-ffreestanding -nostdlib -lgcc
+SET CCFLAGS=-O3 -std=gnu99 -ffreestanding -Wall -Wextra 
+SET LDFLAGS=-O3 -ffreestanding -nostdlib -lgcc
 set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o
 
 
@@ -28,7 +28,7 @@ IF EXIST "./bin/" (
 ) ELSE (
     mkdir bin & mkdir isodir & cd isodir & mkdir boot & cd boot & mkdir grub & cd ../../
 )
-
+::36,3 КБ (37 272 байт)
 
 
 echo Build asm kernel
