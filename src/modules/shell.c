@@ -166,9 +166,6 @@ void shell_exec(char input_command[]){
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("\tfree memory: %d", get_free_memory_size());
         tty_printf("\n\tfree page count: %d", free_page_count);    
-    } else if(strcmp(input_command, "")==0){
-        //No command
-
     } else {
         // Unknown command
         tty_setcolor(VGA_COLOR_RED);
