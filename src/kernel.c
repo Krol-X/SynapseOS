@@ -50,14 +50,22 @@ void kmain(){
 	while(EXIT!=1){
 		check_keyboard();
 	}
-	//asm ("hlt");
 
+	/*
 	//qemu
 	outw(0x604, 0x2000);
-	
+
 	//bochs
 	outw(0xB004, 0x2000);
 
 	//Virtualbox
 	outw(0x4004, 0x3400);
+
+	asm("mov ax, 0x5307");
+	asm("mov bx, 0x0001");
+	asm("mov cx, 0x0003");
+	asm("int 0x15");
+	*/
+	__asm__ __volatile__ ("outw %1, %0" : : "dN" ((uint16_t)0xB004), "a" ((uint16_t)0x2000));
+	
 }

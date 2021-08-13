@@ -2,10 +2,9 @@ src/kernel/bin/*
 .vscode/*
 *.o
 *.elf
-
+src/include/kernel.h
 SynapseOS.iso
 isodir/boot/kernel.elf
 isodir/boot/grub/grub.cfg
 Qemu_log.txt
-src/include/kernel.h
 Bochs_log.txt

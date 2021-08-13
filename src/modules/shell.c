@@ -49,21 +49,14 @@ void shell_exec(char input_command[]){
         //system info
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("Help page 2/3.\nCommands:");
-        tty_printf("\n    hello - info about commands        sysinfo - system information");
-        tty_printf("\n    time - info about current time    tests - Show all system tests");
-        tty_printf("\n    exit - Shutdown SynapseOS         cls or clear - cleaning screen");
-        tty_printf("\n    ascii - show all ASCII symbols    debug - enable debug mode");
-        tty_printf("\n    colors - Show all color themes    vga test - show all 256 vga colors");
+        tty_printf("\n    hello - info about commands              SID - get system ID");
+        tty_printf("\n    version - info about current version     tests - Show all system tests");
 
     } else if( strcmp(input_command, "help 3") == 0 ){
         //system info
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("Help page 3/3.\nCommands:");
-        tty_printf("\n    hello - info about commands        sysinfo - system information");
-        tty_printf("\n     - info about current time    tests - Show all system tests");
-        tty_printf("\n    exit - Shutdown SynapseOS         cls or clear - cleaning screen");
-        tty_printf("\n    ascii - show all ASCII symbols    debug - enable debug mode");
-        tty_printf("\n    colors - Show all color themes    vga test - show all 256 vga colors");
+        tty_printf("\n    ! - enable safe mode");
 
     } else if( strcmp(input_command, "sysinfo") == 0 ){
         //system info
