@@ -1,3 +1,5 @@
+/*
+
 struct pe_hdr {
     unsigned long pe_sign;
     unsigned short pe_cputype;
@@ -53,8 +55,9 @@ int LoadPE (unsigned char *bin)
         // либо код либо инициализированные данные
         memcpy (PE->pe_image_base + POH->o_vaddr,
             bin + POH->o_poff, POH->o_psize);
-            
+
         POH = (struct pe_ohdr *)((unsigned char *)POH + sizeof (struct pe_ohdr));
     }
     return PE_OK;
 }
+*/

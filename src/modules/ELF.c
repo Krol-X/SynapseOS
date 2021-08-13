@@ -1,3 +1,5 @@
+/*
+
 #define EI_NIDENT 16
 
 struct elf32_hdr {
@@ -52,3 +54,5 @@ int LoadELF (unsigned char *bin){
     }
     return ELF_OK;
 }
+
+*/

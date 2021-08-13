@@ -50,4 +50,5 @@ void kmain(){
 	while(EXIT!=1){
 		check_keyboard();
 	}
+	asm ("hlt");
 }
