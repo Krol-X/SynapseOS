@@ -6,5 +6,4 @@ isodir/boot/grub/grub.cfg
 Qemu_log.txt
 Bochs_log.txt
 SynapseOS.iso
-kernel.elf
 kernel.h
