@@ -50,5 +50,14 @@ void kmain(){
 	while(EXIT!=1){
 		check_keyboard();
 	}
-	asm ("hlt");
+	//asm ("hlt");
+
+	//qemu
+	outw(0x604, 0x2000);
+	
+	//bochs
+	outw(0xB004, 0x2000);
+
+	//Virtualbox
+	outw(0x4004, 0x3400);
 }
