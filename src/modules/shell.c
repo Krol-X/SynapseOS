@@ -180,12 +180,17 @@ void shell_exec(char input_command[]){
 }
 
 void check_keyboard(){
+    if ( DEBUG == 1 ){
+        qemu_printf("");
+    }
     if ( keyboard_get_input == 0){
         return;
     }
     keyboard_get_input = 0;
     if(keycode == 14){
-        qemu_printf("Backspase!\n");
+        if ( DEBUG == 1 ){
+            qemu_printf("Backspase!\n");
+        }
         if (string_mem_counter != 0){
           string_mem_counter--;
           string_mem[ string_mem_counter ] = 0;
@@ -200,12 +205,16 @@ void check_keyboard(){
       }
       if ( keycode   == 42 ) {
         SHIFT = 1;
-        qemu_printf("\nSHIFT = %d\n", SHIFT);
+        if ( DEBUG == 1 ){
+            qemu_printf("\nSHIFT = %d\n", SHIFT);
+        }
         return;
       }
       if ( keycode   == -86 ) {
         SHIFT = 0;
-        qemu_printf("\nSHIFT = %d\n", SHIFT);
+        if ( DEBUG == 1 ){
+            qemu_printf("\nSHIFT = %d\n", SHIFT);
+        }
         return;
       }
       
@@ -216,7 +225,9 @@ void check_keyboard(){
         } else {
           CAPS = 0;
         }
-        qemu_printf("CAPS = %d", CAPS);
+        if ( DEBUG == 1 ){
+            qemu_printf("CAPS = %d", CAPS);
+        }
       }
       //tty_printf("\n%d \n", keycode);
       if( keycode  <  0){
@@ -229,7 +240,9 @@ void check_keyboard(){
         } else {
           SHIFT = 0;
         }
-        qemu_printf("SHIFT = %d", SHIFT);
+        if ( DEBUG == 1 ){
+            qemu_printf("\nSHIFT = %d\n", SHIFT);
+        }
       }
 
       if(keycode  == ENTER_KEY_CODE) {
@@ -244,11 +257,16 @@ void check_keyboard(){
         colors(0);
         return;
       }
-      qemu_printf("SHIFT = %d, CAPS = %d\n", SHIFT, CAPS);
+        if ( DEBUG == 1 ){
+            qemu_printf("SHIFT = %d, CAPS = %d\n", SHIFT, CAPS);
+        }
+      
       if ( SHIFT == 0 ){
         tty_putchar(keyboard_map[(unsigned char) keycode]);
       } else {
-        qemu_printf("SHIFTED\n");
+        if ( DEBUG == 1 ){
+            qemu_printf("SHIFTED\n");
+        }
         tty_putchar(keyboard_map_shifted[(unsigned char) keycode]);
       }
 
