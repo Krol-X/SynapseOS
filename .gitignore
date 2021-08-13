@@ -2,7 +2,7 @@ src/kernel/bin/*
 .vscode/*
 *.o
 *.elf
-src/include/kernel.h
+kernel.h
 SynapseOS.iso
 isodir/boot/kernel.elf
 isodir/boot/grub/grub.cfg
