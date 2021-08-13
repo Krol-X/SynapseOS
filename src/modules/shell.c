@@ -6,6 +6,7 @@
 #include "../include/memory_manager.h"
 #include "../include/kernel.h"
 #include "../include/kbd.h"
+#include "../include/vga.h"
 
 int color_theme = 0;
 int DEBUG = 0;
@@ -59,7 +60,7 @@ void shell_exec(char input_command[]){
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("Help page 3/3.\nCommands:");
         tty_printf("\n    hello - info about commands        sysinfo - system information");
-        tty_printf("\n    time - info about current time    tests - Show all system tests");
+        tty_printf("\n     - info about current time    tests - Show all system tests");
         tty_printf("\n    exit - Shutdown SynapseOS         cls or clear - cleaning screen");
         tty_printf("\n    ascii - show all ASCII symbols    debug - enable debug mode");
         tty_printf("\n    colors - Show all color themes    vga test - show all 256 vga colors");
@@ -133,7 +134,8 @@ void shell_exec(char input_command[]){
         }
 
     } else if( strcmp(input_command, "exit") == 0 ){
-        //Exit
+        //Shutdown OS
+
         EXIT = 1;
 
     } else if( strcmp(input_command, "debug") == 0 ){
