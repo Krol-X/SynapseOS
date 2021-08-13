@@ -28,7 +28,6 @@ IF EXIST "./bin/" (
 ) ELSE (
     mkdir bin & mkdir isodir & cd isodir & mkdir boot & cd boot & mkdir grub & cd ../../
 )
-::36,3 КБ (37 272 байт)
 
 
 echo Build asm kernel
