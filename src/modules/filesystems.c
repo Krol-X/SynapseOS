@@ -54,3 +54,40 @@ struct ext2_super_block {
     uint32 s_checkinterval;
     uint32 s_reserved[238];
 };
+
+
+struct ext2_group_desc {
+    uint32 bg_block_bitmap;
+    uint32 bg_inode_bitmap;
+    uint32 bg_inode_table;
+    uint16 bg_free_blocks_count;
+    uint16 bg_free_inodes_count;
+    uint16 bg_used_dirs_count;
+    uint16 bg_pad;
+    uint32 bg_reserved[3];
+};
+
+
+struct ext2_inode {
+    uint16 i_mode;
+    uint16 i_uid;
+    uint32 i_size;
+    uint32 i_atime;
+    uint32 i_ctime;
+    uint32 i_mtime;
+    uint32 i_dtime;
+    uint16 i_gid;
+    uint16 i_links_count;
+    uint32 i_blocks;
+    uint32 i_flags;
+    uint32 i_reserved1;
+    uint32 i_block[14];
+    uint32 i_version;
+    uint32 i_file_acl;
+    uint32 i_dir_acl;
+    uint32 i_faddr;
+    uint8 i_frag;
+    uint8 i_fsize;
+    uint16 i_pad1;
+    uint32 i_reserved2[2];
+};
