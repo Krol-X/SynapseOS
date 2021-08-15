@@ -1,5 +1,5 @@
 # SynapseOS
-SynapseOS is a free and open source 64x operating system written in FASM and C
+SynapseOS is a free and open source x86-64 operating system written in FASM and C
 
 ## Documentation
 [Documentation](https://synapse-os.github.io/doc)
@@ -20,7 +20,7 @@ Next, unpack the downloaded archive into a separate folder and run one of the fi
 ---------------
 
 # SynapseOS
-SynapseOS это бесплатная open source 64x операционная система написанная на FASM и СИ
+SynapseOS это бесплатная open source x86-64 операционная система написанная на FASM и С
 
 ## Документация
 [Документация](https://synapse-os.github.io/doc)
