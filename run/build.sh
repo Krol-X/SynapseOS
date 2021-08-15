@@ -1,6 +1,6 @@
 CC="/opt/i686-elf-tools-linux/bin/i686-elf-gcc"
 
-BUILDFLAGS="-std=gnu99 -ffreestanding -Wall -Wextra"
+BUILDFLAGS="-std=gnu11 -ffreestanding -Wall -Wextra"
 LINKFLAGS="-ffreestanding -nostdlib -lgcc"
 
 cd ..
