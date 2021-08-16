@@ -13,8 +13,10 @@
 #include "../include/kbd.h"
 #include "../include/vga.h"
 
+// Color theme default = 0
 int color_theme = 0;
-int DEBUG = 0;
+// Debug default 0
+int DEBUG = 0; // Note: Debug works only on Qemu emulatorx
 
 
 void colors(int element){
@@ -40,7 +42,7 @@ void colors(int element){
 }
 
 void shell_exec(char input_command[]){
-    //Help
+    // Help page 1/3
     if( strcmp(input_command, "help") == 0 || strcmp(input_command, "help 1") == 0 ){
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C. Help page 1/3.\nCommands:");
@@ -51,20 +53,20 @@ void shell_exec(char input_command[]){
         tty_printf("\n    colors - Show all color themes          vga test - show all 256 vga colors");
         
     } else if( strcmp(input_command, "help 2") == 0 ){
-        //system info
+        // Help page 2/3
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("Help page 2/3.\nCommands:");
         tty_printf("\n    hello - info about commands              SID - get system ID");
         tty_printf("\n    version - info about current version     ! - enable safe mode");
 
     } else if( strcmp(input_command, "help 3") == 0 ){
-        //system info
+        // Help page 3/3
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("Help page 3/3.\nCommands:");
         tty_printf("\n    ");
 
     } else if( strcmp(input_command, "sysinfo") == 0 ){
-        //system info
+        // System info
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("SynapseOS v%s build %s\n\n", VERSION, __TIMESTAMP__);
         detect_cpu();
@@ -89,7 +91,7 @@ void shell_exec(char input_command[]){
         tty_printf("________________________________________________________________________________");
 
     } else if( strcmp(input_command, "vga test") == 0 ){
-        //est all VGA colors
+        // Test all VGA colors
         int i = 0;
         while (i != 256){
             tty_setcolor(i);
@@ -97,36 +99,41 @@ void shell_exec(char input_command[]){
             i++;
         }
         colors(0);
+        tty_printf(" ");
+
         
     } else if( strcmp(input_command, "time") == 0 ){
         //Time from CMOS
         getnowtime();
 
     } else if( strcmp(input_command, "colors") == 0 ){
-        //Colors
+        // Colors
         tty_printf("All color themes:\n");
         tty_printf("    theme 0 - default color theme\n    theme 1 - MAGENTA color theme\n");
-        //tty_printf("    theme_2 - blue color theme\n    theme_3 - green color theme\n");
 
     } else if( strcmp(input_command, "theme 0") == 0 ){
-        //Colors
+        // Default color theme
         tty_printf("Color theme: default\n");
         color_theme = 0;
 
     } else if( strcmp(input_command, "theme 1") == 0 ){
-        //Colors
+        // Magenta color theme
         tty_printf("Color theme: MAGENTA\n");
         color_theme = 1;
 
     } else if( strcmp(input_command, "hello") == 0 ){
+        // TTY hello world test
         tty_printf("Hello World!");
 
     } else if( strcmp(input_command, "ignat") == 0 ){
+        // Put smile symbol
         tty_printf("%c", (unsigned char)1);
 
     } else if( strcmp(input_command, "ascii") == 0 ){
-        int i = 0;
-        while( i != 256 ){
+        // Show ASCII symbols
+        int i = -256;
+        while( i != 512 ){
+            qemu_printf("\n%d = {%c}", i, (unsigned char)i);
             tty_printf("%c", (unsigned char)i);
             i++;
         }
