@@ -1,10 +1,14 @@
+::
+:: Build and run script
+::
+
 @Echo off
 set VERSION="0008"
 
 echo build SynapseOS %VERSION%
 cd ..
 echo *************************
-REM Creating a Newline variable (the two blank lines are required!)
+:: Creating a Newline variable (the two blank lines are required!)
 set NLM=^
 
 
@@ -66,7 +70,6 @@ endlocal & set "%1=%ut%" & goto :vars
 
 :programm_done
 echo Done
-pause
+qemu-system-i386 -kernel bin/kernel.elf
 exit
 
-qemu-system-i386 -kernel bin/kernel.elf

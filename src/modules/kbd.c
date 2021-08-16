@@ -29,7 +29,7 @@ unsigned  char keyboard_map[] = {
     -2,		/*  Left shift 42 */
     '\\',  'z', 'x',  'c', 'v',  'b', 'n',			/*  49 */
     'm', ',',  '.', '/',  
-    -2,				/*  Right  shift  */
+    -2,				/*  Right  shift  54*/
     '*',
     0,	/*  Alt  */
     ' ',	/*  Space  bar  */
@@ -108,8 +108,7 @@ void  kb_init(void){
 }
 
 
-char  keyboard_handler_main(void)
-{
+char  keyboard_handler_main(void){
     /*  write  EOI  */
     outb(0x20,  0x20);
 

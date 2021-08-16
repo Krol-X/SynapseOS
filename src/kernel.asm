@@ -13,7 +13,7 @@ public keyboard_handler
 public load_idt
 public gdt_flush
 
-extrn kmain             ;this is defined in the c file
+extrn main             ;this is defined in the c file
 extrn keyboard_handler_main
 
 
@@ -56,7 +56,7 @@ gdt_flush:
 
 start:
 	cli
-        call kmain
+        call main
         mov esp, stack_space
 	hlt
 

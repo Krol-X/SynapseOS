@@ -9,12 +9,12 @@
 
 int EXIT = 0;
 
-//char TEMP_MEMORY[1024];
-//void *memory_map
+// char TEMP_MEMORY[1024];
+// void *memory_map
 int *memory_map = (int *)0x2C628;
 
 /* ------------------------------------------- */
-void kmain(){
+void main(){
 	
 	init_memory_manager(memory_map);
 	VGA_MEMORY = (uint16_t*)0xB8000;
@@ -28,44 +28,42 @@ void kmain(){
 	idt_init(); // initialize Interrupt Descriptor Table
 	qemu_printf("Interrupt Descriptor Table inited\n");
 	
-	kb_init(); // initialize the PS/2 keyboard
+	// initialize the PS/2 keyboard
+	kb_init(); 
 	qemu_printf("keyboard inited\n");
 
-	tty_init(); // initialize terminal
+	// Initialize input\output module
+	tty_init();
 	qemu_printf("tty inited\n");
 
 
+	// Show Logo and current time using shell
 	shell_exec("logo");
-	
 	shell_exec("time");
 	
-	//init_memory_manager(memory_map);
 
+	// Show note and shell enter symbol
 	tty_printf("\n\n\n\n\n\n\n\n\nEnter 'help' to get info about commands\n\n");
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);
 	tty_printf(">");
 	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 
 
+	// While kernel working we get input from keyboard
 	while(EXIT!=1){
 		check_keyboard();
 	}
 
-	/*
-	//qemu
+	// Shutdown codes	
+	// qemu
 	outw(0x604, 0x2000);
 
-	//bochs
+	// bochs
 	outw(0xB004, 0x2000);
 
-	//Virtualbox
+	// Virtualbox
 	outw(0x4004, 0x3400);
-
-	asm("mov ax, 0x5307");
-	asm("mov bx, 0x0001");
-	asm("mov cx, 0x0003");
-	asm("int 0x15");
-	*/
+	
 	__asm__ __volatile__ ("outw %1, %0" : : "dN" ((uint16_t)0xB004), "a" ((uint16_t)0x2000));
 	
 }
