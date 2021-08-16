@@ -239,6 +239,8 @@ void check_keyboard(){
         return;
     }
 
+
+    // If caps lock pressed
     if ( keycode  ==  -70 ) {
         if ( CAPS == 0 ){
             CAPS = 1;
@@ -252,7 +254,7 @@ void check_keyboard(){
     }
 
     if( keycode  <  0){
-    return;
+        return;
     }
 
     if (CAPS == 1)	{
