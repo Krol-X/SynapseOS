@@ -6,15 +6,22 @@
 int century_register = 0x00;                                // Set by ACPI table parsing code if possible
 
 
-
+//
 unsigned char second;
 unsigned char minute;
 unsigned char hour;
 unsigned char day;
 unsigned char month;
 unsigned int year;
- 
-
+unsigned char century;
+unsigned char last_second;
+unsigned char last_minute;
+unsigned char last_hour;
+unsigned char last_day;
+unsigned char last_month;
+unsigned char last_year;
+unsigned char last_century;
+unsigned char registerB;
  
 enum {
       cmos_address = 0x70,
@@ -32,15 +39,7 @@ unsigned char get_RTC_register(int reg) {
 }
  
 void read_rtc() {
-      unsigned char century;
-      unsigned char last_second;
-      unsigned char last_minute;
-      unsigned char last_hour;
-      unsigned char last_day;
-      unsigned char last_month;
-      unsigned char last_year;
-      unsigned char last_century;
-      unsigned char registerB;
+      
  
       // Note: This uses the "read registers until you get the same values twice in a row" technique
       //       to avoid getting dodgy/inconsistent values due to RTC updates
