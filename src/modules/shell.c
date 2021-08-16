@@ -1,3 +1,8 @@
+/*
+    Shell module
+    Simple console interpritator
+*/
+
 #include "../include/shell.h"
 #include "../include/tty.h"
 #include "../include/stdlib.h"
@@ -200,7 +205,7 @@ void check_keyboard(){
       if (keycode == -114){
         return;
       }
-      if ( keycode   == 42 ) {
+      if ( keycode == 42 || keycode == 54 ) {
         SHIFT = 1;
         if ( DEBUG == 1 ){
             qemu_printf("\nSHIFT = %d\n", SHIFT);
