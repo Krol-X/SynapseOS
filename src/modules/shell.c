@@ -76,8 +76,6 @@ void shell_exec(char input_command[]){
 
     } else if( strcmp(input_command, "syscheck") == 0 ){
         // System health check
-        
-        
 
     } else if( strcmp(input_command, "sysinfo") == 0 ){
         // System info
@@ -107,6 +105,7 @@ void shell_exec(char input_command[]){
         // Test all VGA colors
         int i = 0;
         while (i != 256){
+            putpixel((unsigned char*)tty_buffer, 10, 10, 2);
             tty_setcolor(i);
             tty_printf("%d ", i);
             i++;
@@ -184,7 +183,7 @@ void shell_exec(char input_command[]){
         if (arg != (unsigned int)-1){
             tty_printf("memory gived");
         } else {
-            tty_setcolor(VGA_COLOR_RED);
+            colors(3);
             tty_printf("failed to give memory\n");
             tty_printf("error code: %d", arg);
         }
@@ -193,8 +192,8 @@ void shell_exec(char input_command[]){
         // Check memory
         colors(2);
         tty_printf("Memory info: \n");
-        tty_printf("    free memory: %d", get_free_memory_size());
-        tty_printf("\n  free page count: %d", free_page_count);
+        tty_printf("    free memory: %d\n", get_free_memory_size());
+        tty_printf("    free page count: %d", free_page_count);
 
     } else {
         // Unknown command
@@ -269,7 +268,13 @@ void check_keyboard(){
             qemu_printf("CAPS = %d", CAPS);
         }
     }
-
+    if( keycode  ==  75){
+        qemu_printf("\nLEFT pressed\n");
+        return;
+    } else if ( keycode == -32){
+        qemu_printf("\nLEFT released\n");
+        return;
+    }
     if( keycode  <  0){
         return;
     }

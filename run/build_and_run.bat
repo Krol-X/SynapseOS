@@ -24,7 +24,7 @@ SET LD=i686-elf-ld
 SET SRC=./src
 SET CCFLAGS=-O3 -std=gnu99 -ffreestanding -Wall -Wextra 
 SET LDFLAGS=-O3 -ffreestanding -nostdlib -lgcc
-set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o
+set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/vga.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o
 
 
 IF EXIST "./bin/" (
@@ -42,6 +42,7 @@ fasm %SRC%/kernel.asm bin/kasm.o
 echo Build kernel
 %CC% %CCFLAGS% -c %SRC%/kernel.c -o ./bin/kc.o
 %CC% %CCFLAGS% -c %SRC%/modules/stdlib.c -o ./bin/stdlib.o
+%CC% %CCFLAGS% -c %SRC%/modules/vga.c -o ./bin/vga.o
 %CC% %CCFLAGS% -c %SRC%/modules/memory_manager.c -o ./bin/memory_manager.o
 %CC% %CCFLAGS% -c %SRC%/modules/gdt.c -o bin/gdt.o
 %CC% %CCFLAGS% -c %SRC%/modules/cmos.c -o bin/cmos.o
@@ -70,6 +71,7 @@ endlocal & set "%1=%ut%" & goto :vars
 
 :programm_done
 echo Done
-qemu-system-i386 -kernel bin/kernel.elf
+qemu-system-x86_64 -m 32 -kernel bin/kernel.elf -monitor stdio -serial file:Qemu_log.txt -no-reboot 
+pause
 exit
 
