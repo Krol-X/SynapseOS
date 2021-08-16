@@ -21,30 +21,41 @@ int DEBUG = 0; // Note: Debug works only on Qemu emulatorx
 
 void colors(int element){
     if (color_theme == 0){
-        if (element == 0){
+        if ( element == 0 ){
             tty_setcolor(VGA_COLOR_LIGHT_CYAN);
-        } else{
+        } else if ( element == 1 ) {
             tty_setcolor(VGA_COLOR_LIGHT_GREEN);
-        }   
-    } else if ( color_theme == 1 ){
-        if (element == 0){
-            tty_setcolor(VGA_COLOR_LIGHT_YELLOW);
+        } else if ( element == 2 ) {
+            tty_setcolor(VGA_COLOR_WHITE);
         } else{
+            tty_setcolor(VGA_COLOR_RED);
+        }    
+    } else if ( color_theme == 1 ){
+        if ( element == 0 ){
+            tty_setcolor(VGA_COLOR_LIGHT_YELLOW);
+        } else if ( element == 1 ) {
             tty_setcolor(VGA_COLOR_LIGHT_MAGENTA);
+        } else{
+            tty_setcolor(VGA_COLOR_GREEN);
         }   
     } else{
-        if (element == 0){
+        if ( element == 0 ){
             tty_setcolor(VGA_COLOR_LIGHT_CYAN);
-        } else{
+        } else if ( element == 1 ) {
             tty_setcolor(VGA_COLOR_LIGHT_GREEN);
-        }
+        } else if ( element == 2 ) {
+            tty_setcolor(VGA_COLOR_WHITE);
+        } else{
+            tty_setcolor(VGA_COLOR_LIGHT_RED);
+        }  
     }
 }
 
 void shell_exec(char input_command[]){
+    colors(2);
+
     // Help page 1/3
     if( strcmp(input_command, "help") == 0 || strcmp(input_command, "help 1") == 0 ){
-        tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C. Help page 1/3.\nCommands:");
         tty_printf("\n    help <1-3> - info about commands        sysinfo - system information");
         tty_printf("\n    time - info about current time          syscheck - check system health");
@@ -54,20 +65,22 @@ void shell_exec(char input_command[]){
         
     } else if( strcmp(input_command, "help 2") == 0 ){
         // Help page 2/3
-        tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("Help page 2/3.\nCommands:");
         tty_printf("\n    hello - info about commands              SID - get system ID");
         tty_printf("\n    version - info about current version     ! - enable safe mode");
 
     } else if( strcmp(input_command, "help 3") == 0 ){
         // Help page 3/3
-        tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("Help page 3/3.\nCommands:");
         tty_printf("\n    ");
 
+    } else if( strcmp(input_command, "syscheck") == 0 ){
+        // System health check
+        
+        
+
     } else if( strcmp(input_command, "sysinfo") == 0 ){
         // System info
-        tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("SynapseOS v%s build %s\n\n", VERSION, __TIMESTAMP__);
         detect_cpu();
         tty_printf("    kernel_page_dir = 0x%x\n", kernel_page_dir);
@@ -158,7 +171,12 @@ void shell_exec(char input_command[]){
             tty_printf("\n");
             i++;
         }
-        
+
+        i = 0;
+        while( i != 25 ){
+            tty_backspace();
+            i++;
+        }
         
     }else if(strcmp(input_command, "get_memory")==0){
         // Try get memory
@@ -173,15 +191,14 @@ void shell_exec(char input_command[]){
         
     } else if(strcmp(input_command, "memory_check")==0){
         // Check memory
-        tty_setcolor(VGA_COLOR_GREEN);
+        colors(2);
         tty_printf("Memory info: \n");
-        tty_setcolor(VGA_COLOR_WHITE);
-        tty_printf("\tfree memory: %d", get_free_memory_size());
-        tty_printf("\n\tfree page count: %d", free_page_count);
+        tty_printf("    free memory: %d", get_free_memory_size());
+        tty_printf("\n  free page count: %d", free_page_count);
 
     } else {
         // Unknown command
-        tty_setcolor(VGA_COLOR_RED);
+        colors(3);
         tty_printf("Unknown command [");
         tty_printf(input_command);
         tty_printf("]");
