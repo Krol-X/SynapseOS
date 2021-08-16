@@ -103,7 +103,7 @@ void shell_exec(char input_command[]){
 
         
     } else if( strcmp(input_command, "time") == 0 ){
-        //Time from CMOS
+        // Time from CMOS
         getnowtime();
 
     } else if( strcmp(input_command, "colors") == 0 ){
@@ -139,12 +139,12 @@ void shell_exec(char input_command[]){
         }
 
     } else if( strcmp(input_command, "exit") == 0 ){
-        //Shutdown OS
-
+        // Shutdown OS
         EXIT = 1;
+        qemu_printf("\n SHUTDOWN! \n");
 
     } else if( strcmp(input_command, "debug") == 0 ){
-        //Debug mode
+        // Debug mode
         if ( DEBUG == 0 ){
             DEBUG = 1;
         } else {
@@ -152,7 +152,7 @@ void shell_exec(char input_command[]){
         }
 
     } else if( strcmp(input_command, "cls") == 0 || strcmp(input_command, "clear") == 0 ){
-        //Cleaning screen
+        // Cleaning screen
         int i = 0;
         while( i != 25 ){
             tty_printf("\n");
@@ -161,9 +161,9 @@ void shell_exec(char input_command[]){
         
         
     }else if(strcmp(input_command, "get_memory")==0){
-        phyaddr arg = alloc_phys_pages(10);
-        if (arg != (unsigned int)-1)
-        {
+        // Try get memory
+        phyaddr arg = alloc_phys_pages(1);
+        if (arg != (unsigned int)-1){
             tty_printf("memory gived");
         } else {
             tty_setcolor(VGA_COLOR_RED);
@@ -171,132 +171,145 @@ void shell_exec(char input_command[]){
             tty_printf("error code: %d", arg);
         }
         
-        
     } else if(strcmp(input_command, "memory_check")==0){
+        // Check memory
         tty_setcolor(VGA_COLOR_GREEN);
         tty_printf("Memory info: \n");
         tty_setcolor(VGA_COLOR_WHITE);
         tty_printf("\tfree memory: %d", get_free_memory_size());
-        tty_printf("\n\tfree page count: %d", free_page_count);    
+        tty_printf("\n\tfree page count: %d", free_page_count);
+
     } else {
         // Unknown command
         tty_setcolor(VGA_COLOR_RED);
         tty_printf("Unknown command [");
         tty_printf(input_command);
         tty_printf("]");
-
     }
 }
 
+
+//Check keyboard keycodes
 void check_keyboard(){
+
+    // If debug enabled we just save all input keycodes to log
     if ( DEBUG == 1 ){
-        qemu_printf("");
+        qemu_printf("\n%d", keycode);
     }
+
+    // If we have not input, we just close function 
     if ( keyboard_get_input == 0){
         return;
     }
+
     keyboard_get_input = 0;
+
+    // Keycode 14 is backspase
     if(keycode == 14){
         if ( DEBUG == 1 ){
             qemu_printf("Backspase!\n");
         }
         if (string_mem_counter != 0){
-          string_mem_counter--;
-          string_mem[ string_mem_counter ] = 0;
-          qemu_printf("string_mem = %s    ",string_mem);
-          qemu_printf("string_mem_counter = %d    \n",string_mem_counter);
-          tty_backspace();
+            string_mem_counter--;
+            string_mem[ string_mem_counter ] = 0;
+            qemu_printf("string_mem = %s    ",string_mem);
+            qemu_printf("string_mem_counter = %d    \n",string_mem_counter);
+            tty_backspace();
         }
         return;
-      }
-      if (keycode == -114){
+    }
+
+    if (keycode == -114){
         return;
-      }
-      if ( keycode == 42 || keycode == 54 ) {
+    }
+
+    if ( keycode == 42 || keycode == 54 ) {
         SHIFT = 1;
         if ( DEBUG == 1 ){
             qemu_printf("\nSHIFT = %d\n", SHIFT);
         }
         return;
-      }
-      if ( keycode   == -86 ) {
+    }
+
+    if ( keycode   == -86 ) {
         SHIFT = 0;
         if ( DEBUG == 1 ){
             qemu_printf("\nSHIFT = %d\n", SHIFT);
         }
         return;
-      }
-      
+    }
 
-      if ( keycode  ==  -70 ) {
+    if ( keycode  ==  -70 ) {
         if ( CAPS == 0 ){
-          CAPS = 1;
+            CAPS = 1;
         } else {
-          CAPS = 0;
+            CAPS = 0;
         }
+
         if ( DEBUG == 1 ){
             qemu_printf("CAPS = %d", CAPS);
         }
-      }
-      //tty_printf("\n%d \n", keycode);
-      if( keycode  <  0){
-        return;
-      }
+    }
 
-      if (CAPS == 1)	{
+    if( keycode  <  0){
+    return;
+    }
+
+    if (CAPS == 1)	{
         if ( SHIFT == 0 ){
-          SHIFT = 1;
+            SHIFT = 1;
         } else {
-          SHIFT = 0;
+            SHIFT = 0;
         }
+
         if ( DEBUG == 1 ){
             qemu_printf("\nSHIFT = %d\n", SHIFT);
         }
-      }
+    }
 
-      if(keycode  == ENTER_KEY_CODE) {
+    if(keycode  == ENTER_KEY_CODE) {
         tty_putchar('\n');
         shell_exec(string_mem);
+        string_mem_counter = 0;
 
-        string_mem_counter  =  0;
-        memset(string_mem,  0, STRING_MEM_MAX);
+        memset(string_mem, 0, STRING_MEM_MAX);
 
         colors(1);
         tty_printf("\n>");
         colors(0);
         return;
-      }
-        if ( DEBUG == 1 ){
-            qemu_printf("SHIFT = %d, CAPS = %d\n", SHIFT, CAPS);
-        }
-      
-      if ( SHIFT == 0 ){
+    }
+
+    if ( DEBUG == 1 ){
+        qemu_printf("SHIFT = %d, CAPS = %d\n", SHIFT, CAPS);
+    }
+
+    if ( SHIFT == 0 ){
         tty_putchar(keyboard_map[(unsigned char) keycode]);
-      } else {
+    } else {
         if ( DEBUG == 1 ){
             qemu_printf("SHIFTED\n");
         }
         tty_putchar(keyboard_map_shifted[(unsigned char) keycode]);
-      }
+    }
 
-      if (string_mem_counter!= STRING_MEM_MAX){
+    if (string_mem_counter!= STRING_MEM_MAX){
         if (DEBUG==1){
-          qemu_printf("\n%d \n", keycode);;
+            qemu_printf("\n%d \n", keycode);;
         }
-        
         if (SHIFT == 0){
             string_mem[string_mem_counter]  =  keyboard_map[(unsigned char) keycode];
         } else {
             string_mem[string_mem_counter]  =  keyboard_map_shifted[(unsigned char) keycode];
         }
-        
         string_mem_counter++;
-      }  else{
-        tty_setcolor(VGA_COLOR_RED);
-        tty_printf("\nError:  Buffer is  full.  Buffer cleaned.\n");
-        colors(0);
-        string_mem_counter  =  0;
-        memset( string_mem,  0, STRING_MEM_MAX );
-        SHIFT = 0;
-      }
+    }  else{
+    tty_setcolor(VGA_COLOR_RED);
+    tty_printf("\nError:  Buffer is  full.  Buffer cleaned.\n");
+    colors(0);
+
+    string_mem_counter  =  0;
+    memset( string_mem,  0, STRING_MEM_MAX );
+    SHIFT = 0;
+    }
 }
