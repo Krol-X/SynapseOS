@@ -3,7 +3,7 @@
 ::
 
 @Echo off
-set VERSION="0008"
+set VERSION="0.0.8.0"
 
 echo build SynapseOS %VERSION%
 cd ..
