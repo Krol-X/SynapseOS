@@ -1,5 +1,11 @@
 #include "../include/stdlib.h"
+#include "../include/qemu_log.h"
+#include "../include/tty.h"
 
+void panic(char *text){
+    tty_printf("\n    !!!PANIC!!!\n %s\n",text);
+    qemu_printf("\n    !!!PANIC!!!\n %s\n",text);
+}
 
 void memset(void *mem, char value, size_t count) {
     asm("movl %0, %%eax \n movl %1, %%edi \n movl %2, %%ecx \n rep stosl"
