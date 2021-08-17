@@ -3,7 +3,7 @@
 ::
 
 @Echo off
-set VERSION="0.0.8.0"
+set VERSION="0.8.0"
 
 echo build SynapseOS %VERSION%
 cd ..
@@ -13,11 +13,21 @@ set NLM=^
 
 
 set NL=^^^%NLM%%NLM%^%NLM%%NLM%
-call :GetUnixTime UNIX_TIME
+IF EXIST "./src/include/kernel.h" (
+    set KERNELH_EXIST=1
+) ELSE (
+    set KERNELH_EXIST=0
+   call :GetUnixTime UNIX_TIME
+)
 
 
 :vars
-echo #define VERSION %VERSION% %NL%#define BUILD_UID "%UNIX_TIME%">src/include/kernel.h
+IF EXIST "./src/include/kernel.h" (
+    set KERNELH_EXIST=1
+) ELSE (
+    set KERNELH_EXIST=0
+   echo #define VERSION %VERSION% %NL%#define BUILD_UID "%UNIX_TIME%">src/include/kernel.h
+)
 SET AS=i686-elf-as
 SET CC=i686-elf-gcc
 SET LD=i686-elf-ld
@@ -71,7 +81,7 @@ endlocal & set "%1=%ut%" & goto :vars
 
 :programm_done
 echo Done
-qemu-system-x86_64 -m 32 -kernel bin/kernel.elf -monitor stdio -serial file:Qemu_log.txt -no-reboot 
+qemu-system-x86_64 -m 32 -kernel bin/kernel.elf -monitor stdio -serial file:./run/Qemu_log.txt -no-reboot 
 pause
 exit
 

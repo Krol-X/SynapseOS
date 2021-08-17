@@ -1,2 +1,2 @@
-#define VERSION "0.0.8.0" 
-#define BUILD_UID "1629220545"
+#define VERSION "0.8.0" 
+#define BUILD_UID "1629231092"

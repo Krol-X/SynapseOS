@@ -12,15 +12,12 @@ int EXIT = 0;
 
 // char TEMP_MEMORY[1024];
 // void *memory_map
-int *memory_map = (int *)0x2C628;
+void *memory_map = (void *)MULTIBOOT_BOOTLOADER_MAGIC;
 
 /* ------------------------------------------- */
 void main(multiboot_info_t* mbd, unsigned int magic){
-	
-	
-	init_memory_manager(memory_map);
 	VGA_MEMORY = (uint16_t*)0xB8000;
-	qemu_printf("magic: %d\n",magic);
+	qemu_printf("magic: %x\n",magic);
 	qemu_printf("VGA MEMORY: %d\n",VGA_MEMORY);
 	qemu_printf("Memory  Manager inited\n");
 	qemu_printf("RESULT: %d\n",alloc_phys_pages(1));
@@ -35,10 +32,16 @@ void main(multiboot_info_t* mbd, unsigned int magic){
 	kb_init(); 
 	qemu_printf("keyboard inited\n");
 
+	// Initialize input\output module
+	tty_init();
+	qemu_printf("tty inited\n");
+
+
 	// Show Logo and current time using shell
 	shell_exec("logo");
 	shell_exec("time");
-	
+
+	init_memory_manager(memory_map);
 	/* Make sure the magic number matches for memory mapping*/
     if(magic != MULTIBOOT_BOOTLOADER_MAGIC) {
         panic("invalid magic number!");
@@ -48,26 +51,8 @@ void main(multiboot_info_t* mbd, unsigned int magic){
     if(!(mbd->flags >> 6 & 0x1)) {
         panic("invalid memory map given by GRUB bootloader");
     }
-	/* Loop through the memory map and display the values */
-    int i;
-    for(i = 0; i < mbd->mmap_length; 
-        i += sizeof(multiboot_memory_map_t)) {
-        multiboot_memory_map_t* mmmt = (multiboot_memory_map_t*) (mbd->mmap_addr + i);
- 
-        tty_printf("Start Addr: %x | Length: %x | Size: %x | Type: %d\n",
-            mmmt->addr, mmmt->len, mmmt->size, mmmt->type);
- 
-        if(mmmt->type == MULTIBOOT_MEMORY_AVAILABLE) {
-            /* 
-             * Do something with this memory block!
-             * BE WARNED that some of memory shown as availiable is actually 
-             * actively being used by the kernel! You'll need to take that
-             * into account before writing to memory!
-             */
-        }
-    }
 	// Show note and shell enter symbol
-	tty_printf("\n\n\n\n\n\n\n\n\nEnter 'help' to get info about commands\n\n");
+	tty_printf("\n\nEnter 'help' to get info about commands\n\n");
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);
 	tty_printf(">");
 	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
