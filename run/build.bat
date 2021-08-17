@@ -1,10 +1,14 @@
+::
+:: Build and run script
+::
+
 @Echo off
 set VERSION="0008"
 
 echo build SynapseOS %VERSION%
 cd ..
 echo *************************
-REM Creating a Newline variable (the two blank lines are required!)
+:: Creating a Newline variable (the two blank lines are required!)
 set NLM=^
 
 
@@ -20,7 +24,7 @@ SET LD=i686-elf-ld
 SET SRC=./src
 SET CCFLAGS=-O3 -std=gnu99 -ffreestanding -Wall -Wextra 
 SET LDFLAGS=-O3 -ffreestanding -nostdlib -lgcc
-set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o
+set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/vga.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o
 
 
 IF EXIST "./bin/" (
@@ -38,6 +42,7 @@ fasm %SRC%/kernel.asm bin/kasm.o
 echo Build kernel
 %CC% %CCFLAGS% -c %SRC%/kernel.c -o ./bin/kc.o
 %CC% %CCFLAGS% -c %SRC%/modules/stdlib.c -o ./bin/stdlib.o
+%CC% %CCFLAGS% -c %SRC%/modules/vga.c -o ./bin/vga.o
 %CC% %CCFLAGS% -c %SRC%/modules/memory_manager.c -o ./bin/memory_manager.o
 %CC% %CCFLAGS% -c %SRC%/modules/gdt.c -o bin/gdt.o
 %CC% %CCFLAGS% -c %SRC%/modules/cmos.c -o bin/cmos.o
@@ -50,11 +55,12 @@ echo Build kernel
 %CC% %CCFLAGS% -c %SRC%/modules/qemu_log.c -o bin/qemu_log.o
 %CC% %LDFLAGS% -T %SRC%/link.ld -o bin/kernel.elf %OBJECTS%
 
-
 echo Create iso
 cp bin/kernel.elf isodir/boot/kernel.elf
 cp %SRC%/grub.cfg isodir/boot/grub/grub.cfg
 ubuntu run grub-mkrescue -o SynapseOS.iso isodir/
+
+
 goto programm_done
 
 
