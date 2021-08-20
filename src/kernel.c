@@ -12,12 +12,15 @@ int EXIT = 0;
 
 // char TEMP_MEMORY[1024];
 // void *memory_map
-void *memory_map = (void *)MULTIBOOT_BOOTLOADER_MAGIC;
 
 /* ------------------------------------------- */
 void main(multiboot_info_t* mbd, unsigned int magic){
+	int *memory_map = MULTIBOOT_BOOTLOADER_MAGIC;
 	VGA_MEMORY = (uint16_t*)0xB8000;
-	qemu_printf("magic: %x\n",magic);
+	qemu_printf("magic x: %x\n",magic);
+	qemu_printf("magic d: %d\n",magic);
+	qemu_printf("MULTIBOOT_BOOTLOADER_MAGIC x: %x\n",MULTIBOOT_BOOTLOADER_MAGIC);
+	qemu_printf("MULTIBOOT_BOOTLOADER_MAGIC d: %d\n",MULTIBOOT_BOOTLOADER_MAGIC);
 	qemu_printf("VGA MEMORY: %d\n",VGA_MEMORY);
 	qemu_printf("Memory  Manager inited\n");
 	qemu_printf("RESULT: %d\n",alloc_phys_pages(1));
@@ -41,7 +44,7 @@ void main(multiboot_info_t* mbd, unsigned int magic){
 	shell_exec("logo");
 	shell_exec("time");
 
-	init_memory_manager(memory_map);
+	init_memory_manager(&memory_map);
 	/* Make sure the magic number matches for memory mapping*/
     if(magic != MULTIBOOT_BOOTLOADER_MAGIC) {
         panic("invalid magic number!");

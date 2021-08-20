@@ -56,8 +56,10 @@ gdt_flush:
 
 start:
 	cli
-        call main
         mov esp, stack_space
+        push eax
+        push ebx
+        call main
 	hlt
 
 section '.bss' 
