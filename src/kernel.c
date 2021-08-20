@@ -15,8 +15,8 @@ int EXIT = 0;
 
 /* ------------------------------------------- */
 void main(multiboot_info_t* mbd, unsigned int magic){
-	int *memory_map = MULTIBOOT_BOOTLOADER_MAGIC;
 	VGA_MEMORY = (uint16_t*)0xB8000;
+
 	qemu_printf("magic x: %x\n",magic);
 	qemu_printf("magic d: %d\n",magic);
 	qemu_printf("MULTIBOOT_BOOTLOADER_MAGIC x: %x\n",MULTIBOOT_BOOTLOADER_MAGIC);
@@ -44,7 +44,7 @@ void main(multiboot_info_t* mbd, unsigned int magic){
 	shell_exec("logo");
 	shell_exec("time");
 
-	init_memory_manager(&memory_map);
+	init_memory_manager(mbd);
 	/* Make sure the magic number matches for memory mapping*/
     if(magic != MULTIBOOT_BOOTLOADER_MAGIC) {
         panic("invalid magic number!");
@@ -54,6 +54,41 @@ void main(multiboot_info_t* mbd, unsigned int magic){
     if(!(mbd->flags >> 6 & 0x1)) {
         panic("invalid memory map given by GRUB bootloader");
     }
+	/* Loop through the memory map and display the values */
+    unsigned int i;
+    for(i = 0; i < mbd->mmap_length; 
+        i += sizeof(multiboot_memory_map_t)) 
+    {
+        multiboot_memory_map_t* mmmt = 
+            (multiboot_memory_map_t*) (mbd->mmap_addr + i);
+ 
+        qemu_printf("Start Addr: %x | Length: %x | Size: %x | Type: %d\n",
+            mmmt->addr, mmmt->len, mmmt->size, mmmt->type);
+		tty_printf("\nStart Addr: %x | Length: %x | Size: %x | Type: %d\n",
+            mmmt->addr, mmmt->len, mmmt->size, mmmt->type);
+ 
+        if(mmmt->type == MULTIBOOT_MEMORY_AVAILABLE) {
+            /* 
+             * Do something with this memory block!
+             * BE WARNED that some of memory shown as availiable is actually 
+             * actively being used by the kernel! You'll need to take that
+             * into account before writing to memory!
+             */
+        }
+    }
+	qemu_printf("flags = %d\n", mbd->flags);
+	qemu_printf("mem_lower = %d\n", mbd->mem_lower);
+	qemu_printf("mem_upper = %d\n", mbd->mem_upper);
+	qemu_printf("boot_device = %d\n", mbd->boot_device);
+	qemu_printf("cmdline = %d\n", mbd->cmdline);
+	qemu_printf("mmap_length = %d\n", mbd->mmap_length);
+	qemu_printf("mmap_addr = %d\n", mbd->mmap_addr);
+	qemu_printf("drives_length = %d\n", mbd->drives_length);
+	qemu_printf("drives_addr = %d\n", mbd->drives_addr);
+	qemu_printf("config_table = %d\n", mbd->config_table);
+	qemu_printf("config_table = %d\n", mbd->config_table);
+	qemu_printf("apm_table = %d\n", mbd->apm_table);
+	qemu_printf("vbe_control_info = %d\n", mbd->vbe_control_info);
 	// Show note and shell enter symbol
 	tty_printf("\n\nEnter 'help' to get info about commands\n\n");
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);
