@@ -10,9 +10,6 @@
 
 int EXIT = 0;
 
-// char TEMP_MEMORY[1024];
-// void *memory_map
-
 /* ------------------------------------------- */
 void main(multiboot_info_t* mbd, unsigned int magic){
 	VGA_MEMORY = (uint16_t*)0xB8000;
