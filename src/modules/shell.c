@@ -98,7 +98,7 @@ void shell_exec(char input_command[]){
         tty_printf("       #   #   #  # # ###### #####       # #         #     #       #\n");
         tty_printf(" #     #   #   #   ## #    # #      #    # #         #     # #     #\n");
         tty_printf("  #####    #   #    # #    # #       ####  ######    #######  ##### \n");
-        tty_printf("                                                                   version: %s", VERSION);
+        tty_printf("                                                                  version: %s", VERSION);
         tty_printf("________________________________________________________________________________");
 
     } else if( strcmp(input_command, "vga test") == 0 ){
