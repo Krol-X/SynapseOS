@@ -7,3 +7,4 @@ Qemu_log.txt
 Bochs_log.txt
 SynapseOS.iso
 kernel.h
+run/bochsout.txt
