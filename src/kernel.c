@@ -7,6 +7,7 @@
 #include "include/memory_manager.h"
 #include "include/shell.h"
 #include "include/multiboot.h"
+#include "include/time.h"
 
 int EXIT = 0;
 
@@ -54,8 +55,7 @@ void main(multiboot_info_t* mbd, unsigned int magic){
 	/* Loop through the memory map and display the values */
     unsigned int i;
     for(i = 0; i < mbd->mmap_length; 
-        i += sizeof(multiboot_memory_map_t)) 
-    {
+        i += sizeof(multiboot_memory_map_t)) {
         multiboot_memory_map_t* mmmt = 
             (multiboot_memory_map_t*) (mbd->mmap_addr + i);
  
