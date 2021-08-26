@@ -26,7 +26,7 @@ IF EXIST "./src/include/kernel.h" (
     set KERNELH_EXIST=1
 ) ELSE (
     set KERNELH_EXIST=0
-   echo #define VERSION %VERSION% %NL%#define BUILD_UID "%UNIX_TIME%">src/include/kernel.h
+   echo #ifndef KERNEL_CONFIG %NL%#define KERNEL_CONFIG %NL%#define VERSION %VERSION% %NL%#define BUILD_UID "%UNIX_TIME%" %NL%#endif>src/include/kernel.h
 )
 SET AS=i686-elf-as
 SET CC=i686-elf-gcc
