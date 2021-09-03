@@ -57,8 +57,8 @@ gdt_flush:
 start:
 	cli
         mov esp, stack_space
-        push eax
-        push ebx
+        push eax ; Multiboot magic number
+        push ebx ; Multiboot structure
         call main
 	hlt
 

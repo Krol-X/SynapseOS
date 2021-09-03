@@ -1,6 +1,6 @@
 // protected mode draw
 #include "../include/tty.h"
-#include "../include/VGA.h"
+#include "../include/vga.h"
 int pitch = 2;
 int pixelwidth = 2;
 

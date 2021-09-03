@@ -3,27 +3,31 @@ CC="/opt/i686-elf-tools-linux/bin/i686-elf-gcc"
 BUILDFLAGS="-std=gnu11 -ffreestanding -Wall -Wextra"
 LINKFLAGS="-ffreestanding -nostdlib -lgcc"
 
-cd ..
+SRC="src"
+OBJS="bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/time.o bin/vga.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o"
 
 mkdir -p bin
 mkdir -p isodir/boot/grub
 
 # build code into objects
-fasm kernel.asm bin/kasm.o
-$CC $BUILDFLAGS -c kernel.c -o bin/kc.o
-$CC $BUILDFLAGS -c modules/cmos.c -o bin/cmos.o
-$CC $BUILDFLAGS -c modules/cpu_detect.c -o bin/cpu_detect.o
-$CC $BUILDFLAGS -c modules/gdt.c -o bin/gdt.o
-$CC $BUILDFLAGS -c modules/interdesctbl.c -o bin/interdesctbl.o
-$CC $BUILDFLAGS -c modules/kbd.c -o bin/kbd.o
-$CC $BUILDFLAGS -c modules/ports.c -o bin/ports.o
-$CC $BUILDFLAGS -c modules/qemu_log.c -o bin/qemu_log.o
-$CC $BUILDFLAGS -c modules/shell.c -o bin/shell.o
-$CC $BUILDFLAGS -c modules/string.c -o bin/string.o
-$CC $BUILDFLAGS -c modules/tty.c -o bin/tty.o
+fasm $SRC/kernel.asm bin/kasm.o
+$CC $BUILDFLAGS -c $SRC/kernel.c -o bin/kc.o
+$CC $BUILDFLAGS -c $SRC/modules/stdlib.c -o bin/stdlib.o
+$CC $BUILDFLAGS -c $SRC/modules/time.c -o bin/time.o
+$CC $BUILDFLAGS -c $SRC/modules/vga.c -o bin/vga.o
+$CC $BUILDFLAGS -c $SRC/modules/memory_manager.c -o bin/memory_manager.o
+$CC $BUILDFLAGS -c $SRC/modules/cmos.c -o bin/cmos.o
+$CC $BUILDFLAGS -c $SRC/modules/cpu_detect.c -o bin/cpu_detect.o
+$CC $BUILDFLAGS -c $SRC/modules/gdt.c -o bin/gdt.o
+$CC $BUILDFLAGS -c $SRC/modules/interdesctbl.c -o bin/interdesctbl.o
+$CC $BUILDFLAGS -c $SRC/modules/kbd.c -o bin/kbd.o
+$CC $BUILDFLAGS -c $SRC/modules/ports.c -o bin/ports.o
+$CC $BUILDFLAGS -c $SRC/modules/qemu_log.c -o bin/qemu_log.o
+$CC $BUILDFLAGS -c $SRC/modules/shell.c -o bin/shell.o
+$CC $BUILDFLAGS -c $SRC/modules/tty.c -o bin/tty.o
 
 # link objects
-$CC $LINKFLAGS -T link.ld -o isodir/boot/kernel.elf bin/kasm.o bin/kc.o bin/cpu_detect.o bin/gdt.o bin/interdesctbl.o bin/kbd.o bin/ports.o bin/qemu_log.o bin/shell.o bin/string.o bin/tty.o
+$CC $LINKFLAGS -T $SRC/link.ld -o isodir/boot/kernel.elf $OBJS
 
-cp grub.cfg isodir/boot/grub/grub.cfg
+cp $SRC/grub.cfg isodir/boot/grub/grub.cfg
 grub-mkrescue -o SynapseOS.iso isodir/
