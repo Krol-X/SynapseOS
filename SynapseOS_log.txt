@@ -11,15 +11,15 @@ keyboard inited
 tty init...
 tty_buffer = 0xB8000
 tty inited
-Start Addr: 0x0 | Length: 0x0 | Size: 0x9FC00 | Type: 0
-Start Addr: 0x9FC00 | Length: 0x0 | Size: 0x400 | Type: 0
-Start Addr: 0xF0000 | Length: 0x0 | Size: 0x10000 | Type: 0
-Start Addr: 0x100000 | Length: 0x0 | Size: 0x1EE0000 | Type: 0
-Start Addr: 0x1FE0000 | Length: 0x0 | Size: 0x20000 | Type: 0
-Start Addr: 0xFFFC0000 | Length: 0x0 | Size: 0x40000 | Type: 0
+Start Addr: 0x0 | Length: 0x9FC00 | Size: 0x14 | Type: 1
+Start Addr: 0x9FC00 | Length: 0x400 | Size: 0x14 | Type: 2
+Start Addr: 0xF0000 | Length: 0x10000 | Size: 0x14 | Type: 2
+Start Addr: 0x100000 | Length: 0x1FEE0000 | Size: 0x14 | Type: 1
+Start Addr: 0x1FFE0000 | Length: 0x20000 | Size: 0x14 | Type: 2
+Start Addr: 0xFFFC0000 | Length: 0x40000 | Size: 0x14 | Type: 2
 flags = 6759
 mem_lower = 639
-mem_upper = 31616
+mem_upper = 523136
 boot_device = -520093697
 cmdline = 65656
 mmap_length = 144
@@ -30,3 +30,29 @@ config_table = 0
 config_table = 0
 apm_table = 0
 vbe_control_info = 66248
+35
+-93
+18
+38
+-110
+25
+-90
+-103
+28
+-100
+31
+21
+-97
+31
+-107
+-97
+23
+-105
+49
+-79
+33
+-95
+24
+-104
+28
+-100

@@ -60,9 +60,9 @@ void main(multiboot_info_t* mbd, unsigned int magic){
             (multiboot_memory_map_t*) (mbd->mmap_addr + i);
  
         qemu_printf("Start Addr: %x | Length: %x | Size: %x | Type: %d\n",
-            mmmt->addr, mmmt->len, mmmt->size, mmmt->type);
+            mmmt->addr_low, mmmt->len_low, mmmt->size, mmmt->type);
 		tty_printf("\nStart Addr: %x | Length: %x | Size: %x | Type: %d\n",
-            mmmt->addr, mmmt->len, mmmt->size, mmmt->type);
+            mmmt->addr_low, mmmt->len_low, mmmt->size, mmmt->type);
  
         if(mmmt->type == MULTIBOOT_MEMORY_AVAILABLE) {
             /* 
