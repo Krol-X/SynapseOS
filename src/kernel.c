@@ -52,7 +52,8 @@ void main(multiboot_info_t* mbd, unsigned int magic){
     if(!(mbd->flags >> 6 & 0x1)) {
         panic("invalid memory map given by GRUB bootloader");
     }
-	/* Loop through the memory map and display the values */
+	/*
+	 Loop through the memory map and display the values 
     unsigned int i;
     for(i = 0; i < mbd->mmap_length; i += sizeof(multiboot_memory_map_t)) {
         multiboot_memory_map_t* mmmt = (multiboot_memory_map_t*) (mbd->mmap_addr + i);
@@ -63,14 +64,10 @@ void main(multiboot_info_t* mbd, unsigned int magic){
             mmmt->addr_low, mmmt->len_low, mmmt->size, mmmt->type);
  
         if(mmmt->type == MULTIBOOT_MEMORY_AVAILABLE) {
-            /* 
-             * Do something with this memory block!
-             * BE WARNED that some of memory shown as availiable is actually 
-             * actively being used by the kernel! You'll need to take that
-             * into account before writing to memory!
-             */
+            
         }
-    }
+    }*/
+	
 	qemu_printf("flags = %d\n", mbd->flags);
 	qemu_printf("mem_lower = %d\n", mbd->mem_lower);
 	qemu_printf("mem_upper = %d\n", mbd->mem_upper);
