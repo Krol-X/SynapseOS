@@ -30,19 +30,9 @@ config_table = 0
 config_table = 0
 apm_table = 0
 vbe_control_info = 66248
-35
--93
-18
-38
--110
-25
--90
--103
-28
--100
 31
-21
 -97
+21
 31
 -107
 -97

@@ -1,14 +1,12 @@
-#include <stdint-gcc.h>
-#include "../include/stdlib.h"
 #include "../include/memory_manager.h"
 
 
-typedef struct {
+/*typedef struct {
     uint64 base;
     uint64 length;
     uint32 type;
     uint32 acpi_ext_attrs;
-} __attribute__((packed)) MemoryMapEntry;
+} __attribute__((packed)) MemoryMapEntry;*/
 
 
 typedef struct {
@@ -25,14 +23,16 @@ void enable_paging(){
     return;
 }
 
-void init_memory_manager(void *memory_map) {
+void init_memory_manager(multiboot_info_t *mb_info) {
     asm("movl %%cr3, %0":"=a"(kernel_page_dir));
-    memory_size = 0x100000;
-    MemoryMapEntry *entry;
-    for (entry = memory_map; entry->type; entry++) {
-        if ((entry->type == 1) && (entry->base >= 0x100000)) {
-            free_phys_pages(entry->base, entry->length >> PAGE_OFFSET_BITS);
-            memory_size += entry->length;
+    //memory_size = 0x100000;
+    memory_size = 0;
+    unsigned int i;
+    for(i = 0; i < mb_info->mmap_length; i += sizeof(multiboot_memory_map_t)) {
+        multiboot_memory_map_t* entry = (multiboot_memory_map_t*) (mb_info->mmap_addr + i);
+        if ((entry->type == 1) && (entry->addr_low >= 0x100000)) {
+            free_phys_pages(entry->addr_low, entry->len_low >> PAGE_OFFSET_BITS);
+            memory_size += entry->len_low;
         }
     }
 }
