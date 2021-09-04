@@ -13,7 +13,6 @@ int EXIT = 0;
 
 /* ------------------------------------------- */
 void main(multiboot_info_t* mbd, unsigned int magic){
-	VGA_MEMORY = (uint16_t*)0xB8000;
 
 	qemu_printf("magic x: %x\n",magic);
 	qemu_printf("magic d: %d\n",magic);

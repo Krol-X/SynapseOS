@@ -35,7 +35,7 @@ void tty_init(void) {
   tty_row = 0;
   tty_column = 0;
   tty_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
-  tty_buffer = (uint16_t*)VGA_MEMORY;
+  tty_buffer = (uint16_t*);
   qemu_printf("tty_buffer = %x\n", (uint32_t)tty_buffer);
   for (size_t y = 0; y < VGA_HEIGHT; y++) {
     for (size_t x = 0; x < VGA_WIDTH; x++) {
