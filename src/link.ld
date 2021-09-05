@@ -1,41 +1,42 @@
-OUTPUT_FORMAT(elf32-i386)
-ENTRY(start)
-SECTIONS
-{
+ENTRY (start)
+
+SECTIONS{
     /* Base address starting at 1MB */
     . = 0x00100000;
+
+	/* The kernel will live at 3GB + 1MB in the virtual address space, */
+	/* which will be mapped to 1MB in the physical address space. */
+	/* Note that we page-align the sections. */
+
+	_kernel_start = .;
+    .multiboot.data : {
+        *(.multiboot.data)
+    }
+
+    .multiboot.text : {
+        *(.multiboot.text)
+    }
+
+	. += 0xC0000000;
+	/* Add a symbol that indicates the start address of the kernel. */
+	.text ALIGN (4K) : AT (ADDR (.text) - 0xC0000000){
+		*(.text)
+	}
+
+	.rodata ALIGN (4K) : AT (ADDR (.rodata) - 0xC0000000){
+		*(.rodata)
+	}
+
+	.data ALIGN (4K) : AT (ADDR (.data) - 0xC0000000){
+		*(.data)
+	}
+
+	.bss ALIGN (4K) : AT (ADDR (.bss) - 0xC0000000){
+		*(COMMON)
+		*(.bss)
+		*(.bootstrap_stack)
+	}
     
-    /* Special multiboot compliant header.
-     * Used by GRUB for image detection.
-    */
-
-    .__mbHeader : { 
-        *(.__mbHeader) 
-    }
-
-    .early_text ALIGN (0x1000) : { 
-        *(.early_text) 
-    }
-
-    .early_data ALIGN (0x1000) : { 
-        *(.early_data) 
-    }
-
-    .early_bss ALIGN (0x1000) :{
-        _EARLY_BSS_START = .;
-        *(.early_bss)
-        _EARLY_BSS_END = .;
-    }
-
-    .text : { 
-        *(.text) 
-    }
-
-    .data : { 
-        *(.data)
-    }
-
-    .bss  : { 
-        *(.bss)  
-    }
+	/* Add a symbol that indicates the end address of the kernel. */
+	_kernel_end = .;
 }

@@ -4,8 +4,8 @@ use32
 section '.text' executable
         ;multiboot spec
         align 4
-        dd 0x1BADB002              ;magic
-        dd 0x00                    ;flags
+        dd 0x1BADB002          ;magic
+        dd 0x00      ;flags
         dd - (0x1BADB002 + 0x00)   ;checksum. m+f+c should be zero
 
 public start
@@ -13,7 +13,7 @@ public keyboard_handler
 public load_idt
 public gdt_flush
 
-extrn main             ;this is defined in the c file
+extrn main         ;this is defined in the c file
 extrn keyboard_handler_main
 
 
@@ -21,7 +21,7 @@ extrn keyboard_handler_main
 load_idt:
         mov edx, [esp + 4]
         lidt [edx]
-        sti                             ;turn on interrupts
+        sti      ;turn on interrupts
         ret
 
 
@@ -38,21 +38,22 @@ keyboard_handler:
 ; This is declared in C as 'extern void gdt_flush(uint32_t gdt_ptr_addr);'
 
 paging:
-       
-        
+        nop
+
+
 gdt_flush:
-    cli
-    mov eax, [esp + 4]
-    lgdt [eax]
-    mov ax, 0x10    ; 0x10 is the offset in the GDT to our data segment
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
-    jmp 0x08:.flush
+        cli
+        mov eax, [esp + 4]
+        lgdt [eax]
+        mov ax, 0x10        ; 0x10 is the offset in the GDT to our data segment
+        mov ds, ax
+        mov es, ax
+        mov fs, ax
+        mov gs, ax
+        mov ss, ax
+        jmp 0x08:.flush
 .flush:
-    ret               ; Returns back to the C code!
+        ret          ; Returns back to the C code!
 
 start:
 	cli
