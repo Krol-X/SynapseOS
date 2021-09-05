@@ -104,22 +104,15 @@ void free_phys_pages(phyaddr base, size_t count) {
             temp_map_page(cur_block);
             if (cur_block + (((PhysMemoryBlock*)TEMP_PAGE)->size << PAGE_OFFSET_BITS) == base) {
                 ((PhysMemoryBlock*)TEMP_PAGE)->size += count;
-                if (((PhysMemoryBlock*)TEMP_PAGE)->next == base +
-                (count << PAGE_OFFSET_BITS)) {
-                phyaddr next1 =
-                ((PhysMemoryBlock*)TEMP_PAGE)->next;
-                temp_map_page(next1);
-                phyaddr next2 =
-                ((PhysMemoryBlock*)TEMP_PAGE)->next;
-                size_t new_count =
-                ((PhysMemoryBlock*)TEMP_PAGE)->size;
-                temp_map_page(next2);
-                ((PhysMemoryBlock*)TEMP_PAGE)->prev =
-                cur_block;
-                temp_map_page(cur_block);
-                ((PhysMemoryBlock*)TEMP_PAGE)->next = next2;
-                ((PhysMemoryBlock*)TEMP_PAGE)->size +=
-                new_count;
+                if (((PhysMemoryBlock*)TEMP_PAGE)->next == base + (count << PAGE_OFFSET_BITS)) {
+                    phyaddr next1 = ((PhysMemoryBlock*)TEMP_PAGE)->next;
+                    temp_map_page(next1);
+                    phyaddr next2 = ((PhysMemoryBlock*)TEMP_PAGE)->next;
+                    size_t new_count = ((PhysMemoryBlock*)TEMP_PAGE)->size;
+                    temp_map_page(next2);((PhysMemoryBlock*)TEMP_PAGE)->prev = cur_block;
+                    temp_map_page(cur_block);
+                    ((PhysMemoryBlock*)TEMP_PAGE)->next = next2;
+                    ((PhysMemoryBlock*)TEMP_PAGE)->size += new_count;
                 }
                 break;
             } else if (base + (count << PAGE_OFFSET_BITS) == cur_block){
@@ -133,8 +126,7 @@ void free_phys_pages(phyaddr base, size_t count) {
                 temp_map_page(base);
                 ((PhysMemoryBlock*)TEMP_PAGE)->next = next;
                 ((PhysMemoryBlock*)TEMP_PAGE)->prev = prev;
-                ((PhysMemoryBlock*)TEMP_PAGE)->size = count +
-                old_count;
+                ((PhysMemoryBlock*)TEMP_PAGE)->size = count + old_count;
                 break;
             } else if ((cur_block > base) || (((PhysMemoryBlock*)TEMP_PAGE)->next == free_phys_memory_pointer)) {
                 phyaddr prev = ((PhysMemoryBlock*)TEMP_PAGE)->next;
@@ -176,8 +168,7 @@ int map_pages(phyaddr page_dir, void *vaddr, phyaddr paddr, size_t count, unsign
                         memset((void*)TEMP_PAGE, 0,
                         PAGE_SIZE);
                         temp_map_page(page_table);
-                        ((phyaddr*)TEMP_PAGE)[index] = addr
-                        | PAGE_VALID | PAGE_WRITABLE | PAGE_USER;
+                        ((phyaddr*)TEMP_PAGE)[index] = addr | PAGE_VALID | PAGE_WRITABLE | PAGE_USER;
                         page_table = addr;
                     } else {
                         return 0;

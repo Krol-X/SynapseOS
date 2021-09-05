@@ -9,6 +9,8 @@ size_t tty_column;
 uint8_t tty_color;
 uint16_t* tty_buffer;
 
+uint16_t* VGA_MEMORY = (uint16_t*)0xC03FF000;
+
 //string.h part (for future)
 static size_t strlen(const char* str) {
     size_t len = 0;
@@ -35,7 +37,7 @@ void tty_init(void) {
   tty_row = 0;
   tty_column = 0;
   tty_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
-  tty_buffer = (uint16_t*);
+  tty_buffer = (uint16_t*)VGA_MEMORY;
   qemu_printf("tty_buffer = %x\n", (uint32_t)tty_buffer);
   for (size_t y = 0; y < VGA_HEIGHT; y++) {
     for (size_t x = 0; x < VGA_WIDTH; x++) {

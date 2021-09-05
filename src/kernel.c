@@ -13,6 +13,7 @@ int EXIT = 0;
 
 /* ------------------------------------------- */
 void main(multiboot_info_t* mbd, unsigned int magic){
+	uint16_t* VGA_MEMORY = (uint16_t*)0xC03FF000;
 
 	qemu_printf("magic x: %x\n",magic);
 	qemu_printf("magic d: %d\n",magic);
@@ -86,10 +87,11 @@ void main(multiboot_info_t* mbd, unsigned int magic){
 	tty_printf(">");
 	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 
-
+	long long int lifetime;
 	// While kernel working we get input from keyboard
 	while(EXIT!=1){
 		check_keyboard();
+		lifetime++;
 	}
 
 	// Shutdown codes	

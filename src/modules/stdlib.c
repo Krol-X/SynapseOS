@@ -35,6 +35,9 @@ char * exception_strings[] = {
     "SIMD Floating-Point Exception" 
 };
 
+int abs(int number) {
+  return number >= 0 ? number : -number;
+}
 
 void panic(char *text){
     tty_printf("\n    !!!PANIC!!!\n %s\n",text);
