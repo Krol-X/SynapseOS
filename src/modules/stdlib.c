@@ -1,11 +1,50 @@
 #include "../include/stdlib.h"
 #include "../include/qemu_log.h"
 #include "../include/tty.h"
+enum exception_codes
+{
+  EXCEPT_DIV = 0,
+  EXCEPT_RESVD,
+  EXCEPT_NMI,
+  EXCEPT_BP,
+  EXCEPT_OVERFLOW,
+  EXCEPT_BOUND,
+  EXCEPT_INVOP,
+  EXCEPT_DEVNA,
+  EXCEPT_DOUBLE,
+  EXCEPT_COSEG,
+  EXCEPT_INVTSS,
+  EXCEPT_SEGNP,
+  EXCEPT_SSFAULT,
+  EXCEPT_GFP,
+  EXCEPT_PAGEFAULT,
+  EXCEPT_RESVD2,
+  EXCEPT_X87FPU,
+  EXCEPT_ALIGN,
+  EXCEPT_MACHINECK,
+  EXCEPT_SIMD
+};
+
+char * exception_strings[] = { 
+    "Divide Error","Reserved","NMI Interrupt","Breakpoint",
+    "Overflow","BOUND Range Exceeded","Invalid Opcode",
+    "Device Not Available","Double Fault","Coprocessor Segment Overrun",
+    "Invalid TSS","Segment Not Present","Stack-Segment Fault",
+    "General Protection Fault (GPF)","Page Fault","Reserved",
+    "x87 FPU Error","Alignment Check","Machine Check",
+    "SIMD Floating-Point Exception" 
+};
+
+int abs(int number) {
+  return number >= 0 ? number : -number;
+}
 
 void panic(char *text){
     tty_printf("\n    !!!PANIC!!!\n %s\n",text);
     qemu_printf("\n    !!!PANIC!!!\n %s\n",text);
 }
+
+void handle_exception();
 
 void memset(void *mem, char value, size_t count) {
     asm("movl %0, %%eax \n movl %1, %%edi \n movl %2, %%ecx \n rep stosl"

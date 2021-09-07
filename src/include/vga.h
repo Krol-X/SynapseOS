@@ -7,7 +7,7 @@
 #define VGA_HEIGHT 25
 #define VGA_W_x_H 2000
 
-uint16_t* VGA_MEMORY; 
+uint16_t* VGA_GRAFIC_MEMORY;
 
 // VGA colors
 enum vga_color {
@@ -39,5 +39,5 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color) {
     return (uint16_t) uc | (uint16_t) color << 8;
 }
 
-void putpixel(unsigned char* screen, int x,int y, int color);
+void putpixel(uint16_t* screen, int x,int y, int color);
 #endif  // _KERNEL_VGA_H

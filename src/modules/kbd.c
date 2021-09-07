@@ -115,14 +115,14 @@ char  keyboard_handler_main(void){
     status  =  inb(KEYBOARD_STATUS_PORT);
     /*  Lowest bit of  status will  be set if  buffer is  not  empty  */
     if  (status  &  0x01)  {
-      keyboard_get_input = 1;
-      keycode = inb(KEYBOARD_DATA_PORT);
-      qemu_printf("%d\n", (int)keycode);
-      if (SHIFT == 0){
-        return keyboard_map[(unsigned char) keycode];
-      } else {
-          return keyboard_map_shifted[(unsigned char) keycode];
-      }
-  }
-  return (char)0;
+		keyboard_get_input = 1;
+		keycode = inb(KEYBOARD_DATA_PORT);
+		qemu_printf("%d\n", (int)keycode);
+		if (SHIFT == 0){
+			return keyboard_map[(unsigned char) keycode];
+		} else {
+			return keyboard_map_shifted[(unsigned char) keycode];
+		}
+	}
+	return (char)0;
 }

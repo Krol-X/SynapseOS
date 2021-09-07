@@ -2,6 +2,7 @@
 #include "include/interdesctbl.h"
 #include "include/kbd.h"
 #include "include/tty.h"
+#include "include/vga.h"
 #include "include/qemu_log.h"
 #include "include/cpu_detect.h"
 #include "include/memory_manager.h"
@@ -13,15 +14,14 @@ int EXIT = 0;
 
 /* ------------------------------------------- */
 void main(multiboot_info_t* mbd, unsigned int magic){
-	VGA_MEMORY = (uint16_t*)0xB8000;
 
 	qemu_printf("magic x: %x\n",magic);
 	qemu_printf("magic d: %d\n",magic);
 	qemu_printf("MULTIBOOT_BOOTLOADER_MAGIC x: %x\n",MULTIBOOT_BOOTLOADER_MAGIC);
 	qemu_printf("MULTIBOOT_BOOTLOADER_MAGIC d: %d\n",MULTIBOOT_BOOTLOADER_MAGIC);
-	qemu_printf("VGA MEMORY: %d\n",VGA_MEMORY);
 	qemu_printf("Memory  Manager inited\n");
 	qemu_printf("RESULT: %d\n",alloc_phys_pages(1));
+	qemu_printf("VGA TEXT MEMORY: %d\n",VGA_TEXT_MEMORY);
 
     gdt_init(); // intialize Global Descriptor Table
 	qemu_printf("Global Descriptor Table inited\n");
@@ -52,27 +52,22 @@ void main(multiboot_info_t* mbd, unsigned int magic){
     if(!(mbd->flags >> 6 & 0x1)) {
         panic("invalid memory map given by GRUB bootloader");
     }
-	/* Loop through the memory map and display the values */
+	/*
+	 Loop through the memory map and display the values 
     unsigned int i;
-    for(i = 0; i < mbd->mmap_length; 
-        i += sizeof(multiboot_memory_map_t)) {
-        multiboot_memory_map_t* mmmt = 
-            (multiboot_memory_map_t*) (mbd->mmap_addr + i);
+    for(i = 0; i < mbd->mmap_length; i += sizeof(multiboot_memory_map_t)) {
+        multiboot_memory_map_t* mmmt = (multiboot_memory_map_t*) (mbd->mmap_addr + i);
  
         qemu_printf("Start Addr: %x | Length: %x | Size: %x | Type: %d\n",
-            mmmt->addr, mmmt->len, mmmt->size, mmmt->type);
+            mmmt->addr_low, mmmt->len_low, mmmt->size, mmmt->type);
 		tty_printf("\nStart Addr: %x | Length: %x | Size: %x | Type: %d\n",
-            mmmt->addr, mmmt->len, mmmt->size, mmmt->type);
+            mmmt->addr_low, mmmt->len_low, mmmt->size, mmmt->type);
  
         if(mmmt->type == MULTIBOOT_MEMORY_AVAILABLE) {
-            /* 
-             * Do something with this memory block!
-             * BE WARNED that some of memory shown as availiable is actually 
-             * actively being used by the kernel! You'll need to take that
-             * into account before writing to memory!
-             */
+            
         }
-    }
+    }*/
+	
 	qemu_printf("flags = %d\n", mbd->flags);
 	qemu_printf("mem_lower = %d\n", mbd->mem_lower);
 	qemu_printf("mem_upper = %d\n", mbd->mem_upper);
@@ -92,10 +87,11 @@ void main(multiboot_info_t* mbd, unsigned int magic){
 	tty_printf(">");
 	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 
-
+	long long int lifetime;
 	// While kernel working we get input from keyboard
 	while(EXIT!=1){
 		check_keyboard();
+		lifetime++;
 	}
 
 	// Shutdown codes	
