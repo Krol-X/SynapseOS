@@ -105,7 +105,7 @@ int do_intel(void) {
 		break;
 	}
 	tty_printf("\n");
-	tty_printf("    Family %d - ", family);
+	tty_printf("\nFamily %d - ", family);
 	switch(family) {
 		case 3:
 		tty_printf("i386");
@@ -127,7 +127,7 @@ int do_intel(void) {
 		extended_family = (eax >> 20) & 0xff;
 		tty_printf("Extended family %d\n", extended_family);
 	}
-	tty_printf("    Model %d - ", model);
+	tty_printf("Model %d - ", model);
 	switch(family) {
 		case 3:
 		break;
@@ -260,7 +260,7 @@ int do_amd(void) {
 	family = (eax >> 8) & 0xf;
 	stepping = eax & 0xf;
 	reserved = eax >> 12;
-	tty_printf("	Family: %d Model: %d [", family, model);
+	tty_printf("Family: %d Model: %d [", family, model);
 	switch(family) {
 		case 4:
 		tty_printf("486 Model %d", model);
@@ -328,6 +328,6 @@ int do_amd(void) {
 			tty_printf("Temperature Sensing Diode Detected!\n");
 		}
 	}
-	tty_printf("	Stepping: %d Reserved: %d\n", stepping, reserved);
+	tty_printf("Stepping: %d Reserved: %d\n", stepping, reserved);
 	return 0;
 }

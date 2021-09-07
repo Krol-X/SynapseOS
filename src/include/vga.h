@@ -7,6 +7,8 @@
 #define VGA_HEIGHT 25
 #define VGA_W_x_H 2000
 
+uint16_t* VGA_GRAFIC_MEMORY;
+
 // VGA colors
 enum vga_color {
     VGA_COLOR_BLACK = 0,

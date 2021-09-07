@@ -76,6 +76,7 @@ void shell_exec(char input_command[]){
 
     } else if( strcmp(input_command, "syscheck") == 0 ){
         // System health check
+        tty_printf("System health: 0");
 
     } else if( strcmp(input_command, "sysinfo") == 0 ){
         // System info
@@ -105,14 +106,14 @@ void shell_exec(char input_command[]){
         // Test all VGA colors
         int i = 0;
         while (i != 256){
-            putpixel((unsigned char*)tty_buffer, 10, 10, 2);
             tty_setcolor(i);
             tty_printf("%d ", i);
+            putpixel((unsigned char*)VGA_GRAFIC_MEMORY, i, i, 1);
+            putpixel((unsigned char*)VGA_GRAFIC_MEMORY, i+1, i, 2);
+            putpixel((unsigned char*)VGA_GRAFIC_MEMORY, i+2, i, 3);
             i++;
         }
         colors(0);
-        tty_printf(" ");
-
         
     } else if( strcmp(input_command, "time") == 0 ){
         // Time from CMOS
