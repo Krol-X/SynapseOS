@@ -2,6 +2,7 @@
 #include "include/interdesctbl.h"
 #include "include/kbd.h"
 #include "include/tty.h"
+#include "include/vga.h"
 #include "include/qemu_log.h"
 #include "include/cpu_detect.h"
 #include "include/memory_manager.h"
@@ -18,9 +19,9 @@ void main(multiboot_info_t* mbd, unsigned int magic){
 	qemu_printf("magic d: %d\n",magic);
 	qemu_printf("MULTIBOOT_BOOTLOADER_MAGIC x: %x\n",MULTIBOOT_BOOTLOADER_MAGIC);
 	qemu_printf("MULTIBOOT_BOOTLOADER_MAGIC d: %d\n",MULTIBOOT_BOOTLOADER_MAGIC);
-	qemu_printf("VGA MEMORY: %d\n",VGA_MEMORY);
 	qemu_printf("Memory  Manager inited\n");
 	qemu_printf("RESULT: %d\n",alloc_phys_pages(1));
+	qemu_printf("VGA TEXT MEMORY: %d\n",VGA_TEXT_MEMORY);
 
     gdt_init(); // intialize Global Descriptor Table
 	qemu_printf("Global Descriptor Table inited\n");
