@@ -108,9 +108,9 @@ void shell_exec(char input_command[]){
         while (i != 256){
             tty_setcolor(i);
             tty_printf("%d ", i);
-            putpixel((unsigned char*)VGA_GRAFIC_MEMORY, i, i, 1);
-            putpixel((unsigned char*)VGA_GRAFIC_MEMORY, i+1, i, 2);
-            putpixel((unsigned char*)VGA_GRAFIC_MEMORY, i+2, i, 3);
+            putpixel(VGA_GRAFIC_MEMORY, i, i, 1);
+            putpixel(VGA_GRAFIC_MEMORY, i+1, i, 2);
+            putpixel(VGA_GRAFIC_MEMORY, i+2, i, 3);
             i++;
         }
         colors(0);
