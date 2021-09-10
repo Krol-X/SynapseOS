@@ -1,3 +1,5 @@
+// CMOS header module header
+
 extern unsigned char second;
 extern unsigned char minute;
 extern unsigned char hour;

@@ -2,6 +2,8 @@
 #define MEMORY_MANAGER_H
 
 #include <stdint-gcc.h>
+// Memory manager module header
+
 #include "stdlib.h"
 #include "multiboot.h"
 

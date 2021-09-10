@@ -1,3 +1,5 @@
+// Qemu debug module header
+
 #ifndef _QEMU_LOG_H
 #define _QEMU_LOG_H
 

@@ -1,3 +1,5 @@
+# Build and run script for linux
+
 CC="/opt/i686-elf-tools-linux/bin/i686-elf-gcc"
 
 BUILDFLAGS="-std=gnu11 -ffreestanding -Wall -Wextra"

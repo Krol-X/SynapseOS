@@ -1,3 +1,5 @@
+// Keyboard driver header
+
 #ifndef KBD_H
 #define KBD_H
 

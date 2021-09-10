@@ -1,6 +1,4 @@
-::
 :: Build and run script
-::
 
 @Echo off
 set VERSION="0.8.2"
@@ -20,7 +18,7 @@ IF EXIST "./src/include/kernel.h" (
    call :GetUnixTime UNIX_TIME
 )
 
-
+:: Setting variables and creating a kernel
 :vars
 IF EXIST "./src/include/kernel.h" (
     set KERNELH_EXIST=1
@@ -37,6 +35,7 @@ SET LDFLAGS=-O3 -ffreestanding -nostdlib -lgcc
 set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/time.o bin/vga.o bin/shell.o bin/idt.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o
 
 
+:: Checking for the presence of a folder and, if not, creating one
 IF EXIST "./bin/" (
     echo Cleaning bin folder
 ) ELSE (
@@ -88,7 +87,6 @@ endlocal & set "%1=%ut%" & goto :vars
 :programm_done
 echo Done
 ::Qemu config
-::qemu-system-x86_64 -m 32 -kernel bin/kernel.elf -monitor stdio -serial file:Qemu_log.txt -no-reboot 
 qemu-system-x86_64 -m 32 -cdrom SynapseOS.iso -monitor stdio -serial file:./run/Qemu_log.txt -no-reboot 
 
 pause

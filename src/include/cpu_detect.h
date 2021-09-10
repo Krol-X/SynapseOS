@@ -1,3 +1,5 @@
+// CPU detector module header
+
 #ifndef _CPU_DETECT_H_
 #define _CPU_DETECT_H_
 

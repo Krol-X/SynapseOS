@@ -1,6 +1,4 @@
-::
 :: Build and run script
-::
 
 @Echo off
 set VERSION="0.8.2"
