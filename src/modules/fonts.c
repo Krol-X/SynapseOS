@@ -1,3 +1,7 @@
+// Fonts module
+
+//Load new fonts
+
 /* import our font that's in the object file we've created above */
 extern char _binary_font_psf_start;
 extern char _binary_font_psf_end;

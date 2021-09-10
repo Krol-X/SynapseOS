@@ -1,4 +1,7 @@
-/*  PS/2 Keyboard  driver */
+//  PS/2 Keyboard  driver
+
+//Provide us keyboard input
+
 #include  "../include/stdlib.h"
 #include  "../include/kbd.h"
 #include  "../include/ports.h"

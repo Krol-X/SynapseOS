@@ -1,3 +1,7 @@
+//  Memory manager module
+
+//Manage memory
+
 #include "../include/memory_manager.h"
 
 
