@@ -1,3 +1,7 @@
+// PE loader
+
+//Can load PE executable files
+
 /*
 
 struct pe_hdr {

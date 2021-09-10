@@ -1,8 +1,7 @@
-/*
-	CMOS module.
+// CMOS module
 
-	CMOS can take us current time
-*/
+//CMOS can take us current time
+
 
 #define CURRENT_YEAR	2021				 // Change this each year!
 

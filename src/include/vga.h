@@ -1,3 +1,5 @@
+// VGA draw module header
+
 #ifndef _KERNEL_VGA_H
 #define _KERNEL_VGA_H
 

@@ -1,3 +1,5 @@
+# Config for bochs
+
 #floppya: 1_44="disk.img", status=inserted
 #boot: floppy
 

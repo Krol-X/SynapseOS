@@ -1,3 +1,7 @@
+// CPU detecting module.
+
+//Can provide us cpu info
+
 #include "../include/cpu_detect.h"
 #include "../include/tty.h"
 

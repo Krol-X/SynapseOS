@@ -1,3 +1,5 @@
+// Fronts module header
+
 #define PSF_FONT_MAGIC 0x864ab572
  
 typedef struct {

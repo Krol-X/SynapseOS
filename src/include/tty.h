@@ -1,3 +1,5 @@
+// Text driver module header
+
 #ifndef TTY_H
 #define TTY_H
 

@@ -1,3 +1,7 @@
+// ELF loader
+
+//Can load ELF executable files
+
 /*
 
 #define EI_NIDENT 16

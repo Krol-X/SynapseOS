@@ -1,3 +1,5 @@
+// IDT module header
+
 #ifndef IDT_H
 #define IDT_H
 

@@ -1,8 +1,12 @@
+// Visual Studio Code Workspace Config 
+
 {
 	"folders": [
 		{
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		
+	}
 }

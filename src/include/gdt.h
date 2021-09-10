@@ -1,3 +1,5 @@
+// GDT module header
+
 #ifndef _KERNEL_GDT_H_
 #define _KERNEL_GDT_H_
 

@@ -1,3 +1,7 @@
+// GDT module
+
+//
+
 #include "../include/gdt.h"
  
 // Defines a GDT entry.
