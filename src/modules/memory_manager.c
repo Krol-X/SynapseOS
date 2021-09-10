@@ -105,12 +105,9 @@ void free_phys_pages(phyaddr base, size_t count) {
         free_phys_memory_pointer = base;
     } else {
         phyaddr cur_block = free_phys_memory_pointer;
-        int y;
         qemu_printf("\nTry free memory: ");
 
         do {
-            qemu_printf("%d, ", y);
-            y++;
             temp_map_page(cur_block);
             if (cur_block + (((PhysMemoryBlock*)TEMP_PAGE)->size << PAGE_OFFSET_BITS) == base) {
                 ((PhysMemoryBlock*)TEMP_PAGE)->size += count;
@@ -153,7 +150,6 @@ void free_phys_pages(phyaddr base, size_t count) {
                 break;
             }
             cur_block = ((PhysMemoryBlock*)TEMP_PAGE)->next;
-            qemu_printf("\nnext block");
 
         } while (cur_block != free_phys_memory_pointer);
         

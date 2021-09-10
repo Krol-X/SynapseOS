@@ -61,8 +61,11 @@ void shell_exec(char input_command[]) {
 		
 		if (test[0] != (unsigned int)-1) {
 			tty_printf("Testing memory alloc...\n");
+				tty_printf("0: %u ", test[0]);
+
+			i = 1;
 			while (i!=5){
-				test[i] = (phyaddr)alloc_phys_pages(i+1);
+				test[i] = (phyaddr)alloc_phys_pages(i+1)*-1;
 				tty_printf("%d: %u ",i, test[i]);
 				i++;
 			}
@@ -70,8 +73,8 @@ void shell_exec(char input_command[]) {
 			tty_printf("\nTesting memory free...\n");
 			i = 0;
 			while (i!=5){
-				free_phys_pages(test[i], i+1);
 				tty_printf("%d: %u ",i, test[i]);
+				free_phys_pages(test[i], i+1);
 				i++;
 			}
 		} else {
