@@ -3,6 +3,7 @@
 //Manage memory
 
 #include "../include/memory_manager.h"
+#include "../include/qemu_log.h"
 
 
 /*typedef struct {
@@ -104,7 +105,12 @@ void free_phys_pages(phyaddr base, size_t count) {
         free_phys_memory_pointer = base;
     } else {
         phyaddr cur_block = free_phys_memory_pointer;
+        int y;
+        qemu_printf("\nTry free memory: ");
+
         do {
+            qemu_printf("%d, ", y);
+            y++;
             temp_map_page(cur_block);
             if (cur_block + (((PhysMemoryBlock*)TEMP_PAGE)->size << PAGE_OFFSET_BITS) == base) {
                 ((PhysMemoryBlock*)TEMP_PAGE)->size += count;
@@ -118,6 +124,7 @@ void free_phys_pages(phyaddr base, size_t count) {
                     ((PhysMemoryBlock*)TEMP_PAGE)->next = next2;
                     ((PhysMemoryBlock*)TEMP_PAGE)->size += new_count;
                 }
+                qemu_printf("\n1 end");
                 break;
             } else if (base + (count << PAGE_OFFSET_BITS) == cur_block){
                 size_t old_count = ((PhysMemoryBlock*)TEMP_PAGE)->size;
@@ -131,6 +138,7 @@ void free_phys_pages(phyaddr base, size_t count) {
                 ((PhysMemoryBlock*)TEMP_PAGE)->next = next;
                 ((PhysMemoryBlock*)TEMP_PAGE)->prev = prev;
                 ((PhysMemoryBlock*)TEMP_PAGE)->size = count + old_count;
+                qemu_printf("\nbase + (count << PAGE_OFFSET_BITS) == cur_block");
                 break;
             } else if ((cur_block > base) || (((PhysMemoryBlock*)TEMP_PAGE)->next == free_phys_memory_pointer)) {
                 phyaddr prev = ((PhysMemoryBlock*)TEMP_PAGE)->next;
@@ -141,15 +149,19 @@ void free_phys_pages(phyaddr base, size_t count) {
                 ((PhysMemoryBlock*)TEMP_PAGE)->next = cur_block;
                 ((PhysMemoryBlock*)TEMP_PAGE)->prev = prev;
                 ((PhysMemoryBlock*)TEMP_PAGE)->size = count;
+                qemu_printf("\n(cur_block > base) || (((PhysMemoryBlock*)TEMP_PAGE)->next == free_phys_memory_pointer)");
                 break;
             }
             cur_block = ((PhysMemoryBlock*)TEMP_PAGE)->next;
+            qemu_printf("\nnext block");
+
         } while (cur_block != free_phys_memory_pointer);
         
         if (base < free_phys_memory_pointer) {
             free_phys_memory_pointer = base;
         }
     }
+    qemu_printf("\nDONE!\n");
     free_page_count += count;
 }
 
