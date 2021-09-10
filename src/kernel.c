@@ -1,5 +1,5 @@
 #include "include/gdt.h"
-#include "include/interdesctbl.h"
+#include "include/idt.h"
 #include "include/kbd.h"
 #include "include/tty.h"
 #include "include/vga.h"

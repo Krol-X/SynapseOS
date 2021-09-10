@@ -34,7 +34,7 @@ SET LD=i686-elf-ld
 SET SRC=./src
 SET CCFLAGS=-O3 -std=gnu99 -ffreestanding -Wall -Wextra 
 SET LDFLAGS=-O3 -ffreestanding -nostdlib -lgcc
-set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/time.o bin/vga.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o
+set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/time.o bin/vga.o bin/shell.o bin/idt.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o
 
 
 IF EXIST "./bin/" (
@@ -58,7 +58,7 @@ echo Build kernel
 %CC% %CCFLAGS% -c %SRC%/modules/gdt.c -o bin/gdt.o
 %CC% %CCFLAGS% -c %SRC%/modules/cmos.c -o bin/cmos.o
 %CC% %CCFLAGS% -c %SRC%/modules/shell.c -o bin/shell.o
-%CC% %CCFLAGS% -c %SRC%/modules/interdesctbl.c -o bin/interdesctbl.o
+%CC% %CCFLAGS% -c %SRC%/modules/idt.c -o bin/idt.o
 %CC% %CCFLAGS% -c %SRC%/modules/kbd.c -o bin/kbd.o
 %CC% %CCFLAGS% -c %SRC%/modules/tty.c -o bin/tty.o
 %CC% %CCFLAGS% -c %SRC%/modules/ports.c -o bin/ports.o

@@ -4,7 +4,7 @@ BUILDFLAGS="-std=gnu11 -ffreestanding -Wall -Wextra"
 LINKFLAGS="-ffreestanding -nostdlib -lgcc"
 
 SRC="src"
-OBJS="bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/time.o bin/vga.o bin/shell.o bin/interdesctbl.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o"
+OBJS="bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/time.o bin/vga.o bin/shell.o bin/idt.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o"
 
 mkdir -p bin
 mkdir -p isodir/boot/grub
@@ -19,7 +19,7 @@ $CC $BUILDFLAGS -c $SRC/modules/memory_manager.c -o bin/memory_manager.o
 $CC $BUILDFLAGS -c $SRC/modules/cmos.c -o bin/cmos.o
 $CC $BUILDFLAGS -c $SRC/modules/cpu_detect.c -o bin/cpu_detect.o
 $CC $BUILDFLAGS -c $SRC/modules/gdt.c -o bin/gdt.o
-$CC $BUILDFLAGS -c $SRC/modules/interdesctbl.c -o bin/interdesctbl.o
+$CC $BUILDFLAGS -c $SRC/modules/idt.c -o bin/idt.o
 $CC $BUILDFLAGS -c $SRC/modules/kbd.c -o bin/kbd.o
 $CC $BUILDFLAGS -c $SRC/modules/ports.c -o bin/ports.o
 $CC $BUILDFLAGS -c $SRC/modules/qemu_log.c -o bin/qemu_log.o
