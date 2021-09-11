@@ -49,7 +49,7 @@ void floppy_detect_drives() {
 	tty_printf(" - Floppy drive B: %s\n\n", drive_types[drives & 0xf]);
 	floppy_write_cmd((int)drives >> 4, 'A');
 	floppy_write_cmd((int)drives & 0xf, 'B');
-	tty_printf("Floppy drive A data: \n [%s] \n", floppy_read_data(0));
+	tty_printf("Floppy drive A data: \n [%s] \n", floppy_read_data(drives >> 4));
 	tty_printf("Floppy drive B data: \n [%s] \n", floppy_read_data((int)drives & 0xf));
 	
 }
@@ -73,30 +73,30 @@ void floppy_detect_drives() {
 
 void floppy_write_cmd(int base, char cmd) {
 	int i; // do timeout
-	for(i = 0; i < 6000; i++) {
-		io_wait(); // sleep
+	for(i = 0; i < 32001; i++) {
+		
 		if(0x80 & inb(base+FLOPPY_MSR)) {
-			return (void) outb(base+FLOPPY_FIFO, cmd);
+			return (void) outw(base+FLOPPY_FIFO, cmd);
 		}
 	}
 }
 
 char *floppy_read_data(int base) {
-	char str[2048];
+	char str[64000];
 	char *str2;
 	qemu_printf("\nfloppy_read_data:\n");
 
 	int i; // do timeout
-	for(i = 0; i < 2048; i++) {
-		qemu_printf("\ntry read: %d",i);
-
+	for(i = 0; i < 64000+1; i++) {
 		if(0x80 & inb(base+FLOPPY_MSR)) {
 			qemu_printf("\nRead: %c",inb(base+FLOPPY_FIFO));
 			str[i] = inb(base+FLOPPY_FIFO);
 		}
 	}
+	qemu_printf("File: [%s]",str);
+
+	memcpy(str2, str, 64000);
 	qemu_printf("\nReading end.\n");
-	str2 = str;
 	return str2;
 }
 
