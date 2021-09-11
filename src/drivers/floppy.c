@@ -1,230 +1,102 @@
-/*
-* Sistema Operacional BrOS
-* CodeD by CorN_Sk8
-* Kernel em C
-*/
+#include "../include/floppy.h"
 
-#include "include\floppy.h"
-#include "include\system.h"
-#include "include\video.h"
-#include "include\in_out.h"
 
-int fdc_flag            = 0;
-int ST0                 = 0;
-int fdc_status[7]       = { 0 };
-int fdc_track           = 0xFF;
-int fdc_motor           = 0;
-int fdc_motor_countdown = 0;
-int fdc_device          = 0;
-int *fdc_buffer;
+// standard base address of the primary floppy controller
+static const int floppy_base = 0x03f0;
 
-static int fdc_wait_until_ready( void )
-{
-   int counter, status;
+// standard IRQ number for floppy controllers
+static const int floppy_irq = 6;
 
-   for( counter = 0; counter < 10000; counter++ )
-   {
-      status = inportb( FDC_MSR );
-      if( status & MSR_READY )
-      {
-         return( status );
-      }
-   }
-   return( -1 );
+// The registers of interest. There are more, but we only use these here.
+enum floppy_registers {
+	FLOPPY_DOR  = 2,  // digital output register
+	FLOPPY_MSR  = 4,  // master status register, read only
+	FLOPPY_FIFO = 5,  // data FIFO, in DMA operation for commands
+	FLOPPY_CCR  = 7	// configuration control register, write only
+};
+
+// The commands of interest. There are more, but we only use these here.
+enum floppy_commands {
+	CMD_SPECIFY = 3,				// SPECIFY
+	CMD_WRITE_DATA = 5,			// WRITE DATA
+	CMD_READ_DATA = 6,			// READ DATA
+	CMD_RECALIBRATE = 7,		// RECALIBRATE
+	CMD_SENSE_INTERRUPT = 8,	// SENSE INTERRUPT
+	CMD_SEEK = 15,				// SEEK
+};
+
+static const char * drive_types[8] = {
+	"none",
+	"360kB 5.25",
+	"1.2MB 5.25",
+	"720kB 3.5",
+
+	"1.44MB 3.5",
+	"2.88MB 3.5",
+	"unknown type",
+	"unknown type"
+};
+
+
+
+// Obviously you'd have this return the data, start drivers or something.
+void floppy_detect_drives() {
+
+	outb(0x70, 0x10);
+	unsigned drives = inb(0x71);
+	tty_printf("\nFloppy:\n");
+	tty_printf(" - Floppy drive A: %s\n", drive_types[drives >> 4]);
+	tty_printf(" - Floppy drive B: %s\n\n", drive_types[drives & 0xf]);
+	floppy_write_cmd((int)drives >> 4, 'A');
+	floppy_write_cmd((int)drives & 0xf, 'B');
+	tty_printf("Floppy drive A data: \n [%s] \n", floppy_read_data(0));
+	tty_printf("Floppy drive B data: \n [%s] \n", floppy_read_data((int)drives & 0xf));
+	
 }
 
-static int fdc_getbyte()
-{
-   int msr;
+//
+// The MSR byte: [read-only]
+// -------------
+//
+//  7	6	5	4	3	2	1	0
+// MRQ DIO NDMA BUSY ACTD ACTC ACTB ACTA
+//
+// MRQ is 1 when FIFO is ready (test before read/write)
+// DIO tells if controller expects write (1) or read (0)
+//
+// NDMA tells if controller is in DMA mode (1 = no-DMA, 0 = DMA)
+// BUSY tells if controller is executing a command (1=busy)
+//
+// ACTA, ACTB, ACTC, ACTD tell which drives position/calibrate (1=yes)
+//
+//
 
-   msr = fdc_wait_until_ready();
-   if( msr < 0 )
-   {
-      return( -1 );
-   }
-   msr &= MSR_DIR | MSR_READY | MSR_BUSY | MSR_DMA;
-   if( msr == (MSR_DIR | MSR_READY | MSR_BUSY) )
-   {
-      return( inportb(FDC_DATA) );
-   }
-   return( -1 );
+void floppy_write_cmd(int base, char cmd) {
+	int i; // do timeout
+	for(i = 0; i < 6000; i++) {
+		io_wait(); // sleep
+		if(0x80 & inb(base+FLOPPY_MSR)) {
+			return (void) outb(base+FLOPPY_FIFO, cmd);
+		}
+	}
 }
 
-static int fdc_sendbyte( int b )
-{
-   int msr;
+char *floppy_read_data(int base) {
+	char str[2048];
+	char *str2;
+	qemu_printf("\nfloppy_read_data:\n");
 
-   msr = fdc_wait_until_ready();
-   if( msr < 0 )
-   {
-      return( -1 );
-   }
-   if( (msr & (MSR_READY | MSR_DIR | MSR_DMA)) == MSR_READY )
-   {
-      outportb( FDC_DATA, b );
-      return( 0 );
-   }
-   return( -1 );
+	int i; // do timeout
+	for(i = 0; i < 2048; i++) {
+		qemu_printf("\ntry read: %d",i);
+
+		if(0x80 & inb(base+FLOPPY_MSR)) {
+			qemu_printf("\nRead: %c",inb(base+FLOPPY_FIFO));
+			str[i] = inb(base+FLOPPY_FIFO);
+		}
+	}
+	qemu_printf("\nReading end.\n");
+	str2 = str;
+	return str2;
 }
 
-int fdc_wait(int sensei){
-     int i;
-     
-     fdc_flag=1;
-     while(fdc_flag) ;
-     
-     i = 0;
-     while( (i < 7) && (inportb(FDC_MSR) & MSR_BUSY) ){
-         fdc_status[ i++ ] = fdc_getbyte();
-     }
-     
-     if( sensei ){
-         fdc_sendbyte( CMD_SENSEI );
-         ST0 = fdc_getbyte();
-         fdc_track = fdc_getbyte();
-     }
-     return 1;   
-}
-
-void fdc_motor_on(){
-     
-     char devs[] = {0x1C, 0x2D, 0x4E, 0x8F};   
-     
-     if(!fdc_motor){
-         outportb( FDC_DOR, devs[fdc_device] );
-         timer_wait(100);
-         fdc_motor = 1;                   
-     } 
-}
-
-void fdc_motor_off(){
-     
-     if(fdc_motor){
-           outportb( FDC_DOR, 0x0C );
-          fdc_motor = 1;                   
-     }
-}
-
-static void fdc_recalibrate()
-{
-   // Turn the motor on.
-   fdc_motor_on();
-
-   // Send recalibrate command.
-   fdc_sendbyte( CMD_RECAL );
-   fdc_sendbyte( 0 );
-
-   // Wait until recalibrate command is finished.
-   fdc_wait( 1 );
-
-   // Turn the motor off.
-   fdc_motor_off();
-}
-
-int __fdc_seek( int track ){
-
-   // If already there return.
-   if( fdc_track == track )
-   {
-      return( 0 );
-   }
-
-   // Turn the motor on.
-   fdc_motor_on();
-
-   // Send seek command.
-   fdc_sendbyte( CMD_SEEK );
-   fdc_sendbyte( 0 );
-   fdc_sendbyte( track );
-
-   // Wait until seek is finished.
-   if( fdc_wait(1) == 0 )
-   {
-      // Timeout!
-      fdc_motor_off();
-      printf("ERRO");
-      return 0;
-   }
-
-   // Let the head settle for 15msec.
-   timer_wait(50);
-
-   // Turn off the motor.
-   fdc_motor_off();
-
-   // Check if seek worked.
-   if( (ST0 == 0x20) && (fdc_track == track) )
-   {
-      return( 0 );
-   }
-   return 0;
-}
-
-int reset_floppy(int device){
-   
-    fdc_device = device;       
-
-    outportb(FDC_DOR, 0x00);
-     
-    outportb(FDC_CCR, 0x00);
-    outportb(FDC_DOR, 0x0C);
-     
-    fdc_wait(1);
-     
-    fdc_sendbyte( CMD_SPECIFY );
-    fdc_sendbyte( 0xdf );
-    fdc_sendbyte( 0x02 ); 
-   
-    __fdc_seek( 1 );   
-    fdc_recalibrate();
-     
-    return 1;
-}
-
-void fdc_handler(struct regs *r){
-     fdc_flag = 0;
-}
-
-int init_floppy(int device){
-    int flag;
-    int ret;
-    int v;
-   
-    // Instal IRQ
-    irq_install_handler(6, fdc_handler);
-     
-    // reset floppy driver         
-    flag = reset_floppy(device);
-    if(flag == 0){
-        printf("\nError on init floppy driver in stage of [Reset].\n");
-        return 0;
-    }
-     
-     fdc_sendbyte( CMD_VERSION );
-     v = fdc_getbyte();
-
-     switch ( v ) {
-         case 0xFF: printf(" [ controller not found ]");
-         ret = 0;
-         break;
-
-           case 0x80: printf(" [ NEC controller ]");
-         ret = 1;           
-         break;
-
-           case 0x81: printf(" [ VMware controller ]");
-         ret = 1;           
-         break;
-
-         case 0x90: printf(" [ enhanced controller ]");
-         ret = 1;         
-         break;
-
-           default: printf(" [ unknown controller [%d] ]", v);
-         ret = 1;           
-         break;
-    }   
-
-    return 1;
-         
-}

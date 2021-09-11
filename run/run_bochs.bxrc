@@ -1,8 +1,7 @@
 # Config for bochs
 
-#floppya: 1_44="disk.img", status=inserted
-#boot: floppy
-
+floppya: 1_44="A.img", status=inserted
+floppyb: 1_44="B.img", status=inserted
 ata0-master: type=cdrom, path=../SynapseOS.iso, status=inserted
 megs: 8
 log: bochsout.txt
