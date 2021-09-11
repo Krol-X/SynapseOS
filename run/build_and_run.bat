@@ -50,19 +50,25 @@ fasm %SRC%/kernel.asm bin/kasm.o
 
 echo Build kernel
 %CC% %CCFLAGS% -c %SRC%/kernel.c -o ./bin/kc.o
+
+echo Build modules
 %CC% %CCFLAGS% -c %SRC%/modules/stdlib.c -o ./bin/stdlib.o
 %CC% %CCFLAGS% -c %SRC%/modules/time.c -o ./bin/time.o
 %CC% %CCFLAGS% -c %SRC%/modules/vga.c -o ./bin/vga.o
 %CC% %CCFLAGS% -c %SRC%/modules/memory_manager.c -o ./bin/memory_manager.o
 %CC% %CCFLAGS% -c %SRC%/modules/gdt.c -o bin/gdt.o
-%CC% %CCFLAGS% -c %SRC%/modules/cmos.c -o bin/cmos.o
 %CC% %CCFLAGS% -c %SRC%/modules/shell.c -o bin/shell.o
 %CC% %CCFLAGS% -c %SRC%/modules/idt.c -o bin/idt.o
 %CC% %CCFLAGS% -c %SRC%/modules/kbd.c -o bin/kbd.o
 %CC% %CCFLAGS% -c %SRC%/modules/tty.c -o bin/tty.o
 %CC% %CCFLAGS% -c %SRC%/modules/ports.c -o bin/ports.o
-%CC% %CCFLAGS% -c %SRC%/modules/cpu_detect.c -o bin/cpu_detect.o
 %CC% %CCFLAGS% -c %SRC%/modules/qemu_log.c -o bin/qemu_log.o
+
+echo Build drivers
+%CC% %CCFLAGS% -c %SRC%/drivers/cmos.c -o bin/cmos.o
+%CC% %CCFLAGS% -c %SRC%/drivers/cpu_detect.c -o bin/cpu_detect.o
+
+echo linking
 %CC% %LDFLAGS% -T %SRC%/link.ld -o bin/kernel.elf %OBJECTS%
 
 echo Create iso

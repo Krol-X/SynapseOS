@@ -97,6 +97,8 @@ phyaddr alloc_phys_pages(size_t count) {
 
 
 void free_phys_pages(phyaddr base, size_t count) {
+    qemu_printf("\nbase: %x, count: %x", base, count);
+    
     if (free_phys_memory_pointer == (unsigned int)-1) {
         temp_map_page(base);
         ((PhysMemoryBlock*)TEMP_PAGE)->next = base;

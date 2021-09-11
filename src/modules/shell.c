@@ -61,7 +61,7 @@ void shell_exec(char input_command[]) {
 		
 		if (test[0] != (unsigned int)-1) {
 			tty_printf("Testing memory alloc...\n");
-				tty_printf("0: %x ", test[0]);
+			tty_printf("0: %x ", test[0]);
 
 			i = 1;
 			while (i!=5){
