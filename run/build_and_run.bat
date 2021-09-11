@@ -32,7 +32,8 @@ SET LD=i686-elf-ld
 SET SRC=./src
 SET CCFLAGS=-O3 -std=gnu99 -ffreestanding -Wall -Wextra 
 SET LDFLAGS=-O3 -ffreestanding -nostdlib -lgcc
-set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/time.o bin/vga.o bin/shell.o bin/idt.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/memory_manager.o bin/stdlib.o
+set OBJECTS_DRIVERS=bin/floppy.o bin/cmos.o bin/vga.o bin/qemu_log.o bin/cpu_detect.o
+set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/idt.o %OBJECTS_DRIVERS% bin/time.o bin/shell.o bin/kbd.o bin/tty.o bin/ports.o bin/memory_manager.o bin/stdlib.o
 
 
 :: Checking for the presence of a folder and, if not, creating one
@@ -66,10 +67,11 @@ echo Build modules
 
 echo Build drivers
 %CC% %CCFLAGS% -c %SRC%/drivers/cmos.c -o bin/cmos.o
+%CC% %CCFLAGS% -c %SRC%/drivers/floppy.c -o bin/floppy.o
 %CC% %CCFLAGS% -c %SRC%/drivers/cpu_detect.c -o bin/cpu_detect.o
 
 echo linking
-%CC% %LDFLAGS% -T %SRC%/link.ld -o bin/kernel.elf %OBJECTS%
+%CC% %LDFLAGS% -T %SRC%/link.ld -o bin/kernel.elf %OBJECTS% 
 
 echo Create iso
 cp bin/kernel.elf isodir/boot/kernel.elf
