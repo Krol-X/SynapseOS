@@ -1,0 +1,29 @@
+magic x: 0x2BADB002
+magic d: 732803074
+MULTIBOOT_BOOTLOADER_MAGIC x: 0x2BADB002
+MULTIBOOT_BOOTLOADER_MAGIC d: 732803074
+Memory  Manager inited
+RESULT: -1
+VGA TEXT MEMORY: 753664
+Global Descriptor Table inited
+Interrupt Descriptor Table inited
+keyboard inited
+tty init...
+tty_buffer = 0xB8000
+tty inited
+
+base: 0x100000, count: 0x1FEE0
+DONE!
+flags = 6759
+mem_lower = 639
+mem_upper = 523136
+boot_device = -520093697
+cmdline = 65656
+mmap_length = 144
+mmap_addr = 65704
+drives_length = 0
+drives_addr = 0
+config_table = 0
+config_table = 0
+apm_table = 0
+vbe_control_info = 66248

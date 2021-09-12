@@ -32,7 +32,7 @@ SET LD=i686-elf-ld
 SET SRC=./src
 SET CCFLAGS=-O3 -std=gnu99 -ffreestanding -Wall -Wextra 
 SET LDFLAGS=-O3 -ffreestanding -nostdlib -lgcc
-set OBJECTS_DRIVERS=bin/floppy.o bin/cmos.o bin/vga.o bin/qemu_log.o bin/cpu_detect.o
+set OBJECTS_DRIVERS=bin/cmos.o bin/vga.o bin/qemu_log.o bin/cpu_detect.o
 set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/idt.o %OBJECTS_DRIVERS% bin/time.o bin/shell.o bin/kbd.o bin/tty.o bin/ports.o bin/memory_manager.o bin/stdlib.o
 
 
@@ -67,7 +67,6 @@ echo Build modules
 
 echo Build drivers
 %CC% %CCFLAGS% -c %SRC%/drivers/cmos.c -o bin/cmos.o
-%CC% %CCFLAGS% -c %SRC%/drivers/floppy.c -o bin/floppy.o
 %CC% %CCFLAGS% -c %SRC%/drivers/cpu_detect.c -o bin/cpu_detect.o
 
 echo linking
@@ -96,7 +95,7 @@ endlocal & set "%1=%ut%" & goto :vars
 echo Done
 
 ::Qemu config
-qemu-system-i386 -m 32 -boot d -cdrom SynapseOS.iso -fda file:./run/A.img -fdb file:./run/B.img -monitor stdio -serial file:./run/Qemu_log.txt -no-reboot 
+qemu-system-i386 -m 32 -boot d -cdrom SynapseOS.iso -monitor stdio -serial file:./run/Qemu_log.txt -no-reboot 
 
 pause
 exit

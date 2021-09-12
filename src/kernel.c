@@ -10,8 +10,6 @@
 #include "include/multiboot.h"
 #include "include/time.h"
 
-#include "include/floppy.h"
-
 int EXIT = 0;
 
 /* ------------------------------------------- */
@@ -84,7 +82,7 @@ void main(multiboot_info_t* mbd, unsigned int magic){
 	qemu_printf("apm_table = %d\n", mbd->apm_table);
 	qemu_printf("vbe_control_info = %d\n", mbd->vbe_control_info);
 	// Show note and shell enter symbol
-	floppy_detect_drives();
+
 	tty_printf("\n\nEnter 'help' to get info about commands\n\n");
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);
 	tty_printf(">");
