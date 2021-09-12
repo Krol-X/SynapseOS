@@ -8,7 +8,7 @@
 #include "../include/stdlib.h"
 #include "../include/cpu_detect.h"
 #include "../include/cmos.h"
-#include "../include/memory_manager.h"
+// #include "../include/phys_mem.h"
 #include "../include/kernel.h"
 #include "../include/kbd.h"
 #include "../include/vga.h"
@@ -48,40 +48,40 @@ void shell_exec(char input_command[]) {
 
 		detect_cpu();
 
-		tty_printf("    kernel_page_dir = 0x%x\n", kernel_page_dir);
-		tty_printf("    memory_size = %d MB\n", memory_size / 1000000 );
-		tty_printf("    get_page_info(kernel_page_dir, 0xB8000) = 0x%x\n",get_page_info(kernel_page_dir, (void*)VGA_TEXT_MEMORY));
+		// tty_printf("    kernel_page_dir = 0x%x\n", kernel_page_dir);
+		// tty_printf("    memory_size = %d MB\n", memory_size / 1000000 );
+		// tty_printf("    get_page_info(kernel_page_dir, 0xB8000) = 0x%x\n",get_page_info(kernel_page_dir, (void*)VGA_TEXT_MEMORY));
 
-		colors(2);
-		int i;
-		phyaddr test[5];
-		tty_printf("Memory info: \n");
-		tty_printf("    free memory: %d    free page count: %d\n", get_free_memory_size(), free_page_count);
-		test[0] = alloc_phys_pages(1);
+		// colors(2);
+		// int i;
+		// phyaddr test[5];
+		// tty_printf("Memory info: \n");
+		// tty_printf("    free memory: %d    free page count: %d\n", get_free_memory_size(), free_page_count);
+		// test[0] = alloc_phys_pages(1);
 		
-		if (test[0] != (unsigned int)-1) {
-			tty_printf("Testing memory alloc...\n");
-			tty_printf("0: %x ", test[0]);
+		// if (test[0] != (unsigned int)-1) {
+		// 	tty_printf("Testing memory alloc...\n");
+		// 	tty_printf("0: %x ", test[0]);
 
-			i = 1;
-			while (i!=5){
-				test[i] = (phyaddr)alloc_phys_pages(i+1)*-1;
-				tty_printf("%d: %x ",i, test[i]);
-				i++;
-			}
+		// 	i = 1;
+		// 	while (i!=5){
+		// 		test[i] = (phyaddr)alloc_phys_pages(i+1)*-1;
+		// 		tty_printf("%d: %x ",i, test[i]);
+		// 		i++;
+		// 	}
 
-			tty_printf("\nTesting memory free...\n");
-			i = 0;
-			while (i!=5){
-				tty_printf("%d ",i);
-				free_phys_pages(test[i], i+1);
-				i++;
-			}
-		} else {
-			colors(3);
-			tty_printf("failed to give memory, error code: %d\n", test[0]);
-			colors(2);
-		}
+		// 	tty_printf("\nTesting memory free...\n");
+		// 	i = 0;
+		// 	while (i!=5){
+		// 		tty_printf("%d ",i);
+		// 		free_phys_pages(test[i], i+1);
+		// 		i++;
+		// 	}
+		// } else {
+		// 	colors(3);
+		// 	tty_printf("failed to give memory, error code: %d\n", test[0]);
+		// 	colors(2);
+		// }
 
 	} else if( strcmp(input_command, "logo") == 0 ) {
 		// SynapseOS logo
