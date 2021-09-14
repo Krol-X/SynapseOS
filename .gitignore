@@ -1,5 +1,6 @@
 src/kernel/bin/*
 .vscode/*
+CMakeFiles/*
 *.o
 *.elf
 isodir/boot/grub/grub.cfg
@@ -8,3 +9,5 @@ Bochs_log.txt
 SynapseOS.iso
 kernel.h
 run/bochsout.txt
+*.log
+CMakeCache.txt

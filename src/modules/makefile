@@ -16,7 +16,7 @@ LDFLAGS=-O3 -ffreestanding -nostdlib
 ifdef DEBUG
 	CCFLAGS=-O3 -std=gnu99 -g -ffreestanding -Wall -Wextra
 else
-	CCFLAGS= -ffreestanding -Wall
+	CCFLAGS=-O3 -std=gnu99 -ffreestanding -Wall -Wextra
 endif
 
 all: $(OBJECTS) $(SOURCES) 
