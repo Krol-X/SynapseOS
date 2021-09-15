@@ -36,11 +36,11 @@ void shell_exec(char input_command[]) {
 
 	// Help page 1/3
 	if( strcmp(input_command, "help") == 0 || strcmp(input_command, "help 1") == 0 ) {
-		tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C. Help page 1/3.\nCommands:");
-		tty_printf("\n	help - info about commands            sysinfo - system information");
-		tty_printf("\n	time - info about current time        vga test - show all 256 vga colors");
-		tty_printf("\n	exit - Shutdown SynapseOS             cls or clear - cleaning screen");
-		tty_printf("\n	ascii - show all ASCII symbols        debug - enable debug mode");
+		tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C. Help page 1/1.\nCommands:");
+		tty_printf("\n   help - info about commands            sysinfo - system information");
+		tty_printf("\n   time - info about current time        vga test - show all 256 vga colors");
+		tty_printf("\n   exit - Shutdown SynapseOS             cls or clear - cleaning screen");
+		tty_printf("\n   ascii - show all ASCII symbols        debug - enable debug mode");
 		
 	} else if( strcmp(input_command, "sysinfo") == 0 ) {
 		// System info
