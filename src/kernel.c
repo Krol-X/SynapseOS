@@ -52,8 +52,6 @@ void main(multiboot_info_t* mboot_info, unsigned int magic) {
 
 	pmm_init(mboot_info);
 	qemu_printf("Physical memory manager inited\n");
-
-	
 	
 	// qemu_printf("flags = %d\n", mbd->flags);
 	// qemu_printf("mem_lower = %d\n", mbd->mem_lower);

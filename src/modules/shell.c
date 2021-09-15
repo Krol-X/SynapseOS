@@ -8,7 +8,7 @@
 #include "../include/stdlib.h"
 #include "../include/cpu_detect.h"
 #include "../include/cmos.h"
-// #include "../include/phys_mem.h"
+#include "../include/phys_mem.h"
 #include "../include/kernel.h"
 #include "../include/kbd.h"
 #include "../include/vga.h"

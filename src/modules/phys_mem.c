@@ -7,6 +7,7 @@
 #include "../include/stdlib.h"
 #include "../include/phys_mem.h"
 #include "../include/tty.h"
+#include "../include/qemu_log.h"
 #include "../include/memmap.h"
 
 uint32_t* phys_memory_bitmap = 0;
@@ -35,22 +36,22 @@ void pmm_parse_memory_map(multiboot_memory_map_t *mmap_addr, uint32_t length) {
 	mentry = mmap_addr; // Set pointer to memory map
 	// Print info about physical memory allocation
 
-	tty_printf("Physical memory map:\n");
+	qemu_printf("Physical memory map:\n");
 	for (i = 0; i < n; i++) {
 		if ((mentry + i)->type == MULTIBOOT_MEMORY_AVAILABLE) {
-			tty_printf("Available: |");
+			qemu_printf("Available: |");
 			phys_available_memory_size += (mentry + i)->len_low;
 		} else {
-            tty_printf("Reserved:  |");
+            qemu_printf("Reserved:  |");
         }
-		tty_printf(" addr: %x", (mentry + i)->addr_low);
-		tty_printf(" length: %x\n", (mentry + i)->len_low);
+		qemu_printf(" addr: %x", (mentry + i)->addr_low);
+		qemu_printf(" length: %x\n", (mentry + i)->len_low);
 		phys_installed_memory_size += (mentry + i)->len_low;
 	}
-	tty_printf("Installed memory size: %d KB", phys_installed_memory_size/1024);
-	tty_printf(" = %d MB\n", phys_installed_memory_size/(1024*1024));
-	tty_printf("Available memory size: %d KB", phys_available_memory_size/1024);
-	tty_printf(" = %d MB\n", phys_available_memory_size/(1024*1024));
+	qemu_printf("Installed memory size: %d KB", phys_installed_memory_size/1024);
+	qemu_printf(" = %d MB\n", phys_installed_memory_size/(1024*1024));
+	qemu_printf("Available memory size: %d KB", phys_available_memory_size/1024);
+	qemu_printf(" = %d MB\n", phys_available_memory_size/(1024*1024));
 }
 
 // Finds first free block in bitmap
@@ -154,7 +155,7 @@ void pmm_free_blocks(void *addr, uint32_t count) {
 // Internal functions to allocate ranges of memory:
 
 void pmm_alloc_chunk(void *base_addr, size_t length) {
-    // tty_printf("pmm_alloc_chunk\n");
+    // qemu_printf("pmm_alloc_chunk\n");
     int cur_block_addr = (int)base_addr / PHYS_BLOCK_SIZE;
     int num_blocks = length / PHYS_BLOCK_SIZE;
     while (num_blocks-- >= 0)
@@ -181,7 +182,7 @@ void pmm_free_chunk(void *base_addr, size_t length) {
 void pmm_free_available_memory(struct multiboot_info* mb) {
     multiboot_memory_map_t* mm = (multiboot_memory_map_t*)mb->mmap_addr;
     while ((unsigned int)mm < mb->mmap_addr + mb->mmap_length) {
-        //tty_printf("freed\n");
+        //qemu_printf("freed\n");
         if (mm->type == MULTIBOOT_MEMORY_AVAILABLE) {
             pmm_free_chunk((void*)mm->addr_low, mm->len_low);
         }
@@ -200,7 +201,7 @@ void pmm_init(struct multiboot_info* mboot_info) {
     phys_memory_bitmap = (uint32_t*)KERNEL_END_PADDR; // physical memory bitmap starts after kernel
     memset(phys_memory_bitmap, 0xFF, phys_block_count / 8); // initially we mark all installed memory as used
     
-    // tty_printf("Total blocks: %d\n", phys_block_count);
+    // qemu_printf("Total blocks: %d\n", phys_block_count);
 
     // Frees memory GRUB considers available
     pmm_free_available_memory(mboot_info);
@@ -208,15 +209,15 @@ void pmm_init(struct multiboot_info* mboot_info) {
     // From the freed memory, we need to allocate the ones used by the Kernel
     pmm_alloc_chunk(KERNEL_START_PADDR, KERNEL_SIZE);
 
-    tty_printf("KERNEL_START_PADDR = %x, KERNEL_END_PADDR = %x, KERNEL_SIZE = %d bytes ", KERNEL_START_PADDR, KERNEL_END_PADDR, KERNEL_SIZE);
-    // tty_printf("MemMap addr = %x\n", mboot_info->mmap_addr);
+    qemu_printf("KERNEL_START_PADDR = %x, KERNEL_END_PADDR = %x, KERNEL_SIZE = %d bytes ", KERNEL_START_PADDR, KERNEL_END_PADDR, KERNEL_SIZE);
+    // qemu_printf("MemMap addr = %x\n", mboot_info->mmap_addr);
     
     // We also need to allocate the memory used by the Physical Map itself
     pmm_alloc_chunk(phys_memory_bitmap, phys_block_count);
     void *kernel_phys_map_start = phys_memory_bitmap;
     void *kernel_phys_map_end = kernel_phys_map_start + (phys_block_count / 8);
 
-    tty_printf("Physical memory manager installed. Physical memory bitmap start: %x, end: %x, size = %d bytes\n", kernel_phys_map_start, kernel_phys_map_end, kernel_phys_map_end - kernel_phys_map_start);
+    qemu_printf("Physical memory manager installed. Physical memory bitmap start: %x, end: %x, size = %d bytes\n", kernel_phys_map_start, kernel_phys_map_end, kernel_phys_map_end - kernel_phys_map_start);
 }
 
 void pmm_test() {
