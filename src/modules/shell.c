@@ -41,6 +41,7 @@ void shell_exec(char input_command[]) {
 		tty_printf("\n   time - info about current time        vga test - show all 256 vga colors");
 		tty_printf("\n   exit - Shutdown SynapseOS             cls or clear - cleaning screen");
 		tty_printf("\n   ascii - show all ASCII symbols        debug - enable debug mode");
+		tty_printf("\n   pmm test - test physical memory manager");
 		
 	} else if( strcmp(input_command, "sysinfo") == 0 ) {
 		// System info
@@ -110,6 +111,10 @@ void shell_exec(char input_command[]) {
 			i++;
 		}
 		colors(0);
+		
+	} else if( strcmp(input_command, "pmm test") == 0 ) {
+		// Test physical memory manager
+		pmm_test();
 		
 	} else if( strcmp(input_command, "time") == 0 ) {
 		// Time from CMOS
