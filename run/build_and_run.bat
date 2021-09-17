@@ -57,6 +57,7 @@ echo Build modules
 %CC% %CCFLAGS% -c %SRC%/modules/time.c -o ./bin/time.o
 %CC% %CCFLAGS% -c %SRC%/modules/vga.c -o ./bin/vga.o
 %CC% %CCFLAGS% -c %SRC%/modules/phys_mem.c -o ./bin/phys_mem.o
+%CC% %CCFLAGS% -c %SRC%/modules/virt_mem.c -o ./bin/virt_mem.o
 %CC% %CCFLAGS% -c %SRC%/modules/gdt.c -o bin/gdt.o
 %CC% %CCFLAGS% -c %SRC%/modules/shell.c -o bin/shell.o
 %CC% %CCFLAGS% -c %SRC%/modules/idt.c -o bin/idt.o
