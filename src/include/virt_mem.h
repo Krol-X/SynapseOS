@@ -56,7 +56,7 @@ enum PAGE_PDE_FLAGS {
 };
 //------------------------------------------------------------------------------------
 
-#define PAGE_ALIGN_DOWN(x) ((x) & -PAGE_SIZE)
+#define PAGE_ALIGN_DOWN(x) (((uintptr_t)x) & -PAGE_SIZE)
 #define PAGE_ALIGN_UP( address )	( ( (address) + PAGE_SIZE - 1 ) & ~( PAGE_SIZE - 1 ) )//wtf???
 
 #define PAGE_DIRECTORY_INDEX(x) (((x) >> 22) & 0x3FF)
@@ -65,52 +65,50 @@ enum PAGE_PDE_FLAGS {
 #define PAGE_GET_TABLE_ADDRESS(x) (*x & ~0xFFF)//read address(20bits) from pde, other 12 bits are flags
 #define PAGE_GET_PHYSICAL_ADDRESS(x) (*x & ~0xFFF)//read address(20bits) from pte, other 12 bits are flags
 
-#define GET_PDE(v)		(page_dir_entry*)(0xFFFFF000 +  (v >> 22) * 4) //get pointer to pde using recursive mapping
-#define GET_PTE(v)		(page_table_entry*)(0xFFC00000 + (v >> 12) * 4)
+#define GET_PDE(v)		(page_dir_entry*)(0xFFFFF000 +  ((uintptr_t)v >> 22) * 4) //get pointer to pde using recursive mapping
+#define GET_PTE(v)		(page_table_entry*)(0xFFC00000 + ((uintptr_t)v >> 12) * 4)
 //-------------------------------------------------------------------------------------
 
-extern page_directory *kernel_page_dir;//pointer (physical) to kernel page dircetory structure
+extern page_directory *kernel_page_dir; // phisical address of kernel page directory
 
-
-//TODO: rewrite all these functions so that they will work using recursive pd techinque
-//functions for Page Table Entries
+// functions for Page Table Entries
 
 void page_table_entry_add_attrib(page_table_entry* entry, uint32_t attrib); //add attribute to pte
 void page_table_entry_del_attrib(page_table_entry* entry, uint32_t attrib); //delete attribute to pte
-void page_table_entry_set_frame(page_table_entry* entry, physical_addr addr);//map pte to physical frame
+void page_table_entry_set_frame(page_table_entry* entry, uintptr_t addr);//map pte to physical frame
 bool page_table_entry_is_present(page_table_entry entry);
 bool page_table_entry_is_writable(page_table_entry entry);
-physical_addr page_table_entry_frame(page_table_entry entry);//return the address of physical frame which pte refers to
+uintptr_t page_table_entry_frame(page_table_entry entry);//return the address of physical frame which pte refers to
 
-//--------------------------------------------------------------------
-//functions for Page Directory Entries
+
+// functions for Page Directory Entries:
 
 void page_dir_entry_add_attrib(page_dir_entry* entry, uint32_t attrib);//add attribute to pde
 void page_dir_entry_del_attrib(page_dir_entry* entry, uint32_t attrib);//old: was without ~ !! //delete attribute to pde
-void page_dir_entry_set_frame(page_dir_entry* entry, physical_addr addr);//map pde to physical frame (where the appropriate page table stores)
+void page_dir_entry_set_frame(page_dir_entry* entry, uintptr_t addr);//map pde to physical frame (where the appropriate page table stores)
 bool page_dir_entry_is_present(page_dir_entry entry);
 bool page_dir_entry_is_user(page_dir_entry entry);
 bool page_dir_entry_is_4mb(page_dir_entry entry);
 bool page_dir_entry_is_writable(page_dir_entry entry);
-physical_addr page_dir_entry_frame(page_dir_entry entry);//return the address of physical frame which pde refers to
+uintptr_t page_dir_entry_frame(page_dir_entry entry);//return the address of physical frame which pde refers to
 
-void flush_tlb_entry(virtual_addr addr);//???
+void flush_tlb_entry(uintptr_t addr);//???
 /*void flush_tlb_all() {asm volatile("movl %%cr3, %%eax\n"
 	"movl %%eax, %%cr3" : : : "%eax");}*/
 
 //void page_dir_entry_enable_global(page_dir_entry entry) {}
 //----------------------------------------------------------------------------------
 
-extern enable_paging(physical_addr page_dir);
+extern void enable_paging(uintptr_t page_dir);
 
 void vmm_init();
 void vmm_create_kernel_page_dir();
 
-bool vmm_alloc_page(virtual_addr vaddr);
-bool vmm_alloc_page_with_userbit(virtual_addr vaddr);
-void vmm_free_page(virtual_addr vaddr);
-void vmm_map_page(physical_addr paddr, virtual_addr vaddr);
-virtual_addr vmm_temp_map_page(physical_addr paddr);
+bool vmm_alloc_page(uintptr_t vaddr);
+bool vmm_alloc_page_with_userbit(uintptr_t vaddr);
+void vmm_free_page(uintptr_t vaddr);
+void vmm_map_page(uintptr_t paddr, uintptr_t vaddr);
+uintptr_t vmm_temp_map_page(uintptr_t paddr);
 void vmm_switch_page_directory(page_directory *page_dir_phys_addr);
 
 void vmm_test();

@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 // Constants to the boundaries of memory
-#define KERNEL_START_PADDR ((void*)&kernel_phys_start)
-#define KERNEL_END_PADDR ((void*)&kernel_phys_end)
+#define KERNEL_START_PADDR ((uintptr_t)&kernel_phys_start)
+#define KERNEL_END_PADDR ((uintptr_t)&kernel_phys_end)
 #define KERNEL_SIZE (KERNEL_END_PADDR - KERNEL_START_PADDR)
 
 #define KERNEL_START_VADDR ((uint32_t)&kernel_virt_start)
@@ -42,10 +42,8 @@ extern uint32_t kernel_virt_start;
 extern uint32_t kernel_virt_end;
 
 // Addresses of the Physical Memory Map in the Physical memory
-extern uint32_t kernel_phys_map_start;
-extern uint32_t kernel_phys_map_end;
+extern uintptr_t kernel_phys_map_start;
+extern uintptr_t kernel_phys_map_end;
 
-typedef uint32_t virtual_addr;
-typedef uint32_t physical_addr;
 
 #endif
