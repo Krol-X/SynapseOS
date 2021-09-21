@@ -33,7 +33,7 @@ SET SRC=./src
 SET CCFLAGS=-O3 -std=gnu99 -ffreestanding -Wall -Wextra 
 SET LDFLAGS=-O3 -ffreestanding -nostdlib -lgcc
 set OBJECTS_DRIVERS=bin/cmos.o bin/vga.o bin/qemu_log.o bin/cpu_detect.o
-set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/idt.o %OBJECTS_DRIVERS% bin/time.o bin/shell.o bin/kbd.o bin/tty.o bin/ports.o bin/phys_mem.o bin/stdlib.o
+set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/idt.o %OBJECTS_DRIVERS% bin/time.o bin/shell.o bin/kbd.o bin/tty.o bin/ports.o bin/virt_mem.o bin/phys_mem.o bin/stdlib.o
 
 
 :: Checking for the presence of a folder and, if not, creating one
@@ -55,7 +55,6 @@ echo Build kernel
 echo Build modules
 %CC% %CCFLAGS% -c %SRC%/modules/stdlib.c -o ./bin/stdlib.o
 %CC% %CCFLAGS% -c %SRC%/modules/time.c -o ./bin/time.o
-%CC% %CCFLAGS% -c %SRC%/modules/vga.c -o ./bin/vga.o
 %CC% %CCFLAGS% -c %SRC%/modules/phys_mem.c -o ./bin/phys_mem.o
 %CC% %CCFLAGS% -c %SRC%/modules/virt_mem.c -o ./bin/virt_mem.o
 %CC% %CCFLAGS% -c %SRC%/modules/gdt.c -o bin/gdt.o
@@ -96,7 +95,7 @@ endlocal & set "%1=%ut%" & goto :vars
 echo Done
 
 ::Qemu config
-qemu-system-i386 -m 32 -boot d -cdrom SynapseOS.iso -monitor stdio -serial file:./run/Qemu_log.txt -no-reboot 
+qemu-system-i386 -m 512 -boot d -cdrom SynapseOS.iso -monitor stdio -serial file:./run/Qemu_log.txt -no-reboot 
 
 pause
 exit
