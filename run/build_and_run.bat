@@ -95,7 +95,7 @@ endlocal & set "%1=%ut%" & goto :vars
 echo Done
 
 ::Qemu config
-qemu-system-i386 -m 512 -boot d -cdrom SynapseOS.iso -monitor stdio -serial file:./run/Qemu_log.txt -no-reboot 
+qemu-system-i386 -m 512 -boot d -cdrom SynapseOS.iso -monitor stdio -serial file:./run/Qemu_log.txt
 
 pause
 exit
