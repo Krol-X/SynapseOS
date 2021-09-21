@@ -6,6 +6,7 @@
 #include "include/qemu_log.h"
 #include "include/cpu_detect.h"
 #include "include/phys_mem.h"
+#include "include/virt_mem.h"
 #include "include/shell.h"
 #include "include/multiboot.h"
 #include "include/time.h"
@@ -55,22 +56,11 @@ void main(multiboot_info_t* mboot_info, unsigned int magic) {
 
 	pmm_init(mboot_info);
 	qemu_printf("Physical memory manager inited\n");
-	
-	// qemu_printf("flags = %d\n", mbd->flags);
-	// qemu_printf("mem_lower = %d\n", mbd->mem_lower);
-	// qemu_printf("mem_upper = %d\n", mbd->mem_upper);
-	// qemu_printf("boot_device = %d\n", mbd->boot_device);
-	// qemu_printf("cmdline = %d\n", mbd->cmdline);
-	// qemu_printf("mmap_length = %d\n", mbd->mmap_length);
-	// qemu_printf("mmap_addr = %d\n", mbd->mmap_addr);
-	// qemu_printf("drives_length = %d\n", mbd->drives_length);
-	// qemu_printf("drives_addr = %d\n", mbd->drives_addr);
-	// qemu_printf("config_table = %d\n", mbd->config_table);
-	// qemu_printf("config_table = %d\n", mbd->config_table);
-	// qemu_printf("apm_table = %d\n", mbd->apm_table);
-	// qemu_printf("vbe_control_info = %d\n", mbd->vbe_control_info);
-	// // Show note and shell enter symbol
 
+    // TODO: why this causes crash?
+	// vmm_init();
+	// qemu_printf("Virtual memory manager inited\n");
+	
 	tty_printf("\n\nEnter 'help' to get info about commands\n\n");
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);
 	tty_printf(">");

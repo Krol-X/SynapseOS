@@ -123,6 +123,7 @@ void vmm_init() {
         page_table_entry_set_frame(&page, frame);
         table1->entries[PAGE_TABLE_INDEX(virt)] = page;
     }
+	qemu_printf("vmm: first mb mapped to 3gb\n");
 
     // Maps kernel pages and phys mem pages
     for (frame = KERNEL_START_PADDR, virt = KERNEL_START_VADDR;
@@ -135,6 +136,7 @@ void vmm_init() {
 
         table2->entries[PAGE_TABLE_INDEX(virt)] = page;
     }
+	qemu_printf("vmm: kernel mapped\n");
 
     page_dir_entry *pde1 = (page_dir_entry*)&kernel_page_dir->entries[PAGE_DIRECTORY_INDEX(0x00000000)];
     page_dir_entry_add_attrib(pde1, I86_PDE_PRESENT);
@@ -148,9 +150,13 @@ void vmm_init() {
 
 	update_phys_memory_bitmap_addr(KERNEL_END_VADDR);
 
+	qemu_printf("vmm: trying enable paging...\n");
+
+	qemu_printf("vmm: enable_paging function address = %x\n", enable_paging);
+
 	enable_paging((uintptr_t )kernel_page_dir);
 
-	tty_printf("Virtual memory manager initialized!\n");
+	tty_printf("vmm: vmm initialized!\n");
 }
 
 void vmm_test() {

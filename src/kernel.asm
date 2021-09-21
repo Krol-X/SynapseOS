@@ -53,22 +53,6 @@ keyboard_handler:
 	popad
 	iretd
 
-enable_paging:
-	; Move directory into CR3
-	mov eax, [esp + 4]
-	mov cr3, eax
-
-	; Disable 4MB pages
-	mov ecx, cr4
-	and ecx, not 0x00000010
-	mov cr4, ecx
-	
-	; Enable paging
-	mov eax, cr0
-	or  eax, 0x80000000
-	mov cr0, eax
-	ret
-
 ; This will set up our new segment registers. We need to do
 ; something special in order to set CS. We do what is called a
 ; far jump. A jump that includes a segment as well as an offset.
@@ -146,4 +130,21 @@ start:
 	call eax
 
 	hlt
+
+section '.text' executable
+enable_paging:
+	; Move directory into CR3
+	mov eax, [esp + 4]
+	mov cr3, eax
+
+	; Disable 4MB pages
+	mov ecx, cr4
+	and ecx, not 0x00000010
+	mov cr4, ecx
+	
+	; Enable paging
+	mov eax, cr0
+	or  eax, 0x80000000
+	mov cr0, eax
+	ret
 

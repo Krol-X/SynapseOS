@@ -1,4 +1,4 @@
-eip in the beginng of main() = 0xC0104014
+eip in the beginng of main() = 0xC0104030
 magic x: 0x2BADB002
 magic d: 732803074
 MULTIBOOT_BOOTLOADER_MAGIC x: 0x2BADB002
@@ -20,15 +20,11 @@ Reserved:  | addr: 0x1FFE0000 length: 0x20000
 Reserved:  | addr: 0xFFFC0000 length: 0x40000
 Installed memory size: 524224 KB = 511 MB
 Available memory size: 523775 KB = 511 MB
-KERNEL_START_PADDR = 0x1030C5, KERNEL_END_PADDR = 0x11C9CF, KERNEL_SIZE = 104714 bytes Physical memory manager installed. Physical memory bitmap start: 0x11C9CF, end: 0x1209CD, size = 16382 bytes
+KERNEL_START_PADDR = 0x1030A9, KERNEL_END_PADDR = 0x11C9CF, KERNEL_SIZE = 104742 bytes Physical memory manager installed. Physical memory bitmap start: 0x11C9CF, end: 0x1209CD, size = 16382 bytes
 Physical memory manager inited
-35
--93
-18
-38
--110
-25
--90
--103
-28
--100
+50
+32
+-78
+37
+-96
+-91
