@@ -4,12 +4,12 @@ magic d: 732803074
 MULTIBOOT_BOOTLOADER_MAGIC x: 0x2BADB002
 MULTIBOOT_BOOTLOADER_MAGIC d: 732803074
 Memory  Manager inited
-VGA TEXT MEMORY: 753664
+VGA TEXT MEMORY: -1072988160
 Global Descriptor Table inited
 Interrupt Descriptor Table inited
 keyboard inited
 tty init...
-tty_buffer = 0xB8000
+tty_buffer = 0xC00B8000
 tty inited
 Physical memory map:
 Available: | addr: 0x0 length: 0x9FC00
@@ -25,8 +25,8 @@ Physical memory manager inited
 35
 -93
 18
--110
 38
+-110
 25
 -90
 -103

@@ -6,7 +6,7 @@ BUILDFLAGS="-std=gnu11 -ffreestanding -Wall -Wextra -g"
 LINKFLAGS="-ffreestanding -nostdlib -lgcc"
 
 SRC="src"
-OBJS="bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/time.o bin/vga.o bin/shell.o bin/idt.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/virt_mem.o bin/phys_mem.o bin/stdlib.o"
+OBJS="bin/kasm.o bin/kc.o bin/gdt.o bin/cmos.o bin/time.o bin/shell.o bin/idt.o bin/kbd.o bin/tty.o bin/ports.o bin/qemu_log.o bin/cpu_detect.o bin/virt_mem.o bin/phys_mem.o bin/stdlib.o"
 
 mkdir -p bin
 mkdir -p isodir/boot/grub
@@ -16,7 +16,6 @@ fasm $SRC/kernel.asm bin/kasm.o
 $CC $BUILDFLAGS -c $SRC/kernel.c -o bin/kc.o
 $CC $BUILDFLAGS -c $SRC/modules/stdlib.c -o bin/stdlib.o
 $CC $BUILDFLAGS -c $SRC/modules/time.c -o bin/time.o
-$CC $BUILDFLAGS -c $SRC/modules/vga.c -o bin/vga.o
 $CC $BUILDFLAGS -c $SRC/modules/phys_mem.c -o bin/phys_mem.o
 $CC $BUILDFLAGS -c $SRC/modules/virt_mem.c -o bin/virt_mem.o
 $CC $BUILDFLAGS -c $SRC/modules/cmos.c -o bin/cmos.o
