@@ -22,9 +22,7 @@ Installed memory size: 524224 KB = 511 MB
 Available memory size: 523775 KB = 511 MB
 KERNEL_START_PADDR = 0x1030A9, KERNEL_END_PADDR = 0x11C9CF, KERNEL_SIZE = 104742 bytes Physical memory manager installed. Physical memory bitmap start: 0x11C9CF, end: 0x1209CD, size = 16382 bytes
 Physical memory manager inited
-50
-32
--78
-37
--96
--91
+vmm: first mb mapped to 3gb
+vmm: kernel mapped
+vmm: trying enable paging...
+vmm: enable_paging function address = 0xC0104000

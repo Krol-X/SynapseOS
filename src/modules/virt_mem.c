@@ -46,39 +46,25 @@ void vmm_free_page(uintptr_t vaddr) {
 
 
 void vmm_create_kernel_page_dir() {
-	qemu_printf("kernel_page_dir = (page_directory*)pmm_alloc_block();\n");
-	qemu_printf("\n");
-
 	kernel_page_dir = (page_directory*)pmm_alloc_block();
-	qemu_printf("((uintptr_t)kernel_page_dir == 0xFFFFFFFF)\n");
 	if ((uintptr_t)kernel_page_dir == 0xFFFFFFFF) {
 		tty_printf("Failed to allocate phys memory for kernel page dir\n");
 		// TODO panic here
 		return;
 	}
-	qemu_printf("page_directory *pd = kernel_page_dir;\n");
 	page_directory *pd = kernel_page_dir;
-	qemu_printf("memset(pd, 0, sizeof(page_directory));\n");
 	memset(pd, 0, sizeof(page_directory));
-	qemu_printf("for (int i = 0; i < PAGE_ENTRIES; i++) {\n");
 	for (int i = 0; i < PAGE_ENTRIES; i++) {
-		qemu_printf("page_dir_entry *pde = (page_dir_entry*)&pd->entries[i];\n");
 		page_dir_entry *pde = (page_dir_entry*)&pd->entries[i];
-		qemu_printf("page_dir_entry_add_attrib(pde, I86_PTE_WRITABLE);\n");
 		page_dir_entry_add_attrib(pde, I86_PTE_WRITABLE);
-		qemu_printf("page_dir_entry_del_attrib(pde, I86_PTE_PRESENT);\n");
 		page_dir_entry_del_attrib(pde, I86_PTE_PRESENT);
 		// we use fractal(recursive) mapping technique, which allows us to access PD and PT
-		qemu_printf("if (i == PAGE_ENTRIES - 1) {\n");
 		if (i == PAGE_ENTRIES - 1) {
-			qemu_printf("page_dir_entry_add_attrib(pde, I86_PTE_PRESENT);\n");
 			page_dir_entry_add_attrib(pde, I86_PTE_PRESENT);
-			qemu_printf("page_dir_entry_set_frame(pde, (uintptr_t )kernel_page_dir);\n");
 			page_dir_entry_set_frame(pde, (uintptr_t )kernel_page_dir);
 			// tty_printf("pd[1023] = %x\n", pd->entries[1023]);
 		}
 	}
-	qemu_printf("DONE!\n");
 }
 
 void vmm_map_page(uintptr_t  paddr, uintptr_t vaddr) {
@@ -118,81 +104,55 @@ void vmm_switch_page_directory(page_directory *page_dir_phys_addr) {
 
 void vmm_init() {
 	vmm_create_kernel_page_dir();
-	qemu_printf("page_table* table1 = (page_table*)pmm_alloc_block();\n");
 	page_table* table1 = (page_table*)pmm_alloc_block();
-	qemu_printf("page_table* table2 = (page_table*)pmm_alloc_block();\n");
     page_table* table2 = (page_table*)pmm_alloc_block();
 
     // Clear allocated page tables
-	qemu_printf("memset((void*)table1, 0, sizeof(page_table));\n");
     memset((void*)table1, 0, sizeof(page_table));
-	qemu_printf("memset((void*)table2, 0, sizeof(page_table));\n");
     memset((void*)table2, 0, sizeof(page_table));
 
     // Maps first MB to 3GB
-	qemu_printf("uintptr_t frame, virt;\n");
     uintptr_t frame, virt; // frame if physical address of page, virt is virtual
-	qemu_printf("for (frame = 0x0, virt = 0xC0000000;\n");
     for (frame = 0x0, virt = 0xC0000000;
 		frame < 0x100000;
 		frame += PAGE_SIZE, virt += PAGE_SIZE)
 	{
-		qemu_printf("page_table_entry page = 0;\n");
         page_table_entry page = 0;
-		qemu_printf("page_table_entry_add_attrib(&page, I86_PTE_PRESENT);\n");
         page_table_entry_add_attrib(&page, I86_PTE_PRESENT);
-		qemu_printf("page_table_entry_set_frame(&page, frame);\n");
         page_table_entry_set_frame(&page, frame);
-		qemu_printf("table1->entries[PAGE_TABLE_INDEX(virt)] = page;\n");
         table1->entries[PAGE_TABLE_INDEX(virt)] = page;
     }
 	qemu_printf("vmm: first mb mapped to 3gb\n");
 
     // Maps kernel pages and phys mem pages
-	qemu_printf("for (frame = KERNEL_START_PADDR, virt = KERNEL_START_VADDR;\n");
     for (frame = KERNEL_START_PADDR, virt = KERNEL_START_VADDR;
 	    frame < KERNEL_PHYS_MAP_END;
 		frame += PAGE_SIZE, virt += PAGE_SIZE)
 	{
-		qemu_printf("page_table_entry page = 0;\n");
         page_table_entry page = 0;
-		qemu_printf("page_table_entry_add_attrib(&page, I86_PTE_PRESENT);\n");
         page_table_entry_add_attrib(&page, I86_PTE_PRESENT);
-		qemu_printf("page_table_entry_set_frame(&page, frame);\n");
         page_table_entry_set_frame(&page, frame);
 
-		qemu_printf("table2->entries[PAGE_TABLE_INDEX(virt)] = page;\n");
         table2->entries[PAGE_TABLE_INDEX(virt)] = page;
     }
 	qemu_printf("vmm: kernel mapped\n");
 
-	qemu_printf("\n");
-	qemu_printf("page_dir_entry *pde1 = (page_dir_entry*)&kernel_page_dir->entries[PAGE_DIRECTORY_INDEX(0x00000000)];\n");
-    page_dir_entry *pde1 = (page_dir_entry*)&kernel_page_dir->entries[PAGE_DIRECTORY_INDEX(0x00000000)];
-	qemu_printf("page_dir_entry_add_attrib(pde1, I86_PDE_PRESENT);\n");
-    page_dir_entry_add_attrib(pde1, I86_PDE_PRESENT);
-	qemu_printf("page_dir_entry_add_attrib(pde1, I86_PDE_WRITABLE);\n");
-    page_dir_entry_add_attrib(pde1, I86_PDE_WRITABLE);
-	qemu_printf("page_dir_entry_set_frame(pde1, (uintptr_t )table1);\n");
-    page_dir_entry_set_frame(pde1, (uintptr_t )table1);
+	page_dir_entry *pde1 = (page_dir_entry*)&kernel_page_dir->entries[PAGE_DIRECTORY_INDEX(0x00000000)];
+	page_dir_entry_add_attrib(pde1, I86_PDE_PRESENT);
+	page_dir_entry_add_attrib(pde1, I86_PDE_WRITABLE);
+	page_dir_entry_set_frame(pde1, (uintptr_t )table1);
 
-	qemu_printf("page_dir_entry *pde2 = (page_dir_entry*)&kernel_page_dir->entries[PAGE_DIRECTORY_INDEX(0xC0100000)];\n");
-    page_dir_entry *pde2 = (page_dir_entry*)&kernel_page_dir->entries[PAGE_DIRECTORY_INDEX(0xC0100000)];
-	qemu_printf("page_dir_entry_add_attrib(pde2, I86_PDE_PRESENT);\n");
-    page_dir_entry_add_attrib(pde2, I86_PDE_PRESENT);
-	qemu_printf("page_dir_entry_add_attrib(pde2, I86_PDE_WRITABLE);\n");
-    page_dir_entry_add_attrib(pde2, I86_PDE_WRITABLE);
-	qemu_printf("page_dir_entry_set_frame(pde2, (uintptr_t )table2);\n");
-    page_dir_entry_set_frame(pde2, (uintptr_t )table2);
+	page_dir_entry *pde2 = (page_dir_entry*)&kernel_page_dir->entries[PAGE_DIRECTORY_INDEX(0xC0100000)];
+	page_dir_entry_add_attrib(pde2, I86_PDE_PRESENT);
+	page_dir_entry_add_attrib(pde2, I86_PDE_WRITABLE);
+	page_dir_entry_set_frame(pde2, (uintptr_t )table2);
 
-	qemu_printf("update_phys_memory_bitmap_addr(KERNEL_END_VADDR);\n");
 	update_phys_memory_bitmap_addr(KERNEL_END_VADDR);
 
 	qemu_printf("vmm: trying enable paging...\n");
 
 	qemu_printf("vmm: enable_paging function address = %x\n", enable_paging);
 
-	qemu_printf("enable_paging((uintptr_t )kernel_page_dir);\n");
 	enable_paging((uintptr_t )kernel_page_dir);
 
 	tty_printf("vmm: vmm initialized!\n");
