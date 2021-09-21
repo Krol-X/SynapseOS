@@ -14,6 +14,9 @@
 int EXIT = 0;
 
 void main(multiboot_info_t* mboot_info, unsigned int magic) {
+	int eip;
+	asm volatile("1: lea 1b, %0;": "=a"(eip));
+    qemu_printf("eip in the beginng of main() = %x\n", eip);
 
 	qemu_printf("magic x: %x\n", magic);
 	qemu_printf("magic d: %d\n", magic);
