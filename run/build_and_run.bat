@@ -33,7 +33,7 @@ SET SRC=./src
 SET CCFLAGS=-O3 -std=gnu99 -ffreestanding -Wall -Wextra 
 SET LDFLAGS=-O3 -ffreestanding -nostdlib -lgcc
 set OBJECTS_DRIVERS=bin/cmos.o bin/vga.o bin/qemu_log.o bin/cpu_detect.o
-set OBJECTS=bin/kasm.o bin/irq_wrappers.o bin/kc.o bin/gdt.o bin/idt.o %OBJECTS_DRIVERS% bin/time.o bin/shell.o bin/kbd.o bin/tty.o bin/ports.o bin/virt_mem.o bin/phys_mem.o bin/stdlib.o
+set OBJECTS=bin/kasm.o bin/irq_wrappers.o bin/kc.o bin/gdt.o bin/pic.o bin/idt.o %OBJECTS_DRIVERS% bin/time.o bin/shell.o bin/kbd.o bin/tty.o bin/ports.o bin/virt_mem.o bin/phys_mem.o bin/stdlib.o
 
 
 :: Checking for the presence of a folder and, if not, creating one
@@ -61,6 +61,7 @@ echo Build modules
 %CC% %CCFLAGS% -c %SRC%/modules/gdt.c -o bin/gdt.o
 %CC% %CCFLAGS% -c %SRC%/modules/shell.c -o bin/shell.o
 %CC% %CCFLAGS% -c %SRC%/modules/idt.c -o bin/idt.o
+%CC% %CCFLAGS% -c %SRC%/modules/pic.c -o bin/pic.o
 %CC% %CCFLAGS% -c %SRC%/modules/kbd.c -o bin/kbd.o
 %CC% %CCFLAGS% -c %SRC%/modules/tty.c -o bin/tty.o
 %CC% %CCFLAGS% -c %SRC%/modules/ports.c -o bin/ports.o
