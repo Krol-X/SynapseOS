@@ -33,7 +33,7 @@ SET SRC=./src
 SET CCFLAGS=-O3 -std=gnu99 -ffreestanding -Wall -Wextra 
 SET LDFLAGS=-O3 -ffreestanding -nostdlib -lgcc
 set OBJECTS_DRIVERS=bin/cmos.o bin/vga.o bin/qemu_log.o bin/cpu_detect.o
-set OBJECTS=bin/kasm.o bin/kc.o bin/gdt.o bin/idt.o %OBJECTS_DRIVERS% bin/time.o bin/shell.o bin/kbd.o bin/tty.o bin/ports.o bin/virt_mem.o bin/phys_mem.o bin/stdlib.o
+set OBJECTS=bin/kasm.o bin/irq_wrappers.o bin/kc.o bin/gdt.o bin/idt.o %OBJECTS_DRIVERS% bin/time.o bin/shell.o bin/kbd.o bin/tty.o bin/ports.o bin/virt_mem.o bin/phys_mem.o bin/stdlib.o
 
 
 :: Checking for the presence of a folder and, if not, creating one
@@ -46,6 +46,7 @@ IF EXIST "./bin/" (
 
 echo Build asm kernel
 fasm %SRC%/kernel.asm bin/kasm.o
+fasm %SRC%/modules/irq_wrappers.asm bin/irq_wrappers.o
 
 
 
@@ -95,7 +96,8 @@ endlocal & set "%1=%ut%" & goto :vars
 echo Done
 
 ::Qemu config
-qemu-system-i386 -m 512 -boot d -cdrom SynapseOS.iso -monitor stdio -serial file:./run/Qemu_log.txt
+qemu-system-i386 -m 512 -boot d -cdrom SynapseOS.iso -monitor stdio -serial file:./run/Qemu_log.txt 
+::-d mmu cpu_reset  -no-reboot 
 
 pause
 exit
