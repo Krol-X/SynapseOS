@@ -1,4 +1,4 @@
-eip in the beginng of main() = 0xC010405F
+eip in the beginng of main() = 0xC010405A
 magic x: 0x2BADB002
 magic d: 732803074
 MULTIBOOT_BOOTLOADER_MAGIC x: 0x2BADB002
@@ -27,5 +27,4 @@ mapping: table1 -> 0xE3, table2 -> 0xE3
 mapping: 0x2000 - > 0xE3
 memset table1...
 memset table2...
-Page fault:
-cr2 = 0x102000
+Page fault at 0x102000 ( present: page is present, read-only: pf caused by a write access, );

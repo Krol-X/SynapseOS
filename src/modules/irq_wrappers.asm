@@ -30,17 +30,17 @@ common_interrupt_handler:                ; the common parts of the generic inter
 	push	esi
 	push	edi
 
-    ; call the C function
-    call    interrupt_handler
+	; call the C function
+	call    interrupt_handler
 
-    ; restore the registers
+	; restore the registers
 	pop	edi
 	pop	esi
 	pop	ebp
 	pop	edx
 	pop	ecx
 	pop	ebx
-    pop     eax
+	pop     eax
 
 	; restore the esp
 	add     esp, 8
@@ -49,7 +49,7 @@ common_interrupt_handler:                ; the common parts of the generic inter
 	iret
 
 no_error_code_interrupt_handler	33	; create handler for interrupt 1 (keyboard)
-no_error_code_interrupt_handler 14	; create handler for interrupt 2 (paging)
+error_code_interrupt_handler 14     ; create handler for interrupt 2 (paging)
 
 public interrupt_handler_14
 public interrupt_handler_33

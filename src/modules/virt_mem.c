@@ -9,6 +9,7 @@
 #include "../include/tty.h"
 #include "../include/qemu_log.h"
 #include "../include/memmap.h"
+#include "../include/idt.h"
 
 
 // phisical address of kernel page directory
@@ -75,8 +76,8 @@ void vmm_map_page(uintptr_t  paddr, uintptr_t vaddr) {
 		page_table *pt_v = (page_table*)vmm_temp_map_page(pt_p);//because we need to write !
 		memset(pt_v, 0, sizeof(page_table));
 		page_dir_entry_add_attrib(pde, I86_PDE_PRESENT);
-    	page_dir_entry_add_attrib(pde, I86_PDE_WRITABLE);
-    	page_dir_entry_set_frame(pde, pt_p);
+		page_dir_entry_add_attrib(pde, I86_PDE_WRITABLE);
+		page_dir_entry_set_frame(pde, pt_p);
 	}
 	page_table_entry *pte = GET_PTE(vaddr);
 	page_table_entry_set_frame(pte, paddr);
@@ -99,13 +100,13 @@ uintptr_t vmm_temp_map_page(uintptr_t  paddr)
 
 // switch page directory, reveives physical address
 void vmm_switch_page_directory(page_directory *page_dir_phys_addr) {
-    asm volatile("mov %0, %%cr3" :: "r"((uint32_t)page_dir_phys_addr));
+	asm volatile("mov %0, %%cr3" :: "r"((uint32_t)page_dir_phys_addr));
 }
 
 void vmm_init() {
 	vmm_create_kernel_page_dir();
 	page_table* table1 = (page_table*)pmm_alloc_block();
-    page_table* table2 = (page_table*)pmm_alloc_block();
+	page_table* table2 = (page_table*)pmm_alloc_block();
 	qemu_printf("table1 = %x, table2 = %x\n", table1, table2);
 
 	// *(uint32_t *)0x102000 = 0x1337;
@@ -116,46 +117,46 @@ void vmm_init() {
 
 	//asm volatile("hlt");
 
-    // Clear allocated page tables
+	// Clear allocated page tables
 	qemu_printf("memset table1...\n");
-    memset(table1, 0, sizeof(page_table)); // why fails here??
+	memset(table1, 0, sizeof(page_table)); // why fails here??
 	qemu_printf("memset table2...\n");
-    memset(table2, 0, sizeof(page_table));
+	memset(table2, 0, sizeof(page_table));
 	qemu_printf("memsets table1 and table2 finished\n");
 
 	qemu_printf("cleared\n");
 
-    // Maps first MB to 3GB
-    uintptr_t frame, virt; // frame if physical address of page, virt is virtual
-    for (frame = 0x0, virt = 0xC0000000;
+	// Maps first MB to 3GB
+	uintptr_t frame, virt; // frame if physical address of page, virt is virtual
+	for (frame = 0x0, virt = 0xC0000000;
 		frame < 0x100000;
 		frame += PAGE_SIZE, virt += PAGE_SIZE)
 	{
-        page_table_entry page = 0;
-        page_table_entry_add_attrib(&page, I86_PTE_PRESENT);
+		page_table_entry page = 0;
+		page_table_entry_add_attrib(&page, I86_PTE_PRESENT);
 		// page_table_entry_add_attrib(&page, I86_PTE_WRITABLE); // 
-        page_table_entry_set_frame(&page, frame);
+		page_table_entry_set_frame(&page, frame);
 		qemu_printf("page1 = %x\n", (uint32_t)page);
-        table1->entries[PAGE_TABLE_INDEX(virt)] = page;
-    }
+		table1->entries[PAGE_TABLE_INDEX(virt)] = page;
+	}
 	qemu_printf("vmm: first mb mapped to 3gb\n");
 
-    // Maps kernel pages and phys mem pages
+	// Maps kernel pages and phys mem pages
 	qemu_printf("vmm: KERNEL_START_PADDR = %x, KERNEL_PHYS_MAP_END = %x, KERNEL_START_VADDR = %x\n",
-	             KERNEL_START_PADDR, KERNEL_PHYS_MAP_END, KERNEL_START_VADDR);
+				 KERNEL_START_PADDR, KERNEL_PHYS_MAP_END, KERNEL_START_VADDR);
 	// qemu_printf("KERNEL_START_PADDR & ~(PAGE_SIZE - 1) = %x\n", KERNEL_START_PADDR & ~(PAGE_SIZE - 1));
-    for (frame = KERNEL_START_PADDR & ~(PAGE_SIZE - 1) , virt = KERNEL_START_VADDR;
-	    frame < (KERNEL_PHYS_MAP_END & ~(PAGE_SIZE - 1)) + PAGE_SIZE;
+	for (frame = KERNEL_START_PADDR & ~(PAGE_SIZE - 1) , virt = KERNEL_START_VADDR;
+		frame < (KERNEL_PHYS_MAP_END & ~(PAGE_SIZE - 1)) + PAGE_SIZE;
 		frame += PAGE_SIZE, virt += PAGE_SIZE)
 	{
-        page_table_entry page = 0;
-        page_table_entry_add_attrib(&page, I86_PTE_PRESENT);
+		page_table_entry page = 0;
+		page_table_entry_add_attrib(&page, I86_PTE_PRESENT);
 		// page_table_entry_add_attrib(&page, I86_PTE_WRITABLE); // 
-        page_table_entry_set_frame(&page, frame);
+		page_table_entry_set_frame(&page, frame);
 		qemu_printf("page2 = %x\n", (uint32_t)page);
 
-        table2->entries[PAGE_TABLE_INDEX(virt)] = page;
-    }
+		table2->entries[PAGE_TABLE_INDEX(virt)] = page;
+	}
 	qemu_printf("vmm: kernel mapped\n");
 
 	page_dir_entry *pde1 = (page_dir_entry*)&kernel_page_dir->entries[PAGE_DIRECTORY_INDEX(0x00000000)];
@@ -189,10 +190,26 @@ void vmm_init() {
 }
 
 
-void page_fault_handler() {
-	uint32_t cr2;
-    asm volatile( "movl %%cr2, %0" : "=r" (cr2) );
-    qemu_printf("Page fault:\ncr2 = %x\n", cr2);
+void page_fault_handler(stack_state_t stack) {
+	uint32_t faulting_address;
+	asm volatile( "movl %%cr2, %0" : "=r" (faulting_address) );
+	uint32_t present = !(stack.error_code & 0x1);
+	uint32_t rw = stack.error_code & 0x2;
+	uint32_t us = stack.error_code & 0x4;
+	uint32_t reserved = stack.error_code & 0x8;
+	uint32_t ifetch = stack.error_code & 0x10;
+	qemu_printf("Page fault at %x ( ", faulting_address);
+	if (present)
+		qemu_printf("present: page is present, ");
+	if (rw)
+		qemu_printf("read-only: pf caused by a write access, ");
+	if (us)
+		qemu_printf("user-mode ");
+	if (reserved)
+		qemu_printf("reserved ");
+	if (ifetch)
+		qemu_printf("insteruction fetch ");
+	qemu_printf(");\n");
 	for (;;); // halt system
 }
 
@@ -211,7 +228,7 @@ void vmm_test() {
 
 	int eip;
 	asm volatile("1: lea 1b, %0;": "=a"(eip));
-    tty_printf("EIP = %x  ", eip);
+	tty_printf("EIP = %x  ", eip);
 }
 
 

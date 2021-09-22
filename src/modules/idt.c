@@ -45,7 +45,7 @@ void idt_init() {
 
 void interrupt_handler(__attribute__((unused)) cpu_state_t cpu,
 	uint32_t interrupt,
-	__attribute__((unused)) stack_state_t stack
+	stack_state_t stack
 ) {
 	// uint8_t scan_code;
 	// uint8_t ascii;
@@ -66,7 +66,7 @@ void interrupt_handler(__attribute__((unused)) cpu_state_t cpu,
 			break;
 		
 		case INTERRUPTS_PAGING:
-			page_fault_handler();	
+			page_fault_handler(stack);	
 			break;
 		default:
 			break;
