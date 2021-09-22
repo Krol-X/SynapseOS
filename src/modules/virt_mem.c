@@ -106,10 +106,24 @@ void vmm_init() {
 	vmm_create_kernel_page_dir();
 	page_table* table1 = (page_table*)pmm_alloc_block();
     page_table* table2 = (page_table*)pmm_alloc_block();
+	qemu_printf("table1 = %x, table2 = %x\n", table1, table2);
+
+	// *(uint32_t *)0x102000 = 0x1337;
+
+	qemu_printf("mapping: table1 -> %x, table2 -> %x\n", *GET_PDE(table1), *GET_PDE(table2));
+
+	qemu_printf("mapping: 0x2000 - > %x\n", *GET_PDE(0x2000));
+
+	//asm volatile("hlt");
 
     // Clear allocated page tables
-    memset((void*)table1, 0, sizeof(page_table));
-    memset((void*)table2, 0, sizeof(page_table));
+	qemu_printf("memset table1...\n");
+    memset(table1, 0, sizeof(page_table)); // why fails here??
+	qemu_printf("memset table2...\n");
+    memset(table2, 0, sizeof(page_table));
+	qemu_printf("memsets table1 and table2 finished\n");
+
+	qemu_printf("cleared\n");
 
     // Maps first MB to 3GB
     uintptr_t frame, virt; // frame if physical address of page, virt is virtual
@@ -119,19 +133,26 @@ void vmm_init() {
 	{
         page_table_entry page = 0;
         page_table_entry_add_attrib(&page, I86_PTE_PRESENT);
+		// page_table_entry_add_attrib(&page, I86_PTE_WRITABLE); // 
         page_table_entry_set_frame(&page, frame);
+		qemu_printf("page1 = %x\n", (uint32_t)page);
         table1->entries[PAGE_TABLE_INDEX(virt)] = page;
     }
 	qemu_printf("vmm: first mb mapped to 3gb\n");
 
     // Maps kernel pages and phys mem pages
-    for (frame = KERNEL_START_PADDR, virt = KERNEL_START_VADDR;
-	    frame < KERNEL_PHYS_MAP_END;
+	qemu_printf("vmm: KERNEL_START_PADDR = %x, KERNEL_PHYS_MAP_END = %x, KERNEL_START_VADDR = %x\n",
+	             KERNEL_START_PADDR, KERNEL_PHYS_MAP_END, KERNEL_START_VADDR);
+	// qemu_printf("KERNEL_START_PADDR & ~(PAGE_SIZE - 1) = %x\n", KERNEL_START_PADDR & ~(PAGE_SIZE - 1));
+    for (frame = KERNEL_START_PADDR & ~(PAGE_SIZE - 1) , virt = KERNEL_START_VADDR;
+	    frame < (KERNEL_PHYS_MAP_END & ~(PAGE_SIZE - 1)) + PAGE_SIZE;
 		frame += PAGE_SIZE, virt += PAGE_SIZE)
 	{
         page_table_entry page = 0;
         page_table_entry_add_attrib(&page, I86_PTE_PRESENT);
+		// page_table_entry_add_attrib(&page, I86_PTE_WRITABLE); // 
         page_table_entry_set_frame(&page, frame);
+		qemu_printf("page2 = %x\n", (uint32_t)page);
 
         table2->entries[PAGE_TABLE_INDEX(virt)] = page;
     }
@@ -155,8 +176,26 @@ void vmm_init() {
 
 	enable_paging((uintptr_t )kernel_page_dir);
 
+	qemu_printf("vmm: kernel page dir loaded\n");
+
+	qemu_printf("*(uint16_t *)0xC00B8000 = %x\n", *(uint16_t *)0xC00B8000);
+	*(uint16_t *)0xC00B8000 = 0x1337;
+
+	qemu_printf("now trying to tty_printf:\n");
+
+	tty_printf("TTY WORKS!\n");
+
 	tty_printf("vmm: vmm initialized!\n");
 }
+
+
+void page_fault_handler() {
+	uint32_t cr2;
+    asm volatile( "movl %%cr2, %0" : "=r" (cr2) );
+    qemu_printf("Page fault:\ncr2 = %x\n", cr2);
+	for (;;); // halt system
+}
+
 
 void vmm_test() {
 	tty_printf("kernel_page_dir = %x\n", kernel_page_dir);

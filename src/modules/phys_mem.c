@@ -187,8 +187,17 @@ void pmm_free_available_memory(struct multiboot_info* mb) {
     while ((unsigned int)mm < mb->mmap_addr + mb->mmap_length) {
         //qemu_printf("freed\n");
         if (mm->type == MULTIBOOT_MEMORY_AVAILABLE) {
+            if (mm->addr_low <= 0x100000) { // dont mark as free first MB
+                if (mm->addr_low + mm->len_low <= 0x100000) {
+                    goto nxt;
+                } else {
+                    pmm_free_chunk((uintptr_t)0x100000, mm->len_low - (0x100000 - mm->addr_low));
+                    goto nxt;
+                }
+            }
             pmm_free_chunk((uintptr_t)mm->addr_low, mm->len_low);
         }
+        nxt:
         mm = (multiboot_memory_map_t*)((unsigned int)mm + mm->size + sizeof(mm->size));
     }
     bitmap_set(0);

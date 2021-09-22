@@ -1,9 +1,10 @@
 //  PS/2 Keyboard  driver
 
 //Provide us keyboard input
-
-#include  "../include/stdlib.h"
 #include  "../include/kbd.h"
+#include  "../include/idt.h"
+#include  "../include/pic.h"
+#include  "../include/stdlib.h"
 #include  "../include/ports.h"
 #include  "../include/tty.h"
 #include  "../include/shell.h"
@@ -111,10 +112,7 @@ void  kb_init(void){
 }
 
 
-char  keyboard_handler_main(void){
-    /*  write  EOI  */
-    outb(0x20,  0x20);
-
+char  keyboard_handler_main(void) {
     status  =  inb(KEYBOARD_STATUS_PORT);
     /*  Lowest bit of  status will  be set if  buffer is  not  empty  */
     if  (status  &  0x01)  {
@@ -127,5 +125,6 @@ char  keyboard_handler_main(void){
 			return keyboard_map_shifted[(unsigned char) keycode];
 		}
 	}
+    pic_acknowledge(INTERRUPTS_KEYBOARD);
 	return (char)0;
 }

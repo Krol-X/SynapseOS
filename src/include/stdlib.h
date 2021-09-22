@@ -43,7 +43,8 @@ typedef __uint64_t uint64_t;*/
 #define inportl(port, out_value) asm("inl %w1, %0":"=a"(out_value):"d"(port));
 
 
-void memset(void *mem, char value, size_t count);
+// void memset(void *mem, char value, size_t count);
+void* memset(void* ptr, uint8_t val, size_t n);
 void memset_word(void *mem, uint16 value, size_t count);
 void memcpy(void *dest, void *src, size_t count);
 int memcmp(void *mem1, void *mem2, size_t count);

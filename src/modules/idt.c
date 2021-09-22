@@ -1,66 +1,74 @@
 //Interrupt Descriptor table module
 
-//
-
 #include "../include/idt.h"
 #include "../include/gdt.h"
-#include "../include/kbd.h"
 #include "../include/ports.h"
+#include "../include/pic.h"
 
+#include "../include/kbd.h"
+#include "../include/virt_mem.h"
 
-#define KEYBOARD_INTERRUPT 0x21
+IDTDescriptor_t idt_descriptors[INTERRUPTS_DESCRIPTOR_COUNT];
+IDT_t idt;
 
-struct IDT_entry IDT[IDT_SIZE]; // array of IDT entries
+void idt_init_descriptor(int index, uint32_t address) {
+	idt_descriptors[index].offset_high = (address >> 16) & 0xFFFF; // offset bits 0..15
+	idt_descriptors[index].offset_low = (address & 0xFFFF); // offset bits 16..31
 
-void idt_init(void) // initialize IDT
-{
-	unsigned long keyboard_address;
-	unsigned long idt_address;
-	unsigned long idt_ptr[2];
+	idt_descriptors[index].segment_selector = 0x08; // The second (code) segment selector in GDT: one segment is 64b.
+	idt_descriptors[index].reserved = 0x00; // Reserved.
 
-	/* populate IDT entry of keyboard's interrupt */
-	keyboard_address = (unsigned long)keyboard_handler;
-	IDT[KEYBOARD_INTERRUPT].offset_lowerbits = keyboard_address & 0xffff;
-	IDT[KEYBOARD_INTERRUPT].selector = KERNEL_CODE_SEGMENT_OFFSET;
-	IDT[KEYBOARD_INTERRUPT].zero = 0;
-	IDT[KEYBOARD_INTERRUPT].type_attr = INTERRUPT_GATE;
-	IDT[KEYBOARD_INTERRUPT].offset_higherbits = (keyboard_address & 0xffff0000) >> 16;
-
-	/*     Ports
-	*	 PIC1	PIC2
-	*Command 0x20	0xA0
-	*Data	 0x21	0xA1
-	*/
-
-	/* ICW1 - begin initialization */
-	outb(0x20 , 0x11);
-	outb(0xA0 , 0x11);
-
-	/* ICW2 - remap offset address of IDT */
 	/*
-	* In x86 protected mode, we have to remap the PICs beyond 0x20 because
-	* Intel have designated the first 32 interrupts as "reserved" for cpu exceptions
+	   Bit:     | 31              16 | 15 | 14 13 | 12 | 11     10 9 8   | 7 6 5 | 4 3 2 1 0 |
+	   Content: | offset high        | P  | DPL   | S  | D and  GateType | 0 0 0 | reserved
+		P	If the handler is present in memory or not (1 = present, 0 = not present). Set to 0 for unused interrupts or for Paging.
+		DPL	Descriptor Privilige Level, the privilege level the handler can be called from (0, 1, 2, 3).
+		S	Storage Segment. Set to 0 for interrupt gates.
+		D	Size of gate, (1 = 32 bits, 0 = 16 bits).
 	*/
-	outb(KEYBOARD_INTERRUPT , 0x20);
-	outb(0xA1 , 0x28);
+	idt_descriptors[index].type_and_attr =	(0x01 << 7) |			// P
+						(0x00 << 6) | (0x00 << 5) |	// DPL
+						0xe;				// 0b1110=0xE 32-bit interrupt gate
+}
 
-	/* ICW3 - setup cascading */
-	outb(KEYBOARD_INTERRUPT , 0x00);
-	outb(0xA1 , 0x00);
+void idt_init() {
+	idt_init_descriptor(INTERRUPTS_KEYBOARD, (unsigned int) interrupt_handler_33);
+	idt_init_descriptor(INTERRUPTS_PAGING, (unsigned int) interrupt_handler_14);
 
-	/* ICW4 - environment info */
-	outb(KEYBOARD_INTERRUPT , 0x01);
-	outb(0xA1 , 0x01);
-	/* Initialization finished */
+	idt.address = (int) &idt_descriptors;
+	idt.size = sizeof(IDTDescriptor_t) * INTERRUPTS_DESCRIPTOR_COUNT;
+	load_idt((uint32_t)&idt);
 
-	/* mask interrupts */
-	outb(KEYBOARD_INTERRUPT , 0xff);
-	outb(0xA1 , 0xff);
+	/*pic_remap(PIC_PIC1_OFFSET, PIC_PIC2_OFFSET);*/
+	pic_remap(PIC_1_OFFSET, PIC_2_OFFSET);
+}
 
-	/* fill the IDT descriptor */
-	idt_address = (unsigned long)IDT ;
-	idt_ptr[0] = (sizeof (struct IDT_entry) * IDT_SIZE) + ((idt_address & 0xffff) << 16);
-	idt_ptr[1] = idt_address >> 16 ;
+void interrupt_handler(__attribute__((unused)) cpu_state_t cpu,
+	uint32_t interrupt,
+	__attribute__((unused)) stack_state_t stack
+) {
+	// uint8_t scan_code;
+	// uint8_t ascii;
 
-	load_idt(idt_ptr); // load IDT to special cpu register
+	switch (interrupt) {
+		case INTERRUPTS_KEYBOARD:
+			// scan_code = keyboard_read_scan_code();
+			// if (scan_code <= KEYBOARD_MAX_ASCII) {
+			// 	ascii = keyboard_scan_code_to_ascii(scan_code);
+			// 	serial_configure_baud_rate(SERIAL_COM1_BASE, 4);
+			// 	serial_configure_line(SERIAL_COM1_BASE);
+			// 	char str[1];
+			// 	str[0] = ascii;
+			// 	serial_write(str, 1);
+			// }
+			// pic_acknowledge(interrupt);
+			keyboard_handler_main();
+			break;
+		
+		case INTERRUPTS_PAGING:
+			page_fault_handler();	
+			break;
+		default:
+			break;
+    }
 }

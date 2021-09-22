@@ -111,6 +111,8 @@ void vmm_map_page(uintptr_t paddr, uintptr_t vaddr);
 uintptr_t vmm_temp_map_page(uintptr_t paddr);
 void vmm_switch_page_directory(page_directory *page_dir_phys_addr);
 
+void page_fault_handler();
+
 void vmm_test();
 
 

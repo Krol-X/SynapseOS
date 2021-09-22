@@ -1,4 +1,4 @@
-eip in the beginng of main() = 0xC0104030
+eip in the beginng of main() = 0xC010405F
 magic x: 0x2BADB002
 magic d: 732803074
 MULTIBOOT_BOOTLOADER_MAGIC x: 0x2BADB002
@@ -20,9 +20,12 @@ Reserved:  | addr: 0x1FFE0000 length: 0x20000
 Reserved:  | addr: 0xFFFC0000 length: 0x40000
 Installed memory size: 524224 KB = 511 MB
 Available memory size: 523775 KB = 511 MB
-KERNEL_START_PADDR = 0x1030A9, KERNEL_END_PADDR = 0x11C9CF, KERNEL_SIZE = 104742 bytes Physical memory manager installed. Physical memory bitmap start: 0x11C9CF, end: 0x1209CD, size = 16382 bytes
+KERNEL_START_PADDR = 0x1030A9, KERNEL_END_PADDR = 0x11C9EF, KERNEL_SIZE = 104774 bytes Physical memory manager installed. Physical memory bitmap start: 0x11C9EF, end: 0x1209ED, size = 16382 bytes
 Physical memory manager inited
-vmm: first mb mapped to 3gb
-vmm: kernel mapped
-vmm: trying enable paging...
-vmm: enable_paging function address = 0xC0104000
+table1 = 0x101000, table2 = 0x102000
+mapping: table1 -> 0xE3, table2 -> 0xE3
+mapping: 0x2000 - > 0xE3
+memset table1...
+memset table2...
+Page fault:
+cr2 = 0x102000
