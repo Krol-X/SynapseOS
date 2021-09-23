@@ -111,9 +111,12 @@ void vmm_init() {
 
 	// *(uint32_t *)0x102000 = 0x1337;
 
-	qemu_printf("mapping: table1 -> %x, table2 -> %x\n", *GET_PDE(table1), *GET_PDE(table2));
+	//qemu_printf("mapping: table1 -> %x, table2 -> %x\n", *GET_PDE(table1), *GET_PDE(table2));
 
-	qemu_printf("mapping: 0x2000 - > %x\n", *GET_PDE(0x2000));
+	qemu_printf("PDE(%x) = %x\n", table1, *GET_PDE(table1));
+	qemu_printf("PDE(%x) = %x\n", table2, *GET_PDE(table2));
+
+	// qemu_printf("mapping: 0x2000 - > %x\n", *GET_PDE(0x2000));
 
 	//asm volatile("hlt");
 
@@ -136,7 +139,7 @@ void vmm_init() {
 		page_table_entry_add_attrib(&page, I86_PTE_PRESENT);
 		// page_table_entry_add_attrib(&page, I86_PTE_WRITABLE); // 
 		page_table_entry_set_frame(&page, frame);
-		qemu_printf("page1 = %x\n", (uint32_t)page);
+		qemu_printf("page1 = %x, frame1 = %x\n", (uint32_t)page, frame);
 		table1->entries[PAGE_TABLE_INDEX(virt)] = page;
 	}
 	qemu_printf("vmm: first mb mapped to 3gb\n");
@@ -193,7 +196,7 @@ void vmm_init() {
 void page_fault_handler(stack_state_t stack) {
 	uint32_t faulting_address;
 	asm volatile( "movl %%cr2, %0" : "=r" (faulting_address) );
-	uint32_t present = !(stack.error_code & 0x1);
+	uint32_t present = (stack.error_code & 0x1);
 	uint32_t rw = stack.error_code & 0x2;
 	uint32_t us = stack.error_code & 0x4;
 	uint32_t reserved = stack.error_code & 0x8;
@@ -208,8 +211,13 @@ void page_fault_handler(stack_state_t stack) {
 	if (reserved)
 		qemu_printf("reserved ");
 	if (ifetch)
-		qemu_printf("insteruction fetch ");
+		qemu_printf("instruction fetch ");
 	qemu_printf(");\n");
+	uint32_t cr4;
+	asm volatile( "movl %%cr4, %0" : "=r" (cr4) );
+	qemu_printf("  cr4 = %x\n", cr4);
+	qemu_printf("  PDE(%x) = %x\n", faulting_address, *GET_PDE(faulting_address));
+	qemu_printf("  PTE(%x) = %x\n", faulting_address, *GET_PTE(faulting_address));
 	for (;;); // halt system
 }
 

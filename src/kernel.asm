@@ -80,7 +80,11 @@ start:
 	mov ebx, 0x00000083
 	xor ecx, ecx
 
-;before_bpd:
+; before_bpd:
+
+; mov eax, _boot_page_dir ;;;
+; mov ebx, early_stack ;; 
+; hlt ;; 
 
 .fill_bpd:
 	cmp ecx, 1024

@@ -58,8 +58,8 @@ void main(multiboot_info_t* mboot_info, unsigned int magic) {
 	qemu_printf("Physical memory manager inited\n");
 
     // TODO: why this causes crash?
-	// vmm_init();
-	// qemu_printf("Virtual memory manager inited\n");
+	vmm_init();
+	qemu_printf("Virtual memory manager inited\n");
 	
 	tty_printf("\n\nEnter 'help' to get info about commands\n\n");
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);

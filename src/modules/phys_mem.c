@@ -184,14 +184,15 @@ void pmm_free_chunk(uintptr_t base_addr, size_t length) {
 // Free all memory marked as available by memory map
 void pmm_free_available_memory(struct multiboot_info* mb) {
     multiboot_memory_map_t* mm = (multiboot_memory_map_t*)mb->mmap_addr;
+    #define DANGER_ZONE_BOUND 0x102000 // dont mark as free first MB, and 0x101000 - 0x102000 (there lives _boot_page_dir !)
     while ((unsigned int)mm < mb->mmap_addr + mb->mmap_length) {
         //qemu_printf("freed\n");
         if (mm->type == MULTIBOOT_MEMORY_AVAILABLE) {
-            if (mm->addr_low <= 0x100000) { // dont mark as free first MB
-                if (mm->addr_low + mm->len_low <= 0x100000) {
+            if (mm->addr_low <= DANGER_ZONE_BOUND) { 
+                if (mm->addr_low + mm->len_low <= DANGER_ZONE_BOUND) {
                     goto nxt;
                 } else {
-                    pmm_free_chunk((uintptr_t)0x100000, mm->len_low - (0x100000 - mm->addr_low));
+                    pmm_free_chunk((uintptr_t)DANGER_ZONE_BOUND, mm->len_low - (DANGER_ZONE_BOUND - mm->addr_low));
                     goto nxt;
                 }
             }
