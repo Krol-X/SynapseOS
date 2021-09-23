@@ -22,9 +22,4 @@ Installed memory size: 524224 KB = 511 MB
 Available memory size: 523775 KB = 511 MB
 KERNEL_START_PADDR = 0x1030A9, KERNEL_END_PADDR = 0x11C9EF, KERNEL_SIZE = 104774 bytes Physical memory manager installed. Physical memory bitmap start: 0x11C9EF, end: 0x1209ED, size = 16382 bytes
 Physical memory manager inited
-table1 = 0x101000, table2 = 0x102000
-mapping: table1 -> 0xE3, table2 -> 0xE3
-mapping: 0x2000 - > 0xE3
-memset table1...
-memset table2...
 Page fault at 0x102000 ( present: page is present, read-only: pf caused by a write access, );
