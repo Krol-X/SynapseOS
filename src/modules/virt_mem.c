@@ -86,9 +86,10 @@ void vmm_map_page(uintptr_t  paddr, uintptr_t vaddr) {
 	flush_tlb_entry(vaddr);
 }
 
-uintptr_t vmm_temp_map_page(uintptr_t  paddr)
+uintptr_t vmm_temp_map_page(uintptr_t paddr)
 {
 	page_table_entry *pte = GET_PTE(TEMP_PAGE_ADDR);
+	qemu_printf("vmm_temp_map_page: pte = %x\n", pte);
 	page_table_entry_set_frame(pte, PAGE_ALIGN_DOWN(paddr));//old:DOWN
 	page_table_entry_add_attrib(pte, I86_PTE_PRESENT);
 	page_table_entry_add_attrib(pte, I86_PTE_WRITABLE);
@@ -106,32 +107,14 @@ void vmm_switch_page_directory(page_directory *page_dir_phys_addr) {
 void vmm_init() {
 	vmm_create_kernel_page_dir();
 	page_table* table1 = (page_table*)pmm_alloc_block();
-	page_table* table2 = (page_table*)pmm_alloc_block();
-	qemu_printf("table1 = %x, table2 = %x\n", table1, table2);
-
-	// *(uint32_t *)0x102000 = 0x1337;
-
-	//qemu_printf("mapping: table1 -> %x, table2 -> %x\n", *GET_PDE(table1), *GET_PDE(table2));
-
-	qemu_printf("PDE(%x) = %x\n", table1, *GET_PDE(table1));
-	qemu_printf("PDE(%x) = %x\n", table2, *GET_PDE(table2));
-
-	// qemu_printf("mapping: 0x2000 - > %x\n", *GET_PDE(0x2000));
-
-	//asm volatile("hlt");
+	qemu_printf("vmm: phys addr of table1 = %x\n", table1);
 
 	// Clear allocated page tables
-	qemu_printf("memset table1...\n");
-	memset(table1, 0, sizeof(page_table)); // why fails here??
-	qemu_printf("memset table2...\n");
-	memset(table2, 0, sizeof(page_table));
-	qemu_printf("memsets table1 and table2 finished\n");
-
-	qemu_printf("cleared\n");
+	memset(table1, 0, sizeof(page_table));
 
 	// Maps first MB to 3GB
 	uintptr_t frame, virt; // frame if physical address of page, virt is virtual
-	for (frame = 0x0, virt = 0xC0000000;
+	for (frame = 0x0, virt = KERNELSPACE_VADDR;
 		frame < 0x100000;
 		frame += PAGE_SIZE, virt += PAGE_SIZE)
 	{
@@ -139,7 +122,7 @@ void vmm_init() {
 		page_table_entry_add_attrib(&page, I86_PTE_PRESENT);
 		// page_table_entry_add_attrib(&page, I86_PTE_WRITABLE); // 
 		page_table_entry_set_frame(&page, frame);
-		qemu_printf("page1 = %x, frame1 = %x\n", (uint32_t)page, frame);
+		// qemu_printf("page1 = %x, frame1 = %x\n", (uint32_t)page, frame);
 		table1->entries[PAGE_TABLE_INDEX(virt)] = page;
 	}
 	qemu_printf("vmm: first mb mapped to 3gb\n");
@@ -156,40 +139,24 @@ void vmm_init() {
 		page_table_entry_add_attrib(&page, I86_PTE_PRESENT);
 		// page_table_entry_add_attrib(&page, I86_PTE_WRITABLE); // 
 		page_table_entry_set_frame(&page, frame);
-		qemu_printf("page2 = %x\n", (uint32_t)page);
+		// qemu_printf("page2 = %x\n", (uint32_t)page);
 
-		table2->entries[PAGE_TABLE_INDEX(virt)] = page;
+		table1->entries[PAGE_TABLE_INDEX(virt)] = page;
 	}
 	qemu_printf("vmm: kernel mapped\n");
 
-	page_dir_entry *pde1 = (page_dir_entry*)&kernel_page_dir->entries[PAGE_DIRECTORY_INDEX(0x00000000)];
+	page_dir_entry *pde1 = (page_dir_entry*)&kernel_page_dir->entries[PAGE_DIRECTORY_INDEX(KERNELSPACE_VADDR)];
 	page_dir_entry_add_attrib(pde1, I86_PDE_PRESENT);
 	page_dir_entry_add_attrib(pde1, I86_PDE_WRITABLE);
-	page_dir_entry_set_frame(pde1, (uintptr_t )table1);
-
-	page_dir_entry *pde2 = (page_dir_entry*)&kernel_page_dir->entries[PAGE_DIRECTORY_INDEX(0xC0100000)];
-	page_dir_entry_add_attrib(pde2, I86_PDE_PRESENT);
-	page_dir_entry_add_attrib(pde2, I86_PDE_WRITABLE);
-	page_dir_entry_set_frame(pde2, (uintptr_t )table2);
+	page_dir_entry_set_frame(pde1, (uintptr_t)table1);
 
 	update_phys_memory_bitmap_addr(KERNEL_END_VADDR);
 
 	qemu_printf("vmm: trying enable paging...\n");
-
-	qemu_printf("vmm: enable_paging function address = %x\n", enable_paging);
-
+	// qemu_printf("vmm: enable_paging function address = %x\n", enable_paging);
 	enable_paging((uintptr_t )kernel_page_dir);
-
 	qemu_printf("vmm: kernel page dir loaded\n");
-
-	qemu_printf("*(uint16_t *)0xC00B8000 = %x\n", *(uint16_t *)0xC00B8000);
-	*(uint16_t *)0xC00B8000 = 0x1337;
-
-	qemu_printf("now trying to tty_printf:\n");
-
-	tty_printf("TTY WORKS!\n");
-
-	tty_printf("vmm: vmm initialized!\n");
+	qemu_printf("vmm: vmm initialized!\n");
 }
 
 
@@ -223,20 +190,22 @@ void page_fault_handler(stack_state_t stack) {
 
 
 void vmm_test() {
-	tty_printf("kernel_page_dir = %x\n", kernel_page_dir);
+	qemu_printf("starting vmm test\n");
+	qemu_printf("  kernel_page_dir = %x\n", kernel_page_dir);
 
-	uintptr_t  padr1 = 0xC0500000;
+	uintptr_t padr1 = (uintptr_t)pmm_alloc_block();
 	uintptr_t vadr1 = vmm_temp_map_page(padr1);
 	*(uint8_t*)vadr1 = 77;
-	tty_printf("%x = %x\n", padr1, *(uint8_t*)vadr1);
-
-	//tty_printf("%x = %x\n", (0x00100000), *(uint8_t*)(0x00100000)); IT WILL CAUSE PAGE FAULT!!!! BEACUSE WE 1:1 MAPPED UP TO 1MB PHYS MEM BUT NEVKLYUCHITELNO!
-	tty_printf("%x = %x\n", (0x00100000 - 1), *(uint8_t*)(0x00100000 - 1));
-	//asm volatile( "movl %0, %%cr3" :: "r" ( kernel_page_dir ) );
-
+	qemu_printf("  %x = %d\n", padr1, *(uint8_t*)vadr1);
+	if (*(uint8_t*)vadr1 != 77) {
+		qemu_printf("  vmm test failed!\n");
+		return;
+	}
+	
 	int eip;
 	asm volatile("1: lea 1b, %0;": "=a"(eip));
-	tty_printf("EIP = %x  ", eip);
+	qemu_printf("  EIP = %x  \n", eip);
+	qemu_printf("  vmm test passed successfully\n");
 }
 
 

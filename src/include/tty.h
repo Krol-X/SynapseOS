@@ -14,6 +14,8 @@
 extern volatile uint8_t tty_feedback;
 extern uint16_t* tty_buffer;
 
+extern uint8_t tty_initialized;
+
 extern uint16_t* VGA_TEXT_MEMORY;
 
 void tty_init(void);

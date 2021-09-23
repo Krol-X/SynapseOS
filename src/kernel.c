@@ -17,15 +17,21 @@ int EXIT = 0;
 void main(multiboot_info_t* mboot_info, unsigned int magic) {
 	int eip;
 	asm volatile("1: lea 1b, %0;": "=a"(eip));
-    qemu_printf("eip in the beginng of main() = %x\n", eip);
+    qemu_printf("eip in the beginning of main() = %x\n", eip);
 
-	qemu_printf("magic x: %x\n", magic);
-	qemu_printf("magic d: %d\n", magic);
-	qemu_printf("MULTIBOOT_BOOTLOADER_MAGIC x: %x\n",MULTIBOOT_BOOTLOADER_MAGIC);
-	qemu_printf("MULTIBOOT_BOOTLOADER_MAGIC d: %d\n",MULTIBOOT_BOOTLOADER_MAGIC);
-	qemu_printf("Memory  Manager inited\n");
-	// qemu_printf("RESULT: %d\n",alloc_phys_pages(1));
-	qemu_printf("VGA TEXT MEMORY: %d\n",VGA_TEXT_MEMORY);
+	/* Make sure the magic number matches for memory mapping*/
+    if (magic != MULTIBOOT_BOOTLOADER_MAGIC) {
+        panic("invalid magic number!");
+    }
+	/* Check bit 6 to see if we have a valid memory map */
+    if (!(mboot_info->flags >> 6 & 0x1)) {
+        panic("invalid memory map given by GRUB bootloader");
+    }
+
+	// qemu_printf("magic x: %x\n", magic);
+	// qemu_printf("magic d: %d\n", magic);
+	// qemu_printf("MULTIBOOT_BOOTLOADER_MAGIC x: %x\n",MULTIBOOT_BOOTLOADER_MAGIC);
+	// qemu_printf("MULTIBOOT_BOOTLOADER_MAGIC d: %d\n",MULTIBOOT_BOOTLOADER_MAGIC);
 
     gdt_init(); // intialize Global Descriptor Table
 	qemu_printf("Global Descriptor Table inited\n");
@@ -35,33 +41,25 @@ void main(multiboot_info_t* mboot_info, unsigned int magic) {
 	
 	// initialize the PS/2 keyboard
 	kb_init(); 
-	qemu_printf("keyboard inited\n");
+	qemu_printf("keyboard initialized\n");
 
 	// Initialize input\output module
 	tty_init();
-	qemu_printf("tty inited\n");
+	qemu_printf("tty initialized\n");
 
 	// Show Logo and current time using shell
 	shell_exec("logo");
 	shell_exec("time");
 
-	/* Make sure the magic number matches for memory mapping*/
-    if(magic != MULTIBOOT_BOOTLOADER_MAGIC) {
-        panic("invalid magic number!");
-    }
-	/* Check bit 6 to see if we have a valid memory map */
-    if(!(mboot_info->flags >> 6 & 0x1)) {
-        panic("invalid memory map given by GRUB bootloader");
-    }
-
 	pmm_init(mboot_info);
-	qemu_printf("Physical memory manager inited\n");
+	qemu_printf("Physical memory manager initialized\n");
 
-    // TODO: why this causes crash?
 	vmm_init();
-	qemu_printf("Virtual memory manager inited\n");
+	qemu_printf("Virtual memory manager initialized\n");
+
+	vmm_test();
 	
-	tty_printf("\n\nEnter 'help' to get info about commands\n\n");
+	tty_printf("\nEnter 'help' to get info about commands\n\n");
 	tty_setcolor(VGA_COLOR_LIGHT_GREEN);
 	tty_printf(">");
 	tty_setcolor(VGA_COLOR_LIGHT_CYAN);

@@ -222,7 +222,7 @@ void pmm_init(struct multiboot_info* mboot_info) {
     // From the freed memory, we need to allocate the ones used by the Kernel
     pmm_alloc_chunk(KERNEL_START_PADDR, KERNEL_SIZE);
 
-    qemu_printf("KERNEL_START_PADDR = %x, KERNEL_END_PADDR = %x, KERNEL_SIZE = %d bytes ", KERNEL_START_PADDR, KERNEL_END_PADDR, KERNEL_SIZE);
+    qemu_printf("KERNEL_START_PADDR = %x, KERNEL_END_PADDR = %x, KERNEL_SIZE = %d bytes \n", KERNEL_START_PADDR, KERNEL_END_PADDR, KERNEL_SIZE);
     // qemu_printf("MemMap addr = %x\n", mboot_info->mmap_addr);
     
     // We also need to allocate the memory used by the Physical Map itself
@@ -230,7 +230,7 @@ void pmm_init(struct multiboot_info* mboot_info) {
     kernel_phys_map_start = (uintptr_t)phys_memory_bitmap;
     kernel_phys_map_end = kernel_phys_map_start + (phys_block_count / 8);
 
-    qemu_printf("Physical memory manager installed. Physical memory bitmap start: %x, end: %x, size = %d bytes\n", kernel_phys_map_start, kernel_phys_map_end, kernel_phys_map_end - kernel_phys_map_start);
+    qemu_printf("Physical memory bitmap start: %x, end: %x, size = %d bytes\n", kernel_phys_map_start, kernel_phys_map_end, kernel_phys_map_end - kernel_phys_map_start);
 }
 
 void pmm_test() {

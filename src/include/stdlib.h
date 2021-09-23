@@ -49,7 +49,7 @@ void memset_word(void *mem, uint16 value, size_t count);
 void memcpy(void *dest, void *src, size_t count);
 int memcmp(void *mem1, void *mem2, size_t count);
 void *memchr(void *mem, char value, size_t count);
-void panic(char *text);
+void panic(const char *text);
 size_t strlen(char *str);
 void strcpy(char *dest, char *src);
 void strncpy(char *dest, char*src, size_t max_count);
