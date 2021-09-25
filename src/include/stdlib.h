@@ -50,7 +50,7 @@ void memcpy(void *dest, void *src, size_t count);
 int memcmp(void *mem1, void *mem2, size_t count);
 void *memchr(void *mem, char value, size_t count);
 void panic(const char *text);
-size_t strlen(char *str);
+size_t strlen(const char *str);
 void strcpy(char *dest, char *src);
 void strncpy(char *dest, char*src, size_t max_count);
 int strcmp(const char *str1, const char *str2);

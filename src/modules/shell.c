@@ -10,6 +10,7 @@
 #include "../include/cmos.h"
 #include "../include/phys_mem.h"
 #include "../include/virt_mem.h"
+#include "../include/NeraMath.h"
 #include "../include/kernel.h"
 #include "../include/kbd.h"
 #include "../include/vga.h"
@@ -18,6 +19,7 @@
 int color_theme = 0;
 // Debug default 0
 int DEBUG = 0; // Note: Debug works only on Qemu emulatorx
+int math = 0; // NeraMath check
 
 
 void colors(int element) {
@@ -41,7 +43,7 @@ void shell_exec(char input_command[]) {
 		tty_printf("\n   help - info about commands            sysinfo - system information");
 		tty_printf("\n   time - info about current time        vga test - show all 256 vga colors");
 		tty_printf("\n   exit - Shutdown SynapseOS             cls or clear - cleaning screen");
-		tty_printf("\n   ascii - show all ASCII symbols        debug - enable debug mode");
+		tty_printf("\n   ascii - show all ASCII symbols        math - enable NeraMath");
 		
 	} else if( strcmp(input_command, "sysinfo") == 0 ) {
 		// System info
@@ -94,6 +96,18 @@ void shell_exec(char input_command[]) {
 		EXIT = 1;
 		qemu_printf("\n SHUTDOWN! \n");
 
+	} else if( strcmp(input_command, "math") == 0 ) {
+		// NeraMath
+		if ( math == 0 ) {
+			tty_printf("NeraMath on\n");
+			qemu_printf("\nNERA MATH on\n");
+			math = 1;
+		} else {
+			math = 0;
+			tty_printf("NeraMath off\n");
+			qemu_printf("\nNERA MATH OFF\n");
+		}
+
 	} else if( strcmp(input_command, "debug") == 0 ) {
 		// Debug mode
 		if ( DEBUG == 0 ) {
@@ -118,10 +132,16 @@ void shell_exec(char input_command[]) {
 
 	} else {
 		// Unknown command
-		colors(3);
-		tty_printf("Unknown command [");
-		tty_printf(input_command);
-		tty_printf("]");
+		
+		if ( math != 0 ){
+			NeraMAth(input_command);
+		} else {
+			colors(3);
+			tty_printf("Unknown command [");
+			tty_printf(input_command);
+			tty_printf("]");
+		}
+		
 	}
 }
 

@@ -112,8 +112,12 @@ void *memchr(void *mem, char value, size_t count) {
 }
 
 
-size_t strlen(char *str) {
-    return (char*)memchr(str, '\0', -1) - str;
+size_t strlen(const char* str) {
+	size_t len = 0;
+	while (str[len] != 0) {
+		len++;
+	}
+	return len;
 }
 
 

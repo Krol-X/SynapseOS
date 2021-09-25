@@ -17,15 +17,20 @@ void process_op(char op, int *x, int *y) {
 	}
 }
 
-int eval_expr(char *inp){
+int eval_expr(const char *inp){
+	qemu_printf("\ninp = %s", inp);
 	
 	int size, i, x = 0, y = 0;
 	
 	char op = '+';
 	//Узнаем размер массива
-	size = strlen(inp); // strlen посчитает столько там ЕСТЬ символов сейчас
+	qemu_printf("\nop = %c", op);
+	size = strlen((char *)inp); // strlen посчитает столько там ЕСТЬ символов сейчас
+	qemu_printf("\nsize = %d", inp);
+
 	//Парсинг строк
 	for (i = 0; i < size; i++){
+		qemu_printf("\neval_expr, i = %d", i);
 		char c = inp[i];
 		// если встретили знак операции
 		if (c == '+' || c == '-' || c == '*' || c == '/'){
@@ -44,6 +49,8 @@ int eval_expr(char *inp){
 	return x;
 }
 
-void NeraMAth(const char* input_text){
+void NeraMAth(const char *input_text){
+	qemu_printf("\ninput_text = %s", input_text);
+
 	tty_printf("\nResult: %d\n", eval_expr(input_text));
 }
