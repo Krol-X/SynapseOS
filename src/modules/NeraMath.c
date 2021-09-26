@@ -18,30 +18,25 @@ void process_op(char op, int *x, int *y) {
 }
 
 int eval_expr(const char *inp){
-	qemu_printf("\ninp = %s", inp);
-	
 	int size, i, x = 0, y = 0;
 	
 	char op = '+';
-	//Узнаем размер массива
-	qemu_printf("\nop = %c", op);
-	size = strlen((char *)inp); // strlen посчитает столько там ЕСТЬ символов сейчас
-	qemu_printf("\nsize = %d", inp);
+
+	size = strlen((char *)inp); 
 
 	//Парсинг строк
 	for (i = 0; i < size; i++){
-		qemu_printf("\neval_expr, i = %d", i);
 		char c = inp[i];
-		// если встретили знак операции
+		// If char is operator
 		if (c == '+' || c == '-' || c == '*' || c == '/'){
-			// обрабатываем прошлую операцию
+			// Execute last operation
 			process_op(op, &x, &y);
-			op = c; // запоминаем новую операцию
+			op = c; // Save new operation
 		} else if (c == '\n' || c == '\t' || c == '\a' || c == ' '){
 			tty_printf("%s '%c'\n", INVALID_CHARACTER, inp[i]);
 		} else {
 			y= y*10 + (c - '0');
-			tty_printf("y = %d\n", y);
+			//tty_printf("y = %d\n", y);
 		}
 	}
 	process_op(op, &x, &y);
