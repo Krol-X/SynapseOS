@@ -64,11 +64,12 @@ void main(multiboot_info_t* mboot_info, unsigned int magic) {
 	tty_printf(">");
 	tty_setcolor(VGA_COLOR_LIGHT_CYAN);
 
-	long long int lifetime;
+	//long long int lifetime = 0;
 	// While kernel working we get input from keyboard
 	while(EXIT!=1){
 		check_keyboard();
-		lifetime++;
+		io_wait();
+		//lifetime++;
 	}
 
 	// Shutdown codes	
