@@ -1,7 +1,7 @@
 :: Build and run script
 
 @Echo off
-set VERSION="0.8.2"
+set VERSION="0.8.3"
 
 echo build SynapseOS %VERSION%
 cd ..
@@ -14,25 +14,19 @@ set NL=^^^%NLM%%NLM%^%NLM%%NLM%
 IF EXIST "./src/include/kernel.h" (
     set KERNELH_EXIST=1
 ) ELSE (
-    set KERNELH_EXIST=0
-   call :GetUnixTime UNIX_TIME
+    echo #ifndef KERNEL_CONFIG %NL%#define KERNEL_CONFIG %NL%#define VERSION %VERSION% %NL%#endif>src/include/kernel.h
 )
 
 :: Setting variables and creating a kernel
 :vars
-IF EXIST "./src/include/kernel.h" (
-    set KERNELH_EXIST=1
-) ELSE (
-    set KERNELH_EXIST=0
-   echo #ifndef KERNEL_CONFIG %NL%#define KERNEL_CONFIG %NL%#define VERSION %VERSION% %NL%#define BUILD_UID "%UNIX_TIME%" %NL%#endif>src/include/kernel.h
-)
+
 SET AS=i686-elf-as
 SET CC=i686-elf-gcc
 SET LD=i686-elf-ld
 SET SRC=./src
 SET CCFLAGS=-O3 -std=gnu99 -ffreestanding -Wall -Wextra 
 SET LDFLAGS=-O3 -ffreestanding -nostdlib -lgcc
-set OBJECTS_DRIVERS=bin/cmos.o bin/vga.o bin/qemu_log.o bin/cpu_detect.o
+set OBJECTS_DRIVERS=bin/qemu_log.o bin/cpu_detect.o
 set OBJECTS=bin/kasm.o bin/irq_wrappers.o bin/kc.o bin/gdt.o bin/pic.o bin/idt.o %OBJECTS_DRIVERS% bin/time.o bin/shell.o bin/NeraMath.o bin/kbd.o bin/tty.o bin/ports.o bin/virt_mem.o bin/phys_mem.o bin/stdlib.o
 
 
@@ -69,7 +63,6 @@ echo Build modules
 %CC% %CCFLAGS% -c %SRC%/modules/qemu_log.c -o bin/qemu_log.o
 
 echo Build drivers
-%CC% %CCFLAGS% -c %SRC%/modules/cmos.c -o bin/cmos.o
 %CC% %CCFLAGS% -c %SRC%/modules/cpu_detect.c -o bin/cpu_detect.o
 
 echo linking
@@ -98,7 +91,7 @@ endlocal & set "%1=%ut%" & goto :vars
 echo Done
 
 ::Qemu config
-qemu-system-i386 -m 512 -boot d -cdrom SynapseOS.iso -monitor stdio -serial file:./run/Qemu_log.txt 
+qemu-system-i386 -m 2048 -boot d -cdrom SynapseOS.iso -monitor stdio -serial file:./run/Qemu_log.txt 
 ::-d mmu cpu_reset  -no-reboot 
 
 pause
