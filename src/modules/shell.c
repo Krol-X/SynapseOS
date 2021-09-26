@@ -5,9 +5,9 @@
 
 #include "../include/shell.h"
 #include "../include/tty.h"
+#include "../include/time.h"
 #include "../include/stdlib.h"
 #include "../include/cpu_detect.h"
-#include "../include/cmos.h"
 #include "../include/phys_mem.h"
 #include "../include/virt_mem.h"
 #include "../include/NeraMath.h"
@@ -41,16 +41,14 @@ void shell_exec(char input_command[]) {
 	if( strcmp(input_command, "help") == 0 || strcmp(input_command, "help 1") == 0 ) {
 		tty_printf("SynapseOS is a free and open source 64x operating system written in FASM and C. Help page 1/1.\nCommands:");
 		tty_printf("\n   help - info about commands            sysinfo - system information");
-		tty_printf("\n   time - info about current time        vga test - show all 256 vga colors");
+		tty_printf("\n   time - info about current time        test - test system");
 		tty_printf("\n   exit - Shutdown SynapseOS             cls or clear - cleaning screen");
-		tty_printf("\n   ascii - show all ASCII symbols        math - enable NeraMath");
+		tty_printf("\n   math - enable NeraMath");
 		
 	} else if( strcmp(input_command, "sysinfo") == 0 ) {
 		// System info
 		tty_printf("SynapseOS v%s build %s\n\n", VERSION, __TIMESTAMP__);
-
 		detect_cpu();
-		
 
 	} else if( strcmp(input_command, "logo") == 0 ) {
 		// SynapseOS logo
@@ -66,35 +64,45 @@ void shell_exec(char input_command[]) {
 		tty_printf("                                                                  version: %s", VERSION);
 		tty_printf("________________________________________________________________________________");
 
-	} else if( strcmp(input_command, "vga test") == 0 ) {
-		// Test all VGA colors
-		int i = 0;
+	} else if( strcmp(input_command, "test") == 0 ) {
+		// Test all system functions
+
+		qemu_printf("\nVGA TEST");
+		tty_printf("VGA TEST");
 		
+		int i = 0;
+
 		while (i != 256) {
 			tty_setcolor(i);
 			tty_printf("%d ", i);
+			colors(2);
 			i++;
 		}
-		colors(0);
-		
+		colors(2);
+
+		i = 0;
+		qemu_printf("\nWAIT TEST");
+		tty_printf("\nWAIT TEST ");
+
+		while ( i!= 100000 ){
+			io_wait();
+			i++;
+		}
 	} else if( strcmp(input_command, "time") == 0 ) {
 		// Time from CMOS
 		getnowtime();
 		tty_printf("\n");
 
-	} else if( strcmp(input_command, "ascii") == 0 ) {
-		// Show ASCII symbols
-		int i = -256;
-		while( i != 512 ) {
-			qemu_printf("\n%d = {%c}", i, (unsigned char)i);
-			tty_printf("%c", (unsigned char)i);
-			i++;
-		}
-
 	} else if( strcmp(input_command, "exit") == 0 ) {
 		// Shutdown OS
-		EXIT = 1;
 		qemu_printf("\n SHUTDOWN! \n");
+		tty_printf("\n\nSHUTDOWNING...");
+		int i = 0;
+		while ( i != 50000 ){
+			io_wait();
+			i++;
+		}
+		EXIT = 1;
 
 	} else if( strcmp(input_command, "math") == 0 ) {
 		// NeraMath
