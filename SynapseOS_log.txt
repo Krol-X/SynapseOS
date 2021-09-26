@@ -1,0 +1,33 @@
+eip in the beginning of main() = 0xC010405A
+Global Descriptor Table inited
+Interrupt Descriptor Table inited
+keyboard initialized
+tty init...
+tty_buffer = 0xC00B8000
+tty initialized
+Physical memory map:
+Available: | addr: 0x0 length: 0x9FC00
+Reserved:  | addr: 0x9FC00 length: 0x400
+Reserved:  | addr: 0xF0000 length: 0x10000
+Available: | addr: 0x100000 length: 0x1FEE0000
+Reserved:  | addr: 0x1FFE0000 length: 0x20000
+Reserved:  | addr: 0xFFFC0000 length: 0x40000
+Installed memory size: 524224 KB = 511 MB
+Available memory size: 523775 KB = 511 MB
+KERNEL_START_PADDR = 0x1030A9, KERNEL_END_PADDR = 0x11C9F7, KERNEL_SIZE = 104782 bytes 
+Physical memory bitmap start: 0x11C9F7, end: 0x1209F5, size = 16382 bytes
+Physical memory manager initialized
+vmm: phys addr of table1 = 0x13C000
+vmm: first mb mapped to 3gb
+vmm: KERNEL_START_PADDR = 0x1030A9, KERNEL_PHYS_MAP_END = 0x1209F5, KERNEL_START_VADDR = 0xC01030A9
+vmm: kernel mapped
+vmm: trying enable paging...
+vmm: kernel page dir loaded
+vmm: vmm initialized!
+Virtual memory manager initialized
+starting vmm test
+  kernel_page_dir = 0x102000
+vmm_temp_map_page: pte = 0xFFF00FFC
+  0x13D000 = 77
+  EIP = 0xC0106EFD  
+  vmm test passed successfully

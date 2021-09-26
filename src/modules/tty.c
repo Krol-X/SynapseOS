@@ -9,8 +9,9 @@ size_t tty_column;
 uint8_t tty_color;
 uint16_t* tty_buffer;
 
-uint16_t* VGA_TEXT_MEMORY = (uint16_t*)0xB8000;	 //old
-//uint16_t* VGA_TEXT_MEMORY = (uint16_t*)0xC03FF000; //for Higer Half kernel
+uint8_t tty_initialized = 0;
+
+uint16_t* VGA_TEXT_MEMORY = (uint16_t*)0xC00B8000;
 
 //string.h part (for future)
 static size_t strlen(const char* str) {
@@ -46,6 +47,7 @@ void tty_init(void) {
 			tty_buffer[index] = vga_entry(' ', tty_color);
 		}
 	}
+	tty_initialized = 1;
 	//tty_putchar('A');
 }
 

@@ -1,0 +1,1 @@
+qemu-system-i386 -s -S -cdrom ../SynapseOS.iso -monitor stdio -serial file:../SynapseOS_log.txt & gdb ../isodir/boot/kernel.elf -ex "target remote localhost:1234" -tui
